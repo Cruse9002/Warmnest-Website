@@ -39,7 +39,7 @@ export default function DashboardPage() {
         <h2 className="text-2xl font-semibold text-foreground mb-4">{t('quickActions')}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {quickActions.map(action => (
-            <Card key={action.href} className={`shadow-lg hover:shadow-xl transition-shadow duration-300 ${action.bgColor}`}>
+            <Card key={action.titleKey} className={`shadow-lg hover:shadow-xl transition-shadow duration-300 ${action.bgColor}`}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className={`text-sm font-medium ${action.color}`}>{t(action.titleKey)}</CardTitle>
                 <action.icon className={`h-6 w-6 ${action.color}`} />
@@ -61,7 +61,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             {lastMood ? (
-              <p className="text-lg">You felt <span className="font-semibold text-primary">{lastMood.mood}</span> {formatTimeAgo(lastMood.timestamp, t('english'))}.</p>
+              <p className="text-lg">You felt <span className="font-semibold text-primary">{lastMood.mood}</span> {formatTimeAgo(lastMood.timestamp, t('english') as 'en' | 'ta')}.</p>
             ) : (
               <p className="text-muted-foreground">No mood logged recently.</p>
             )}
@@ -76,7 +76,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             {recentEntry ? (
-               <p className="text-lg">"<span className="italic text-primary">{recentEntry.title}</span>" written {formatTimeAgo(recentEntry.timestamp, t('english'))}.</p>
+               <p className="text-lg">"<span className="italic text-primary">{recentEntry.title}</span>" written {formatTimeAgo(recentEntry.timestamp, t('english') as 'en' | 'ta')}.</p>
             ) : (
               <p className="text-muted-foreground">{t('noEntriesYet')}</p>
             )}
@@ -106,3 +106,4 @@ function formatTimeAgo(date: Date, lang: 'en' | 'ta'): string {
   if (interval > 1) return Math.floor(interval) + (lang === 'en' ? " minutes ago" : " நிமிடங்களுக்கு முன்பு");
   return Math.floor(seconds) + (lang === 'en' ? " seconds ago" : " விநாடிகளுக்கு முன்பு");
 }
+
