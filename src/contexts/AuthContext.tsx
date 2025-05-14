@@ -1,7 +1,7 @@
 
 "use client";
 
-import type { User } from '@/types';
+import type { User, QuestionnaireAnswers } from '@/types'; // Added QuestionnaireAnswers
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -12,15 +12,15 @@ interface AuthContextType {
   logout: () => Promise<void>;
   register: (email: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
-  updateUser: (updatedFields: Partial<User>) => void;
-  deleteAccount: () => Promise<void>; // Added deleteAccount
+  updateUser: (updatedFields: Partial<User & QuestionnaireAnswers>) => void; // Allow QuestionnaireAnswers here
+  deleteAccount: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true); // Start with loading true
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -83,6 +83,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (existingUser) {
       commonLoginProcedure(existingUser, false);
     } else {
+      // For a login attempt for a non-existent user, treat as new for onboarding
+      // or show an error (for now, treat as new for mock purposes)
       const mockUser: User = { 
         id: '1', 
         email, 
@@ -136,11 +138,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem('warmnest-journal');
     localStorage.removeItem('warmnest-moodlog');
     localStorage.removeItem('warmnest-theme');
+    // Clear onboarding answers too
+    localStorage.removeItem('warmnest-onboarding-answers'); 
     setLoading(false);
     router.push('/auth/login');
   };
   
-  const updateUser = (updatedFields: Partial<User>) => {
+  const updateUser = (updatedFields: Partial<User & QuestionnaireAnswers>) => {
     setUser(prevUser => {
       if (!prevUser) return null;
       const newUser = { ...prevUser, ...updatedFields };
@@ -150,9 +154,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteAccount = async () => {
-    // The actual data clearing and redirect is handled by logout
-    // This function exists primarily to be called after user confirmation
-    // In a real app, this would trigger backend account deletion.
     await logout(); 
   };
 

@@ -23,7 +23,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { 
-  Home, MessageCircle, User, LogOut, Sun, Moon, Settings, Wind, BookOpen, HelpCircle, ShieldCheck, Palette
+  Home, MessageCircle, User, LogOut, Sun, Moon, Settings, Wind, BookOpen, HelpCircle, ShieldCheck, Palette, Music2 // Added Music2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -32,6 +32,7 @@ const mainNavLinks = [
   { href: '/breathing', labelKey: 'breathingExercises', icon: Wind },
   { href: '/chatbot', labelKey: 'chatbot', icon: MessageCircle },
   { href: '/journal', labelKey: 'journal', icon: BookOpen },
+  { href: '/music-therapy', labelKey: 'musicTherapy', icon: Music2 }, // New Music Therapy Link
 ] as const;
 
 const accountNavLinks = [
