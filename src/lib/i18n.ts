@@ -35,6 +35,13 @@ export const translations = {
     newPassword: "New Password",
     confirmNewPassword: "Confirm New Password",
     passwordChangeMockMessage: "Password change is mocked for this demo.",
+    deleteAccount: "Delete Account",
+    deleteAccountWarning: "Danger Zone: Account Deletion",
+    deleteAccountDescription: "Permanently delete your account and all associated data. This action cannot be undone.",
+    deleteAccountConfirmationTitle: "Confirm Account Deletion",
+    deleteAccountConfirmationMessage: "Are you sure you want to delete your account and all associated data? This action cannot be undone.",
+    cancel: "Cancel",
+    confirmDelete: "Delete",
     // Onboarding
     welcomeToOnboarding: "Welcome to Onboarding",
     questionnaireIntro: "Let's get to know you better. This will help us personalize your experience.",
@@ -94,7 +101,7 @@ export const translations = {
     recentJournalEntry: "Recent Journal Entry",
   },
   ta: {
-    appName: "மனதில் உறுதி", // Keeping the Tamil name as is, as it's thematic and not a direct translation.
+    appName: "WarmNest", // Keeping the Tamil name as is, as it's thematic and not a direct translation.
     // Auth
     login: "உள்நுழை",
     register: "பதிவு செய்",
@@ -126,6 +133,13 @@ export const translations = {
     newPassword: "புதிய கடவுச்சொல்",
     confirmNewPassword: "புதிய கடவுச்சொல்லை உறுதிப்படுத்தவும்",
     passwordChangeMockMessage: "இந்த டெமோவிற்கு கடவுச்சொல் மாற்றம் கேலி செய்யப்படுகிறது.",
+    deleteAccount: "கணக்கை நீக்கு",
+    deleteAccountWarning: "ஆபத்து மண்டலம்: கணக்கு நீக்கம்",
+    deleteAccountDescription: "உங்கள் கணக்கு மற்றும் தொடர்புடைய எல்லா தரவையும் நிரந்தரமாக நீக்கவும். இந்தச் செயலைச் செயல்தவிர்க்க முடியாது.",
+    deleteAccountConfirmationTitle: "கணக்கு நீக்குதலை உறுதிப்படுத்தவும்",
+    deleteAccountConfirmationMessage: "உங்கள் கணக்கு மற்றும் தொடர்புடைய எல்லா தரவையும் நீக்க விரும்புகிறீர்களா? இந்தச் செயலைச் செயல்தவிர்க்க முடியாது.",
+    cancel: "ரத்துசெய்",
+    confirmDelete: "நீக்கு",
     // Onboarding
     welcomeToOnboarding: "அறிமுகத்திற்கு வரவேற்கிறோம்",
     questionnaireIntro: "உங்களைப் பற்றி மேலும் தெரிந்து கொள்வோம். இது உங்கள் அனுபவத்தைத் தனிப்பயனாக்க உதவும்.",
