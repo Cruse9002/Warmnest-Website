@@ -19,41 +19,38 @@ export function ChatInterface() {
   const { language, t } = useLanguage();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const messagesLength = messages.length; // For stable useEffect dependency
 
   useEffect(() => {
-    // Add initial welcome message from bot
-    setMessages([
-      {
-        id: 'initial-bot-message',
-        text: t('chatbotWelcome'),
-        sender: 'bot',
-        timestamp: new Date(),
-        language: language,
-      }
-    ]);
-  }, [t, language]); // Re-initialize if language changes and messages are empty
+    // Add initial welcome message from bot only if messages are empty
+    if (messages.length === 0) {
+      setMessages([
+        {
+          id: 'initial-bot-message',
+          text: t('chatbotWelcome'),
+          sender: 'bot',
+          timestamp: new Date(),
+          language: language,
+        }
+      ]);
+    }
+  }, [t, language, messages.length]); // Added messages.length
 
   useEffect(() => {
     // Scroll to bottom when new messages are added
     const scrollChatToBottom = () => {
       if (scrollAreaRef.current) {
-        // Radix UI's ScrollArea Viewport typically has this data attribute
         const viewport = scrollAreaRef.current.querySelector<HTMLDivElement>('[data-radix-scroll-area-viewport]');
         if (viewport) {
           viewport.scrollTop = viewport.scrollHeight;
-        } else {
-          // Fallback: try scrolling the root element directly if viewport isn't found
-          // This might not be as effective but is better than nothing.
-          scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
         }
       }
     };
 
-    // Defer the scroll operation to allow the DOM to update and break potential synchronous update loops.
     const timerId = setTimeout(scrollChatToBottom, 0);
 
-    return () => clearTimeout(timerId); // Cleanup the timeout if the component unmounts or dependencies change
-  }, [messages]);
+    return () => clearTimeout(timerId);
+  }, [messagesLength]); // Changed dependency to messagesLength
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '' || isLoading) return;
@@ -72,7 +69,7 @@ export function ChatInterface() {
     try {
       const response = await mentalWellnessChatbot({
         userMessage: userMessage.text,
-        language: language as 'en' | 'ta', // Cast to specific enum if needed by AI flow
+        language: language as 'en' | 'ta', 
       });
       
       const botMessage: ChatMessageType = {
