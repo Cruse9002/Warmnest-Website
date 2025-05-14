@@ -3,7 +3,7 @@ import type { Language } from '@/types';
 
 export const translations = {
   en: {
-    appName: "Warmth Within",
+    appName: "WarmNest",
     // Auth
     login: "Login",
     register: "Register",
@@ -94,7 +94,7 @@ export const translations = {
     recentJournalEntry: "Recent Journal Entry",
   },
   ta: {
-    appName: "மனதில் உறுதி",
+    appName: "மனதில் உறுதி", // Keeping the Tamil name as is, as it's thematic and not a direct translation.
     // Auth
     login: "உள்நுழை",
     register: "பதிவு செய்",
@@ -106,7 +106,7 @@ export const translations = {
     alreadyHaveAccount: "ஏற்கனவே கணக்கு உள்ளதா?",
     // Navigation
     dashboard: "முகப்பு",
-    onboarding: "அறிமுகம்", // Corrected from "начало"
+    onboarding: "அறிமுகம்", 
     breathingExercises: "சுவாசப் பயிற்சிகள்",
     chatbot: "உரையாடல் கருவி",
     journal: "நாட்குறிப்பு",

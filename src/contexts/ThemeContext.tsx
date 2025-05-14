@@ -25,7 +25,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       if (user?.darkMode !== undefined) {
         initialTheme = user.darkMode ? "dark" : "light";
       } else {
-        const storedTheme = localStorage.getItem('warmth-within-theme') as Theme | null;
+        const storedTheme = localStorage.getItem('warmnest-theme') as Theme | null;
         if (storedTheme) {
           initialTheme = storedTheme;
         } else {
@@ -41,7 +41,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const root = window.document.documentElement;
     root.classList.remove(theme === "light" ? "dark" : "light");
     root.classList.add(theme);
-    localStorage.setItem('warmth-within-theme', theme);
+    localStorage.setItem('warmnest-theme', theme);
     if (user && user.darkMode !== (theme === "dark")) {
       updateUser({ darkMode: theme === "dark" });
     }

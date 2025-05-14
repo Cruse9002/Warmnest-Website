@@ -63,7 +63,7 @@ export function AuthForm({ isRegister = false }: AuthFormProps) {
           {isRegister ? t('register') : t('login')}
         </CardTitle>
         <CardDescription className="text-center">
-          {isRegister ? "Create your Warmth Within account." : "Access your Warmth Within space."}
+          {isRegister ? "Create your WarmNest account." : "Access your WarmNest space."}
         </CardDescription>
       </CardHeader>
       <CardContent>

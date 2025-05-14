@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('warmth-within-user');
+    const storedUser = localStorage.getItem('warmnest-user');
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       // Ensure default name if missing from older stored data
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches, // Default to system preference
     };
     setUser(mockUser);
-    localStorage.setItem('warmth-within-user', JSON.stringify(mockUser));
+    localStorage.setItem('warmnest-user', JSON.stringify(mockUser));
     setLoading(false);
     if (!mockUser.onboarded) {
       router.push('/onboarding');
@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
     };
     setUser(mockUser);
-    localStorage.setItem('warmth-within-user', JSON.stringify(mockUser));
+    localStorage.setItem('warmnest-user', JSON.stringify(mockUser));
     setLoading(false);
     router.push('/onboarding');
   };
@@ -75,9 +75,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setLoading(true);
     setUser(null);
-    localStorage.removeItem('warmth-within-user');
+    localStorage.removeItem('warmnest-user');
     // Optionally clear theme preference from localStorage if it's app-wide and not user-specific
-    // localStorage.removeItem('warmth-within-theme'); 
+    // localStorage.removeItem('warmnest-theme'); 
     setLoading(false);
     router.push('/auth/login');
   };
@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(prevUser => {
       if (!prevUser) return null;
       const newUser = { ...prevUser, ...updatedFields };
-      localStorage.setItem('warmth-within-user', JSON.stringify(newUser));
+      localStorage.setItem('warmnest-user', JSON.stringify(newUser));
       return newUser;
     });
   };

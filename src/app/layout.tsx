@@ -19,8 +19,8 @@ const geistSans = Geist({
 // });
 
 export const metadata: Metadata = {
-  title: 'Warmth Within - Your Companion for Stress Management',
-  description: 'Warmth Within helps you manage stress with guided exercises, journaling, and chatbot support.',
+  title: 'WarmNest - Your Companion for Stress Management',
+  description: 'WarmNest helps you manage stress with guided exercises, journaling, and chatbot support.',
 };
 
 export default function RootLayout({

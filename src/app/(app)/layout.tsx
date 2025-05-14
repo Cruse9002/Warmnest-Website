@@ -61,7 +61,7 @@ export default function AppLayout({
           {children}
         </div>
         <footer className="py-6 text-center text-sm text-muted-foreground border-t">
-          © {new Date().getFullYear()} Warmth Within. All rights reserved.
+          © {new Date().getFullYear()} WarmNest. All rights reserved.
         </footer>
       </SidebarInset>
     </SidebarProvider>

@@ -101,7 +101,7 @@ export function AppHeader() {
         
         {/* Centered Logo/Title for mobile when sidebar trigger is shown */}
         <div className="md:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <Link href="/dashboard" className="font-semibold text-lg text-primary">Warmth Within</Link>
+          <Link href="/dashboard" className="font-semibold text-lg text-primary">WarmNest</Link>
         </div>
 
         <div className="flex items-center gap-3">

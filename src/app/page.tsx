@@ -33,7 +33,7 @@ export default function HomePage() {
       </div>
       <Progress value={50} className="w-1/2 md:w-1/4 mb-4" />
       <p className="text-muted-foreground text-lg">Initializing your space...</p>
-      <p className="text-sm text-muted-foreground mt-2">Please wait while we prepare Warmth Within for you.</p>
+      <p className="text-sm text-muted-foreground mt-2">Please wait while we prepare WarmNest for you.</p>
     </div>
   );
 }

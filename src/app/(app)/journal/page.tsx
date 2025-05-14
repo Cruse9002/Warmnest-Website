@@ -10,15 +10,20 @@ import type { MoodLog, JournalEntry } from '@/types';
 import { useLanguage } from '@/hooks/useLanguage';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
+import { format } from 'date-fns';
+import { ta } from 'date-fns/locale/ta';
+import { enUS } from 'date-fns/locale/en-US';
 
-const JOURNAL_LS_KEY = 'warmth-within-journal';
-const MOODLOG_LS_KEY = 'warmth-within-moodlog';
+
+const JOURNAL_LS_KEY = 'warmnest-journal';
+const MOODLOG_LS_KEY = 'warmnest-moodlog';
 
 export default function JournalPage() {
   const [moodLogs, setMoodLogs] = useState<MoodLog[]>([]);
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { toast } = useToast();
+  const locale = language === 'ta' ? ta : enUS;
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -69,7 +74,7 @@ export default function JournalPage() {
         {moodLogs.length > 0 ? (
           <ScrollArea className="h-[400px] pr-4">
             {moodLogs.map(log => (
-              <EntryListItem key={log.id} item={log} type="mood" />
+              <EntryListItem key={log.id} item={log} type="mood" locale={locale} />
             ))}
           </ScrollArea>
         ) : (
@@ -83,7 +88,7 @@ export default function JournalPage() {
         {journalEntries.length > 0 ? (
            <ScrollArea className="h-[400px] pr-4">
             {journalEntries.map(entry => (
-              <EntryListItem key={entry.id} item={entry} type="journal" />
+              <EntryListItem key={entry.id} item={entry} type="journal" locale={locale} />
             ))}
           </ScrollArea>
         ) : (
