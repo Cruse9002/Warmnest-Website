@@ -20,7 +20,7 @@ export const translations = {
     chatbot: "Chatbot",
     journal: "Journal",
     profile: "Profile",
-    musicTherapy: "Music Therapy", // New Nav Item
+    musicTherapy: "Music Therapy",
     // Profile
     name: "Name",
     languageSettings: "Language Settings",
@@ -76,7 +76,7 @@ export const translations = {
     orange: "Orange",
     black: "Black",
     white: "White",
-    other_color: "Other", // For favorite color
+    other_color: "Other", 
     // Breathing
     guidedBreathing: "Guided Breathing",
     boxBreathing: "Box Breathing",
@@ -118,23 +118,26 @@ export const translations = {
     recentJournalEntry: "Recent Journal Entry",
     // Music Therapy
     musicTherapyTitle: "Music Therapy Room",
-    musicTherapyDescription: "Relax and unwind with sounds tailored for you.",
-    personalizedSuggestions: "Personalized Suggestions",
+    musicTherapyDescription: "Relax and unwind with sounds tailored for you, and explore common therapeutic sounds.",
+    personalizedSuggestions: "Personalized Music",
     basedOnYourPreferences: "Based on your preferences:",
-    commonSounds: "Common Sounds",
+    commonSounds: "Common Therapeutic Sounds",
     whiteNoise: "White Noise",
     rainSounds: "Rain Sounds",
     oceanWaves: "Ocean Waves",
-    playTrack: "Play Track",
-    calmingAmbient: "Calming Ambient Sounds",
+    playTrack: "Play Track (Mock)",
+    calmingAmbient: "Calming Ambient",
     energeticBeats: "Energetic Beats",
     gentleMelodies: "Gentle Melodies",
-    focusEnhancingMusic: "Focus Enhancing Music",
+    focusEnhancingMusic: "Focus Music",
     natureSounds: "Nature Sounds",
     upliftingTunes: "Uplifting Tunes",
+    jamendoAttribution: "Music previews notionally powered by Jamendo (mock integration).",
+    noTracksForPreference: "No specific tracks found for your preference, try exploring common sounds!",
+
   },
   ta: {
-    appName: "WarmNest", // Keeping the Tamil name as is, as it's thematic and not a direct translation.
+    appName: "WarmNest", 
     // Auth
     login: "உள்நுழை",
     register: "பதிவு செய்",
@@ -151,7 +154,7 @@ export const translations = {
     chatbot: "உரையாடல் கருவி",
     journal: "நாட்குறிப்பு",
     profile: "சுயவிவரம்",
-    musicTherapy: "இசை சிகிச்சை", // New Nav Item
+    musicTherapy: "இசை சிகிச்சை",
     // Profile
     name: "பெயர்",
     languageSettings: "மொழி அமைப்புகள்",
@@ -238,7 +241,7 @@ export const translations = {
     writeYourThoughts: "உங்கள் எண்ணங்களை எழுதுங்கள்...",
     saveEntry: "பதிவை சேமி",
     noEntriesYet: "இன்னும் நாட்குறிப்பு பதிவுகள் இல்லை. எழுதத் தொடங்குங்கள்!",
-     // Dashboard
+    // Dashboard
     welcomeUser: "வரவேற்கிறோம்",
     quickActions: "விரைவு நடவடிக்கைகள்",
     startBreathingExercise: "சுவாசப் பயிற்சியைத் தொடங்குங்கள்",
@@ -249,20 +252,22 @@ export const translations = {
     recentJournalEntry: "சமீபத்திய நாட்குறிப்பு பதிவு",
     // Music Therapy
     musicTherapyTitle: "இசை சிகிச்சை அறை",
-    musicTherapyDescription: "உங்களுக்காக வடிவமைக்கப்பட்ட ஒலிகளுடன் ஓய்வெடுத்து ஆசுவாசப்படுத்துங்கள்.",
-    personalizedSuggestions: "தனிப்பயனாக்கப்பட்ட பரிந்துரைகள்",
+    musicTherapyDescription: "உங்களுக்காக வடிவமைக்கப்பட்ட ஒலிகளுடன் ஓய்வெடுத்து ஆசுவாசப்படுத்துங்கள், மற்றும் பொதுவான சிகிச்சை ஒலிகளை ஆராயுங்கள்.",
+    personalizedSuggestions: "தனிப்பயனாக்கப்பட்ட இசை",
     basedOnYourPreferences: "உங்கள் விருப்பங்களின் அடிப்படையில்:",
-    commonSounds: "பொதுவான ஒலிகள்",
+    commonSounds: "பொதுவான சிகிச்சை ஒலிகள்",
     whiteNoise: "வெள்ளை இரைச்சல்",
     rainSounds: "மழை ஓசைகள்",
     oceanWaves: "கடல் அலைகள்",
-    playTrack: "ஒலியை இயக்கு",
-    calmingAmbient: "அமைதியான சூழல் ஒலிகள்",
-    energeticBeats: "ஆற்றல்மிக்க இசைத்துடிப்புகள்",
-    gentleMelodies: "மென்மையான மெல்லிசைகள்",
-    focusEnhancingMusic: "கவனத்தை அதிகரிக்கும் இசை",
+    playTrack: "ஒலியை இயக்கு (மாதிரி)",
+    calmingAmbient: "அமைதியான சூழல்",
+    energeticBeats: "ஆற்றல்மிக்க இசை",
+    gentleMelodies: "மென்மையான மெல்லிசை",
+    focusEnhancingMusic: "கவன இசை",
     natureSounds: "இயற்கை ஒலிகள்",
     upliftingTunes: "உற்சாகமூட்டும் இசை",
+    jamendoAttribution: "இசை மாதிரிகள் ஜமெண்டோ மூலம் வழங்கப்படுகிறது (மாதிரி ஒருங்கிணைப்பு).",
+    noTracksForPreference: "உங்கள் விருப்பத்திற்கு குறிப்பிட்ட இசை எதுவும் கிடைக்கவில்லை, பொதுவான ஒலிகளை ஆராய முயற்சிக்கவும்!",
   },
 };
 
