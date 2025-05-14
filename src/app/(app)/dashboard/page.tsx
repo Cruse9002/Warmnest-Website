@@ -124,7 +124,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig} className="h-[250px] w-full">
-                    <BarChart accessibilityLayer data={moodChartData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
+                    <BarChart accessibilityLayer data={moodChartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}> {/* Adjusted left margin */}
                         <CartesianGrid vertical={false} strokeDasharray="3 3" />
                         <XAxis 
                             dataKey="date" 
@@ -139,7 +139,7 @@ export default function DashboardPage() {
                             tickMargin={8}
                             domain={[0, 5]}
                             ticks={[1, 2, 3, 4, 5]}
-                            tickFormatter={(value) => ['Sad', 'Anxious', 'Neutral', 'Calm', 'Happy'][value-1]}
+                            tickFormatter={(value) => [t('sad'), t('anxious'), t('neutral'), t('calm'), t('happy')][value-1]}
                         />
                         <ChartTooltip content={<ChartTooltipContent hideIndicator />} />
                         <Bar dataKey="moodScore" fill="var(--color-moodScore)" radius={4} />
@@ -168,3 +168,4 @@ function formatTimeAgo(date: Date, lang: 'en' | 'ta'): string {
   if (interval > 1) return Math.floor(interval) + (lang === 'en' ? ` minute${Math.floor(interval) > 1 ? 's' : ''} ago` : " நிமிடங்களுக்கு முன்பு");
   return Math.floor(seconds) + (lang === 'en' ? ` second${Math.floor(seconds) > 1 ? 's' : ''} ago` : " விநாடிகளுக்கு முன்பு");
 }
+
