@@ -20,10 +20,10 @@ import { AppLogo } from './AppLogo';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useLanguage } from '@/hooks/useLanguage';
-import { useAuth } from '@/hooks/useAuth'; // Corrected import
+import { useAuth } from '@/contexts/AuthContext'; // Corrected import path
 import { useTheme } from '@/contexts/ThemeContext';
 import {
-  Home, MessageCircle, User, LogOut, Sun, Moon, Settings, Wind, BookOpen, Music2, Brain, Languages // Added Languages, Sun, Moon. Removed Palette.
+  Home, MessageCircle, User, LogOut, Sun, Moon, Settings, Wind, BookOpen, Music2, Brain, Languages
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
