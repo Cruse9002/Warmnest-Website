@@ -1,12 +1,14 @@
 
 "use client";
 
-import React from 'react'; // Added React import
+import React from 'react';
 import type { JournalEntry, MoodLog } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Smile, Meh, Frown, Laugh, Annoyed, Edit3 } from 'lucide-react';
+import { ta } from 'date-fns/locale/ta';
+import { enUS } from 'date-fns/locale/en-US';
 
 interface EntryListItemProps {
   item: JournalEntry | MoodLog;
@@ -23,7 +25,7 @@ const moodIcons = {
 
 export function EntryListItem({ item, type }: EntryListItemProps) {
   const { t, language } = useLanguage();
-  const locale = language === 'ta' ? require('date-fns/locale/ta') : require('date-fns/locale/en-US');
+  const locale = language === 'ta' ? ta : enUS;
 
   return (
     <Card className="mb-4 shadow-sm hover:shadow-md transition-shadow duration-200">
@@ -36,7 +38,10 @@ export function EntryListItem({ item, type }: EntryListItemProps) {
             {type === 'mood' ? t((item as MoodLog).mood as any) : t('journalEntry')} 
           </CardTitle>
           <CardDescription className="text-xs">
-            {format(new Date(item.timestamp), 'PPpp', { locale })}
+            {/* Ensure item.timestamp is a valid Date object before formatting */}
+            {item.timestamp instanceof Date && !isNaN(item.timestamp.valueOf()) 
+              ? format(item.timestamp, 'PPpp', { locale })
+              : "Invalid date"}
           </CardDescription>
         </div>
       </CardHeader>
