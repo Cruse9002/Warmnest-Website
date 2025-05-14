@@ -35,6 +35,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           } else if (!parsedUser.name) {
             parsedUser.name = "User";
           }
+          if (!parsedUser.photoURL) { // Ensure photoURL has a sensible default if missing
+            parsedUser.photoURL = `https://placehold.co/100x100.png?text=${parsedUser.name?.[0]?.toUpperCase() || 'U'}`;
+          }
           if (isMounted) {
             setUser(parsedUser);
           }
@@ -56,6 +59,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const commonLoginProcedure = (mockUser: User, isNewUser: boolean) => {
+    if (!mockUser.photoURL) {
+      mockUser.photoURL = `https://placehold.co/100x100.png?text=${mockUser.name?.[0]?.toUpperCase() || 'U'}`;
+    }
     setUser(mockUser);
     localStorage.setItem('warmnest-user', JSON.stringify(mockUser));
     setLoading(false);
@@ -68,7 +74,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string) => {
     setLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500)); 
+    await new Promise(resolve => setTimeout(resolve, 500));
     const storedUser = localStorage.getItem('warmnest-user');
     let existingUser: User | null = null;
     if (storedUser) {
@@ -83,15 +89,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (existingUser) {
       commonLoginProcedure(existingUser, false);
     } else {
-      // For a login attempt for a non-existent user, treat as new for onboarding
-      // or show an error (for now, treat as new for mock purposes)
-      const mockUser: User = { 
-        id: '1', 
-        email, 
+      const mockUser: User = {
+        id: '1',
+        email,
         name: email.split('@')[0] || "User",
-        language: 'en', 
-        onboarded: false, 
+        language: 'en',
+        onboarded: false,
         darkMode: typeof window !== "undefined" ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) : false,
+        photoURL: `https://placehold.co/100x100.png?text=${(email.split('@')[0] || "U")[0].toUpperCase()}`,
       };
       commonLoginProcedure(mockUser, true);
     }
@@ -100,33 +105,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (email: string) => {
     setLoading(true);
     await new Promise(resolve => setTimeout(resolve, 500));
-    const mockUser: User = { 
-      id: `user-${Date.now()}`, 
-      email, 
+    const mockUser: User = {
+      id: `user-${Date.now()}`,
+      email,
       name: email.split('@')[0] || "User",
-      language: 'en', 
+      language: 'en',
       onboarded: false,
       darkMode: typeof window !== "undefined" ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) : false,
+      photoURL: `https://placehold.co/100x100.png?text=${(email.split('@')[0] || "U")[0].toUpperCase()}`,
     };
     commonLoginProcedure(mockUser, true);
   };
 
   const signInWithGoogle = async () => {
     setLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500)); 
-    
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     const randomId = Math.floor(Math.random() * 10000);
     const googleEmail = `google.user.${randomId}@example.com`;
-    const nameFromEmail = googleEmail.split('@')[0].replace(/\./g, ' '); 
+    const nameFromEmail = googleEmail.split('@')[0].replace(/\./g, ' ');
     const formattedName = nameFromEmail.split(' ').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
 
     const mockUser: User = {
       id: `google-${Date.now()}`,
       email: googleEmail,
       name: formattedName,
-      language: 'en', 
-      onboarded: false, 
+      language: 'en',
+      onboarded: false,
       darkMode: typeof window !== "undefined" ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) : false,
+      photoURL: `https://placehold.co/100x100.png?text=${formattedName?.[0]?.toUpperCase() || 'G'}`,
     };
     commonLoginProcedure(mockUser, true);
   };
@@ -138,12 +145,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem('warmnest-journal');
     localStorage.removeItem('warmnest-moodlog');
     localStorage.removeItem('warmnest-theme');
-    // Clear onboarding answers too
-    localStorage.removeItem('warmnest-onboarding-answers'); 
+    localStorage.removeItem('warmnest-onboarding-answers');
     setLoading(false);
     router.push('/auth/login');
   };
-  
+
   const updateUser = (updatedFields: Partial<User & QuestionnaireAnswers>) => {
     setUser(prevUser => {
       if (!prevUser) return null;
@@ -154,7 +160,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteAccount = async () => {
-    await logout(); 
+    await logout();
   };
 
   return (

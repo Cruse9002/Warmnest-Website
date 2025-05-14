@@ -11,7 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarMenuBadge,
+  // SidebarMenuBadge, // Not used currently
   SidebarGroup,
   SidebarGroupLabel,
   useSidebar,
@@ -20,10 +20,10 @@ import { AppLogo } from './AppLogo';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useLanguage } from '@/hooks/useLanguage';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth'; // Corrected import
 import { useTheme } from '@/contexts/ThemeContext';
-import { 
-  Home, MessageCircle, User, LogOut, Sun, Moon, Settings, Wind, BookOpen, HelpCircle, ShieldCheck, Palette, Music2, Brain // Added Brain for Focus Mode
+import {
+  Home, MessageCircle, User, LogOut, Sun, Moon, Settings, Wind, BookOpen, Music2, Brain, Languages // Added Languages, Sun, Moon. Removed Palette.
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -33,7 +33,7 @@ const mainNavLinks = [
   { href: '/chatbot', labelKey: 'chatbot', icon: MessageCircle },
   { href: '/journal', labelKey: 'journal', icon: BookOpen },
   { href: '/music-therapy', labelKey: 'musicTherapy', icon: Music2 },
-  { href: '/focus-mode', labelKey: 'focusMode', icon: Brain }, // New Focus Mode Link
+  { href: '/focus-mode', labelKey: 'focusMode', icon: Brain },
 ] as const;
 
 const accountNavLinks = [
@@ -96,21 +96,21 @@ export function AppSidebar() {
                     </SidebarMenuItem>
                 ))}
                 <SidebarMenuItem>
-                    <SidebarMenuButton 
+                    <SidebarMenuButton
                         onClick={handleLanguageToggle}
-                        tooltip={sidebarState === 'collapsed' ? (language === 'en' ? t('tamil') : t('english')) : undefined}
+                        tooltip={sidebarState === 'collapsed' ? (language === 'en' ? t('switchToTamil') : t('switchToEnglish')) : undefined}
                     >
-                        {language === 'en' ? <Moon /> : <Sun />}
-                        <span>{language === 'en' ? t('tamil') : t('english')}</span>
+                        <Languages />
+                        <span>{language === 'en' ? t('switchToTamil') : t('switchToEnglish')}</span>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton 
+                    <SidebarMenuButton
                         onClick={toggleTheme}
-                        tooltip={sidebarState === 'collapsed' ? (theme === 'dark' ? t('lightMode') : t('darkMode')) : undefined}
+                        tooltip={sidebarState === 'collapsed' ? (theme === 'dark' ? t('switchToLightMode') : t('switchToDarkMode')) : undefined}
                     >
-                        <Palette />
-                        <span>{theme === 'dark' ? t('lightMode') : t('darkMode')}</span>
+                        {theme === 'dark' ? <Sun /> : <Moon />}
+                        <span>{theme === 'dark' ? t('switchToLightMode') : t('switchToDarkMode')}</span>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
@@ -124,11 +124,11 @@ export function AppSidebar() {
             sidebarState === 'collapsed' ? "justify-center" : ""
           )}>
             <Avatar className="h-9 w-9 border-2 border-primary">
-              <AvatarImage src={`https://placehold.co/100x100.png?text=${user.name?.[0]?.toUpperCase() || 'U'}`} alt={user.name || "User Avatar"} data-ai-hint="avatar profile" />
+              <AvatarImage src={user.photoURL || `https://placehold.co/100x100.png?text=${user.name?.[0]?.toUpperCase() || 'U'}`} alt={user.name || "User Avatar"} data-ai-hint="avatar profile" />
               <AvatarFallback>{user.name?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
             </Avatar>
             {sidebarState === 'expanded' && (
-              <div className="flex-1 overflow-hidden min-w-0"> {/* Added min-w-0 here */}
+              <div className="flex-1 overflow-hidden min-w-0">
                 <p className="text-sm font-medium leading-none truncate">{user.name}</p>
                 <p className="text-xs leading-none text-muted-foreground truncate">
                   {user.email}
@@ -136,7 +136,7 @@ export function AppSidebar() {
               </div>
             )}
              {sidebarState === 'expanded' && (
-                <Button variant="ghost" size="icon" onClick={logout} className="text-muted-foreground hover:text-destructive">
+                <Button variant="ghost" size="icon" onClick={logout} className="text-muted-foreground hover:text-destructive" aria-label={t('logout')}>
                     <LogOut size={18} />
                 </Button>
              )}
@@ -147,7 +147,6 @@ export function AppSidebar() {
                 <SidebarMenuItem>
                     <SidebarMenuButton onClick={logout} tooltip={t('logout')}>
                         <LogOut />
-                         {/* No text label when collapsed */}
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
@@ -156,5 +155,3 @@ export function AppSidebar() {
     </>
   );
 }
-
-    

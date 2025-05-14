@@ -4,11 +4,12 @@ export type Language = 'en' | 'ta';
 export interface User {
   id: string;
   email: string;
-  name: string; 
+  name: string;
   language: Language;
   onboarded: boolean;
-  darkMode?: boolean; 
-  dob?: string; 
+  darkMode?: boolean;
+  photoURL?: string; // Added for profile photo
+  dob?: string;
   gender?: 'male' | 'female' | 'other' | 'preferNotToSay';
   favoriteColor?: 'red' | 'blue' | 'green' | 'yellow' | 'purple' | 'pink' | 'orange' | 'black' | 'white' | 'other_color';
   stressSource?: string;
@@ -25,8 +26,8 @@ export interface QuestionnaireAnswers {
 
 export interface BreathingExercise {
   slug: string;
-  nameKey: TranslatedStringType; 
-  descriptionKey: TranslatedStringType; 
+  nameKey: TranslatedStringType;
+  descriptionKey: TranslatedStringType;
   durationMinutes: number;
 }
 

@@ -21,17 +21,21 @@ export const translations = {
     journal: "Journal",
     profile: "Profile",
     musicTherapy: "Music Therapy",
-    focusMode: "Focus Mode", // New
+    focusMode: "Focus Mode",
     // Profile
     name: "Name",
     languageSettings: "Language Settings",
     selectLanguage: "Select Language",
     english: "English",
     tamil: "Tamil",
+    switchToEnglish: "Switch to English",
+    switchToTamil: "Switch to Tamil",
     saveSettings: "Save Settings",
     themeSettings: "Theme Settings",
     darkMode: "Dark Mode",
     lightMode: "Light Mode",
+    switchToDarkMode: "Switch to Dark Mode",
+    switchToLightMode: "Switch to Light Mode",
     changePassword: "Change Password",
     currentPassword: "Current Password",
     newPassword: "New Password",
@@ -44,6 +48,11 @@ export const translations = {
     deleteAccountConfirmationMessage: "Are you sure you want to delete your account and all associated data? This action cannot be undone.",
     cancel: "Cancel",
     confirmDelete: "Delete",
+    profilePhoto: "Profile Photo",
+    uploadPhoto: "Upload Photo",
+    changePhoto: "Change Photo",
+    profilePhotoUpdatedTitle: "Profile Photo Updated",
+    profilePhotoUpdatedDescMock: "Your new profile photo is now active (mocked).",
     // Onboarding
     welcomeToOnboarding: "Welcome to Onboarding",
     questionnaireIntro: "Let's get to know you better. This will help us personalize your experience.",
@@ -77,7 +86,7 @@ export const translations = {
     orange: "Orange",
     black: "Black",
     white: "White",
-    other_color: "Other", 
+    other_color: "Other",
     // Breathing
     guidedBreathing: "Guided Breathing",
     boxBreathing: "Box Breathing",
@@ -159,7 +168,7 @@ export const translations = {
     markDone: "Mark as Done",
   },
   ta: {
-    appName: "WarmNest", 
+    appName: "WarmNest",
     // Auth
     login: "உள்நுழை",
     register: "பதிவு செய்",
@@ -171,23 +180,27 @@ export const translations = {
     alreadyHaveAccount: "ஏற்கனவே கணக்கு உள்ளதா?",
     // Navigation
     dashboard: "முகப்பு",
-    onboarding: "அறிமுகம்", 
+    onboarding: "அறிமுகம்",
     breathingExercises: "சுவாசப் பயிற்சிகள்",
     chatbot: "உரையாடல் கருவி",
     journal: "நாட்குறிப்பு",
     profile: "சுயவிவரம்",
     musicTherapy: "இசை சிகிச்சை",
-    focusMode: "கவனப் பயன்முறை", // New
+    focusMode: "கவனப் பயன்முறை",
     // Profile
     name: "பெயர்",
     languageSettings: "மொழி அமைப்புகள்",
     selectLanguage: "மொழியைத் தேர்ந்தெடுக்கவும்",
     english: "ஆங்கிலம்",
     tamil: "தமிழ்",
+    switchToEnglish: "ஆங்கிலத்திற்கு மாறவும்",
+    switchToTamil: "தமிழுக்கு மாறவும்",
     saveSettings: "அமைப்புகளைச் சேமி",
     themeSettings: "தீம் அமைப்புகள்",
     darkMode: "இருண்ட பயன்முறை",
     lightMode: "ஒளி பயன்முறை",
+    switchToDarkMode: "இருண்ட பயன்முறைக்கு மாறவும்",
+    switchToLightMode: "ஒளி பயன்முறைக்கு மாறவும்",
     changePassword: "கடவுச்சொல்லை மாற்று",
     currentPassword: "தற்போதைய கடவுச்சொல்",
     newPassword: "புதிய கடவுச்சொல்",
@@ -200,6 +213,11 @@ export const translations = {
     deleteAccountConfirmationMessage: "உங்கள் கணக்கு மற்றும் தொடர்புடைய எல்லா தரவையும் நீக்க விரும்புகிறீர்களா? இந்தச் செயலைச் செயல்தவிர்க்க முடியாது.",
     cancel: "ரத்துசெய்",
     confirmDelete: "நீக்கு",
+    profilePhoto: "சுயவிவரப் படம்",
+    uploadPhoto: "புகைப்படத்தைப் பதிவேற்று",
+    changePhoto: "புகைப்படத்தை மாற்று",
+    profilePhotoUpdatedTitle: "சுயவிவரப் படம் புதுப்பிக்கப்பட்டது",
+    profilePhotoUpdatedDescMock: "உங்கள் புதிய சுயவிவரப் படம் இப்போது செயலில் உள்ளது (கேலி செய்யப்பட்டது).",
     // Onboarding
     welcomeToOnboarding: "அறிமுகத்திற்கு வரவேற்கிறோம்",
     questionnaireIntro: "உங்களைப் பற்றி மேலும் தெரிந்து கொள்வோம். இது உங்கள் அனுபவத்தைத் தனிப்பயனாக்க உதவும்.",
@@ -317,5 +335,3 @@ export const translations = {
 };
 
 export type TranslatedStringType = keyof typeof translations.en;
-
-    

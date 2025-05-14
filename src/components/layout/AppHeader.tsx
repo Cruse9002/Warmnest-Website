@@ -12,13 +12,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { SidebarTrigger } from '@/components/ui/sidebar'; // Import SidebarTrigger
-import { Home, MessageCircle, User, LogOut, Sun, Moon, Palette } from 'lucide-react'; // Palette for theme
+import { SidebarTrigger } from '@/components/ui/sidebar';
+import { User, LogOut, Sun, Moon, Languages } from 'lucide-react'; // Added Languages, Sun, Moon. Removed Palette.
 import { AppLogo } from './AppLogo';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext'; // Import useTheme
-import { useRouter } // Import useRouter for navigation
+import { useTheme } from '@/contexts/ThemeContext';
+import { useRouter }
 from 'next/navigation';
 
 
@@ -26,12 +26,12 @@ export function AppHeader() {
   const { t, language, setLanguage } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const { user, logout, loading } = useAuth();
-  const router = useRouter(); // Initialize router
+  const router = useRouter();
 
   const handleLanguageToggle = () => {
     setLanguage(prev => prev === 'en' ? 'ta' : 'en');
   };
-  
+
   const navigateToProfile = () => {
     router.push('/profile');
   };
@@ -42,7 +42,7 @@ export function AppHeader() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10 border-2 border-primary">
-            <AvatarImage src={`https://placehold.co/100x100.png?text=${user?.name?.[0]?.toUpperCase() || 'U'}`} alt={user?.name || 'User'} data-ai-hint="avatar profile" />
+            <AvatarImage src={user?.photoURL || `https://placehold.co/100x100.png?text=${user?.name?.[0]?.toUpperCase() || 'U'}`} alt={user?.name || 'User'} data-ai-hint="avatar profile" />
             <AvatarFallback>{user?.name?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
           </Avatar>
         </Button>
@@ -62,12 +62,12 @@ export function AppHeader() {
           <span>{t('profile')}</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleLanguageToggle}>
-          {language === 'en' ? <Moon className="mr-2 h-4 w-4" /> : <Sun className="mr-2 h-4 w-4" />}
-          <span>{language === 'en' ? t('tamil') : t('english')}</span>
+          <Languages className="mr-2 h-4 w-4" />
+          <span>{language === 'en' ? t('switchToTamil') : t('switchToEnglish')}</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={toggleTheme}>
-          <Palette className="mr-2 h-4 w-4" /> {/* Theme toggle */}
-          <span>{theme === 'dark' ? t('lightMode') : t('darkMode')}</span>
+          {theme === 'dark' ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
+          <span>{theme === 'dark' ? t('switchToLightMode') : t('switchToDarkMode')}</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={logout}>
@@ -77,7 +77,7 @@ export function AppHeader() {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-  
+
   const AuthButtons = () => (
     <div className="flex items-center gap-2">
       <Button variant="ghost" asChild>
@@ -98,7 +98,7 @@ export function AppHeader() {
             <AppLogo size="sm"/> {/* Smaller logo for header when sidebar is present */}
          </div>
         </div>
-        
+
         {/* Centered Logo/Title for mobile when sidebar trigger is shown */}
         <div className="md:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <Link href="/dashboard" className="font-semibold text-lg text-primary">WarmNest</Link>

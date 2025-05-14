@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -29,7 +30,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Camera } from 'lucide-react';
 
 const profileFormSchema = z.object({
   name: z.string().min(1, "Name is required."),
@@ -38,7 +39,7 @@ const profileFormSchema = z.object({
   confirmNewPassword: z.string().optional(),
 }).refine(data => {
   if (data.newPassword && !data.currentPassword) {
-    return false; 
+    return false;
   }
   return true;
 }, {
@@ -64,6 +65,7 @@ export function UserProfile() {
   const { theme, toggleTheme } = useTheme();
   const { toast } = useToast();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
@@ -104,7 +106,7 @@ export function UserProfile() {
         description: "Your profile settings have been saved.",
       });
     }
-    form.reset({ 
+    form.reset({
         ...form.getValues(),
         currentPassword: "",
         newPassword: "",
@@ -115,13 +117,27 @@ export function UserProfile() {
   const handleDeleteAccountConfirm = async () => {
     await deleteAccount();
     setIsDeleteDialogOpen(false);
-    toast({
-      title: "Account Deleted",
-      description: "Your account and all data have been removed.",
-      variant: "destructive",
-    });
-    // AuthContext's logout (called by deleteAccount) will handle redirection
+    // Toast is handled by AuthContext or calling page after redirect
   };
+
+  const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && user) {
+      // Mock photo update: In a real app, upload file and get URL.
+      // Here, we'll use a new placeholder to demonstrate change.
+      const newPhotoURL = `https://placehold.co/100x100.png?text=${user.name?.[0]?.toUpperCase() || 'U'}${Math.floor(Math.random() * 100)}`;
+      updateUser({ photoURL: newPhotoURL });
+      toast({
+        title: t('profilePhotoUpdatedTitle'),
+        description: t('profilePhotoUpdatedDescMock'),
+      });
+    }
+    // Reset file input to allow selecting the same file again if needed (optional)
+    if (event.target) {
+      event.target.value = "";
+    }
+  };
+
 
   if (!user) {
     return <p>Loading profile...</p>;
@@ -137,6 +153,36 @@ export function UserProfile() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              {/* Profile Photo Section */}
+              <div className="flex flex-col items-center space-y-3">
+                <Label className="text-base font-medium">{t('profilePhoto')}</Label>
+                <div className="relative w-28 h-28">
+                  <Avatar className="w-28 h-28 text-3xl border-2 border-primary">
+                    <AvatarImage src={user?.photoURL || `https://placehold.co/100x100.png?text=${user?.name?.[0]?.toUpperCase() || 'U'}`} alt={user?.name || "User"} data-ai-hint="avatar profile" />
+                    <AvatarFallback>{user?.name?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
+                  </Avatar>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="absolute bottom-0 right-0 rounded-full bg-background hover:bg-muted"
+                    onClick={() => fileInputRef.current?.click()}
+                    aria-label={t('changePhoto')}
+                  >
+                    <Camera className="h-5 w-5" />
+                  </Button>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handlePhotoChange}
+                  />
+                </div>
+              </div>
+
+              <Separator />
+
               {/* Email (read-only) */}
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-base font-medium">{t('email')}</Label>
@@ -157,7 +203,7 @@ export function UserProfile() {
                   </FormItem>
                 )}
               />
-              
+
               <Separator />
 
               {/* Language Settings */}
@@ -245,7 +291,7 @@ export function UserProfile() {
                   )}
                 />
               </div>
-              
+
               <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
                 {t('saveSettings')}
               </Button>
@@ -279,7 +325,7 @@ export function UserProfile() {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel onClick={() => setIsDeleteDialogOpen(false)}>{t('cancel')}</AlertDialogCancel>
-                <AlertDialogAction 
+                <AlertDialogAction
                   onClick={handleDeleteAccountConfirm}
                   className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
                 >
