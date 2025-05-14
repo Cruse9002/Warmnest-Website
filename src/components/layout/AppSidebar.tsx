@@ -122,11 +122,11 @@ export function AppSidebar() {
             sidebarState === 'collapsed' ? "justify-center" : ""
           )}>
             <Avatar className="h-9 w-9 border-2 border-primary">
-              <AvatarImage src={`https://placehold.co/100x100.png?text=${user.name?.[0]?.toUpperCase() || 'U'}`} alt={user.name} data-ai-hint="avatar profile" />
+              <AvatarImage src={`https://placehold.co/100x100.png?text=${user.name?.[0]?.toUpperCase() || 'U'}`} alt={user.name || "User Avatar"} data-ai-hint="avatar profile" />
               <AvatarFallback>{user.name?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
             </Avatar>
             {sidebarState === 'expanded' && (
-              <div className="flex-1 overflow-hidden">
+              <div className="flex-1 overflow-hidden min-w-0"> {/* Added min-w-0 here */}
                 <p className="text-sm font-medium leading-none truncate">{user.name}</p>
                 <p className="text-xs leading-none text-muted-foreground truncate">
                   {user.email}
