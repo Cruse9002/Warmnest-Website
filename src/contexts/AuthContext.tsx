@@ -146,8 +146,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setLoading(true);
     setUser(null);
+    // Clear all app-related localStorage items
     localStorage.removeItem('warmnest-user');
-    // No need to remove 'warmnest-theme' here, ThemeContext handles it.
+    localStorage.removeItem('warmnest-journal');
+    localStorage.removeItem('warmnest-moodlog');
+    localStorage.removeItem('warmnest-theme');
     setLoading(false);
     router.push('/auth/login');
   };
