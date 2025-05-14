@@ -43,7 +43,7 @@ const chartConfig = {
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage(); // Destructure language here
 
   return (
     <div className="space-y-8">
@@ -89,7 +89,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             {lastMood ? (
-              <p className="text-lg">You felt <span className="font-semibold text-primary">{lastMood.mood}</span> {formatTimeAgo(lastMood.timestamp, t('english') as 'en' | 'ta')}.</p>
+              <p className="text-lg">You felt <span className="font-semibold text-primary">{lastMood.mood}</span> {formatTimeAgo(lastMood.timestamp, language)}.</p>
             ) : (
               <p className="text-muted-foreground">No mood logged recently.</p>
             )}
@@ -105,7 +105,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             {recentEntry ? (
-               <p className="text-lg">"<span className="italic text-primary">{recentEntry.title}</span>" written {formatTimeAgo(recentEntry.timestamp, t('english') as 'en' | 'ta')}.</p>
+               <p className="text-lg">"<span className="italic text-primary">{recentEntry.title}</span>" written {formatTimeAgo(recentEntry.timestamp, language)}.</p>
             ) : (
               <p className="text-muted-foreground">{t('noEntriesYet')}</p>
             )}
