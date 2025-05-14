@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/hooks/useLanguage";
-import { BookOpen, MessageCircle, Wind, Edit3, Smile, CalendarDays, TrendingUp } from "lucide-react";
+import { BookOpen, MessageCircle, Wind, Edit3, Smile, CalendarDays, TrendingUp, Quote } from "lucide-react";
 import Link from "next/link";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import React, { useState, useEffect } from 'react';
 
 
 // Mock data - replace with actual data fetching
@@ -40,10 +41,35 @@ const chartConfig = {
   },
 } satisfies import("@/components/ui/chart").ChartConfig;
 
+const wellKnownAffirmations = [
+  "Believe you can and you're halfway there. - Theodore Roosevelt",
+  "The only way to do great work is to love what you do. - Steve Jobs",
+  "Your limitation—it's only your imagination.",
+  "Push yourself, because no one else is going to do it for you.",
+  "Great things never come from comfort zones.",
+  "Dream it. Wish it. Do it.",
+  "Success doesn’t just find you. You have to go out and get it.",
+  "The harder you work for something, the greater you’ll feel when you achieve it.",
+  "Wake up with determination. Go to bed with satisfaction.",
+  "Do something today that your future self will thank you for. - Sean Patrick Flanery",
+  "It’s going to be hard, but hard does not mean impossible.",
+  "Don’t wait for opportunity. Create it.",
+  "The key to success is to focus on goals, not obstacles.",
+  "You are capable of amazing things.",
+  "Every day is a new beginning. Take a deep breath, smile, and start again."
+];
+
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const { t, language } = useLanguage(); 
+  const { t, language } = useLanguage();
+  const [affirmation, setAffirmation] = useState<string>("");
+
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * wellKnownAffirmations.length);
+    setAffirmation(wellKnownAffirmations[randomIndex]);
+  }, []);
+
 
   return (
     <div className="space-y-6 md:space-y-8">
@@ -54,7 +80,15 @@ export default function DashboardPage() {
         <p className="text-muted-foreground text-base sm:text-lg">
           {t('howAreYouFeeling')}
         </p>
-         <Button asChild className="mt-4 w-full sm:w-auto">
+        {affirmation && (
+          <div className="mt-4 p-3 bg-primary/10 rounded-lg shadow">
+            <p className="text-sm sm:text-base italic text-primary flex items-start">
+              <Quote className="h-5 w-5 mr-2 shrink-0 mt-1" />
+              <span>"{affirmation}"</span>
+            </p>
+          </div>
+        )}
+         <Button asChild className="mt-6 w-full sm:w-auto">
             <Link href="/journal">
                 <Smile className="mr-2 h-5 w-5" /> {t('logYourMood')}
             </Link>
@@ -170,3 +204,4 @@ function formatTimeAgo(date: Date, lang: 'en' | 'ta'): string {
   if (interval > 1) return Math.floor(interval) + (lang === 'en' ? ` minute${Math.floor(interval) > 1 ? 's' : ''} ago` : " நிமிடங்களுக்கு முன்பு");
   return Math.floor(seconds) + (lang === 'en' ? ` second${Math.floor(seconds) > 1 ? 's' : ''} ago` : " விநாடிகளுக்கு முன்பு");
 }
+
