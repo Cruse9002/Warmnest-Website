@@ -4,9 +4,10 @@ export type Language = 'en' | 'ta';
 export interface User {
   id: string;
   email: string;
-  name?: string;
+  name: string; // Changed from optional
   language: Language;
   onboarded: boolean;
+  darkMode?: boolean; // Added for theme preference
 }
 
 export interface QuestionnaireAnswers {
@@ -43,3 +44,7 @@ export interface ChatMessage {
   language: Language;
   escalate?: boolean;
 }
+
+// Add TranslatedStringType if it's not globally available or imported elsewhere
+// For this example, assuming it's defined or imported from i18n.ts
+export type TranslatedStringType = string;

@@ -8,11 +8,10 @@ import { useRouter } from 'next/navigation';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string) // Simplified login
-    => Promise<void>;
+  login: (email: string) => Promise<void>;
   logout: () => Promise<void>;
-  register: (email: string) // Simplified register
-    => Promise<void>;
+  register: (email: string) => Promise<void>;
+  updateUser: (updatedFields: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,19 +22,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    // Mock loading user from localStorage
     const storedUser = localStorage.getItem('warmth-within-user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      // Ensure default name if missing from older stored data
+      if (!parsedUser.name) {
+        parsedUser.name = parsedUser.email ? parsedUser.email.split('@')[0] : "User";
+      }
+      setUser(parsedUser);
     }
     setLoading(false);
   }, []);
 
   const login = async (email: string) => {
     setLoading(true);
-    // Mock API call
     await new Promise(resolve => setTimeout(resolve, 500));
-    const mockUser: User = { id: '1', email, name: email.split('@')[0], language: 'en', onboarded: false };
+    const mockUser: User = { 
+      id: '1', 
+      email, 
+      name: email.split('@')[0] || "User", // Ensure name is set
+      language: 'en', 
+      onboarded: false,
+      darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches, // Default to system preference
+    };
     setUser(mockUser);
     localStorage.setItem('warmth-within-user', JSON.stringify(mockUser));
     setLoading(false);
@@ -48,9 +57,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const register = async (email: string) => {
     setLoading(true);
-    // Mock API call
     await new Promise(resolve => setTimeout(resolve, 500));
-    const mockUser: User = { id: '1', email, name: email.split('@')[0], language: 'en', onboarded: false };
+    const mockUser: User = { 
+      id: '1', 
+      email, 
+      name: email.split('@')[0] || "User", // Ensure name is set
+      language: 'en', 
+      onboarded: false,
+      darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
+    };
     setUser(mockUser);
     localStorage.setItem('warmth-within-user', JSON.stringify(mockUser));
     setLoading(false);
@@ -61,11 +76,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     setUser(null);
     localStorage.removeItem('warmth-within-user');
+    // Optionally clear theme preference from localStorage if it's app-wide and not user-specific
+    // localStorage.removeItem('warmth-within-theme'); 
     setLoading(false);
     router.push('/auth/login');
   };
   
-  // Function to update user, e.g., after onboarding or language change
   const updateUser = (updatedFields: Partial<User>) => {
     setUser(prevUser => {
       if (!prevUser) return null;
@@ -75,7 +91,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-
   return (
     <AuthContext.Provider value={{ user, loading, login, logout, register, updateUser }}>
       {children}
@@ -83,11 +98,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useAuth = (): AuthContextType & { updateUser: (updatedFields: Partial<User>) => void } => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-  // Re-asserting updateUser in the return type for direct access via useAuth()
-  return context as AuthContextType & { updateUser: (updatedFields: Partial<User>) => void };
+  return context;
 };

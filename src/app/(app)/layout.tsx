@@ -2,10 +2,18 @@
 "use client";
 
 import { AppHeader } from '@/components/layout/AppHeader';
+import { AppSidebar } from '@/components/layout/AppSidebar'; // Import new AppSidebar
+import { 
+  SidebarProvider, 
+  Sidebar, 
+  SidebarInset, 
+  SidebarRail 
+} from '@/components/ui/sidebar'; // Import sidebar components
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 import React, { useEffect } from 'react';
-import { Progress } from '@/components/ui/progress'; // For loading state
+import { Progress } from '@/components/ui/progress';
+import { AppLogo as MinimalAppLogo } from '@/components/layout/AppLogo'; // Renamed for clarity
 
 export default function AppLayout({
   children,
@@ -25,7 +33,7 @@ export default function AppLayout({
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen items-center justify-center bg-background">
-        <AppLogo size="lg" />
+        <MinimalAppLogo size="lg" />
         <Progress value={50} className="w-1/4 mt-4" />
         <p className="text-muted-foreground mt-2">Loading your space...</p>
       </div>
@@ -33,7 +41,6 @@ export default function AppLayout({
   }
   
   if (!user && pathname !== '/auth/login' && pathname !== '/auth/register') {
-     // This case should ideally be handled by the redirect, but as a fallback:
     return (
       <div className="flex flex-col min-h-screen items-center justify-center bg-background">
          <p className="text-muted-foreground mt-2">Redirecting to login...</p>
@@ -41,28 +48,23 @@ export default function AppLayout({
     );
   }
 
-
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <AppHeader />
-      <main className="flex-1 container py-8 max-w-screen-xl">
-        {children}
-      </main>
-      <footer className="py-6 text-center text-sm text-muted-foreground border-t">
-        © {new Date().getFullYear()} Warmth Within. All rights reserved.
-      </footer>
-    </div>
+    <SidebarProvider defaultOpen>
+      <div className="flex min-h-screen flex-col bg-secondary/30 dark:bg-background"> {/* Changed background for better contrast with inset */}
+        <Sidebar side="left" variant="sidebar" collapsible="icon">
+          <AppSidebar />
+        </Sidebar>
+        <SidebarRail />
+        <SidebarInset>
+          <AppHeader /> {/* AppHeader might need SidebarTrigger now */}
+          <main className="flex-1 p-4 sm:p-6 md:p-8"> {/* Added padding here */}
+            {children}
+          </main>
+          <footer className="py-6 text-center text-sm text-muted-foreground border-t">
+            © {new Date().getFullYear()} Warmth Within. All rights reserved.
+          </footer>
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
   );
 }
-
-// Minimal AppLogo for loading screen
-const AppLogo = ({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) => {
-  const textSizeClass = size === 'lg' ? 'text-3xl' : size === 'md' ? 'text-2xl' : 'text-xl';
-  return (
-    <div className="flex items-center gap-2 text-primary">
-      <span className={`font-semibold ${textSizeClass} text-primary`}>
-        Warmth Within
-      </span>
-    </div>
-  );
-};
