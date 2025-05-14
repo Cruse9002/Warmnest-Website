@@ -2,18 +2,18 @@
 "use client";
 
 import { AppHeader } from '@/components/layout/AppHeader';
-import { AppSidebar } from '@/components/layout/AppSidebar'; // Import new AppSidebar
+import { AppSidebar } from '@/components/layout/AppSidebar';
 import { 
   SidebarProvider, 
   Sidebar, 
   SidebarInset, 
   SidebarRail 
-} from '@/components/ui/sidebar'; // Import sidebar components
+} from '@/components/ui/sidebar';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { Progress } from '@/components/ui/progress';
-import { AppLogo as MinimalAppLogo } from '@/components/layout/AppLogo'; // Renamed for clarity
+import { AppLogo as MinimalAppLogo } from '@/components/layout/AppLogo';
 
 export default function AppLayout({
   children,
@@ -50,21 +50,20 @@ export default function AppLayout({
 
   return (
     <SidebarProvider defaultOpen>
-      <div className="flex min-h-screen flex-col bg-secondary/30 dark:bg-background"> {/* Changed background for better contrast with inset */}
-        <Sidebar side="left" variant="sidebar" collapsible="icon">
-          <AppSidebar />
-        </Sidebar>
-        <SidebarRail />
-        <SidebarInset>
-          <AppHeader /> {/* AppHeader might need SidebarTrigger now */}
-          <main className="flex-1 p-4 sm:p-6 md:p-8"> {/* Added padding here */}
-            {children}
-          </main>
-          <footer className="py-6 text-center text-sm text-muted-foreground border-t">
-            © {new Date().getFullYear()} Warmth Within. All rights reserved.
-          </footer>
-        </SidebarInset>
-      </div>
+      <Sidebar side="left" variant="sidebar" collapsible="icon">
+        <AppSidebar />
+      </Sidebar>
+      <SidebarRail />
+      <SidebarInset> {/* SidebarInset is a <main> tag with flex flex-col */}
+        <AppHeader />
+        {/* This div wraps the page children to provide padding and flex-grow */}
+        <div className="flex-1 p-4 sm:p-6 md:p-8">
+          {children}
+        </div>
+        <footer className="py-6 text-center text-sm text-muted-foreground border-t">
+          © {new Date().getFullYear()} Warmth Within. All rights reserved.
+        </footer>
+      </SidebarInset>
     </SidebarProvider>
   );
 }
