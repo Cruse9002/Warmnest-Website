@@ -21,6 +21,7 @@ export const translations = {
     journal: "Journal",
     profile: "Profile",
     musicTherapy: "Music Therapy",
+    focusMode: "Focus Mode", // New
     // Profile
     name: "Name",
     languageSettings: "Language Settings",
@@ -134,7 +135,28 @@ export const translations = {
     upliftingTunes: "Uplifting Tunes",
     jamendoAttribution: "Music previews notionally powered by Jamendo (mock integration).",
     noTracksForPreference: "No specific tracks found for your preference, try exploring common sounds!",
-
+    // Focus Mode
+    focusModeTitle: "Focus Mode",
+    focusModeDescription: "Boost your productivity with proven focusing techniques.",
+    pomodoroTechnique: "Pomodoro Technique",
+    pomodoroDescription: "Work in focused bursts with short breaks in between.",
+    twoMinuteRule: "2 Minute Rule",
+    twoMinuteRuleDescription: "If a task takes less than two minutes, do it now.",
+    start: "Start",
+    pause: "Pause",
+    reset: "Reset",
+    workTime: "Work Time",
+    shortBreak: "Short Break",
+    longBreak: "Long Break",
+    pomodorosCompleted: "Pomodoros this cycle:",
+    startTwoMinuteTimer: "Start 2-Minute Timer",
+    taskCompleted: "Task Completed!",
+    takeYourBreak: "Time for a break!",
+    backToWork: "Back to work!",
+    longBreakTime: "Time for a longer break!",
+    pomodoroSessionComplete: "Pomodoro Session Complete!",
+    whatsTheTask: "What's the task (optional)?",
+    markDone: "Mark as Done",
   },
   ta: {
     appName: "WarmNest", 
@@ -155,6 +177,7 @@ export const translations = {
     journal: "நாட்குறிப்பு",
     profile: "சுயவிவரம்",
     musicTherapy: "இசை சிகிச்சை",
+    focusMode: "கவனப் பயன்முறை", // New
     // Profile
     name: "பெயர்",
     languageSettings: "மொழி அமைப்புகள்",
@@ -268,7 +291,31 @@ export const translations = {
     upliftingTunes: "உற்சாகமூட்டும் இசை",
     jamendoAttribution: "இசை மாதிரிகள் ஜமெண்டோ மூலம் வழங்கப்படுகிறது (மாதிரி ஒருங்கிணைப்பு).",
     noTracksForPreference: "உங்கள் விருப்பத்திற்கு குறிப்பிட்ட இசை எதுவும் கிடைக்கவில்லை, பொதுவான ஒலிகளை ஆராய முயற்சிக்கவும்!",
+    // Focus Mode
+    focusModeTitle: "கவனப் பயன்முறை",
+    focusModeDescription: "நிரூபிக்கப்பட்ட கவனக் குவிப்பு நுட்பங்கள் மூலம் உங்கள் உற்பத்தித்திறனை அதிகரிக்கவும்.",
+    pomodoroTechnique: "பொமோடோரோ நுட்பம்",
+    pomodoroDescription: "இடையில் சிறிய இடைவேளைகளுடன் கவனம் செலுத்தி வேலை செய்யுங்கள்.",
+    twoMinuteRule: "2 நிமிட விதி",
+    twoMinuteRuleDescription: "ஒரு பணி இரண்டு நிமிடங்களுக்கு குறைவாக எடுத்தால், அதை இப்போதே செய்யுங்கள்.",
+    start: "தொடங்கு",
+    pause: "இடைநிறுத்து",
+    reset: " மீட்டமை",
+    workTime: "வேலை நேரம்",
+    shortBreak: "சிறிய இடைவேளை",
+    longBreak: "நீண்ட இடைவேளை",
+    pomodorosCompleted: "இந்த சுழற்சியில் பொமோடோரோக்கள்:",
+    startTwoMinuteTimer: "2-நிமிட டைமரைத் தொடங்கு",
+    taskCompleted: "பணி முடிந்தது!",
+    takeYourBreak: "ஓய்வுக்கான நேரம்!",
+    backToWork: "வேலைக்குத் திரும்பு!",
+    longBreakTime: "நீண்ட ஓய்வுக்கான நேரம்!",
+    pomodoroSessionComplete: "பொமோடோரோ அமர்வு முடிந்தது!",
+    whatsTheTask: "பணி என்ன (விருப்பத்தேர்வு)?",
+    markDone: "முடிந்ததாகக் குறிக்கவும்",
   },
 };
 
 export type TranslatedStringType = keyof typeof translations.en;
+
+    
