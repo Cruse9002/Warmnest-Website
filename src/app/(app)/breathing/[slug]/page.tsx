@@ -95,49 +95,43 @@ export default function BreathingExercisePage() {
   }
 
   return (
-    <div className="flex flex-col items-center space-y-8 p-4 md:p-8">
+    <div className="flex flex-col items-center space-y-6 p-4 md:p-8">
       <div className="w-full max-w-2xl">
-        <Button variant="ghost" asChild className="mb-4">
+        <Button variant="ghost" asChild className="mb-4 text-sm sm:text-base">
           <Link href="/breathing">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to exercises
           </Link>
         </Button>
-        <h1 className="text-3xl md:text-4xl font-bold text-center text-primary mb-2">{t(exercise.nameKey)}</h1>
-        <p className="text-center text-muted-foreground mb-8">{t(exercise.descriptionKey)}</p>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-primary mb-2">{t(exercise.nameKey)}</h1>
+        <p className="text-center text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">{t(exercise.descriptionKey)}</p>
       </div>
 
       {isPlaying ? (
         <BreathingAnimation cycle={exercise.cycleConfig} onCycleComplete={handleCycleComplete} />
       ) : (
-        <div className="w-48 h-48 md:w-64 md:h-64 bg-primary/10 rounded-full flex items-center justify-center shadow-lg">
-          <Play className="w-16 h-16 text-primary cursor-pointer" onClick={togglePlay} />
+        <div className="w-36 h-36 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-primary/10 rounded-full flex items-center justify-center shadow-lg">
+          <Play className="w-12 h-12 sm:w-16 sm:h-16 text-primary cursor-pointer" onClick={togglePlay} />
         </div>
       )}
       
-      <div className="w-full max-w-md space-y-4">
-        <div className="flex justify-center space-x-4">
-            <Button onClick={togglePlay} variant="outline" size="lg" className="w-32">
+      <div className="w-full max-w-xs sm:max-w-md space-y-4">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:space-x-4">
+            <Button onClick={togglePlay} variant="outline" size="lg" className="w-full sm:w-32">
             {isPlaying ? <Pause className="mr-2 h-5 w-5" /> : <Play className="mr-2 h-5 w-5" />}
             {isPlaying ? 'Pause' : (completedCycles >= totalCycles && totalCycles > 0 ? 'Replay' : 'Start')}
             </Button>
-            <Button onClick={resetExercise} variant="outline" size="lg" className="w-32">
+            <Button onClick={resetExercise} variant="outline" size="lg" className="w-full sm:w-32">
                 <RotateCcw className="mr-2 h-5 w-5" />
                 Reset
             </Button>
         </div>
         <div className="text-center">
-            <p className="text-sm text-muted-foreground">Progress: {completedCycles} / {totalCycles} cycles</p>
-            <div className="w-full bg-muted rounded-full h-2.5 mt-1">
-                <div className="bg-primary h-2.5 rounded-full" style={{ width: `${progress}%` }}></div>
+            <p className="text-xs sm:text-sm text-muted-foreground">Progress: {completedCycles} / {totalCycles} cycles</p>
+            <div className="w-full bg-muted rounded-full h-2 sm:h-2.5 mt-1">
+                <div className="bg-primary h-2 sm:h-2.5 rounded-full" style={{ width: `${progress}%` }}></div>
             </div>
         </div>
       </div>
-
-      {/* Placeholder for audio player if it were implemented */}
-      {/* <div className="mt-8 p-4 border rounded-md w-full max-w-md">
-        <h3 className="font-semibold">Audio Guide</h3>
-        <p className="text-sm text-muted-foreground">Audio player would go here.</p>
-      </div> */}
     </div>
   );
 }

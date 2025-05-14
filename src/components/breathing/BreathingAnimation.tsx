@@ -71,30 +71,30 @@ export function BreathingAnimation({ cycle, onCycleComplete }: BreathingAnimatio
   }
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 space-y-6">
+    <div className="flex flex-col items-center justify-center p-4 sm:p-8 space-y-4 sm:space-y-6">
       <div 
         key={animationKey}
         className={cn(
-          "w-48 h-48 md:w-64 md:h-64 bg-primary/30 rounded-full flex items-center justify-center shadow-xl transition-all duration-500 ease-in-out",
+          "w-36 h-36 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-primary/30 rounded-full flex items-center justify-center shadow-xl transition-all duration-500 ease-in-out",
           getAnimationClass()
         )}
         style={{ animationDuration: `${currentDuration}s` }}
       >
         <div className={cn(
-            "w-32 h-32 md:w-48 md:h-48 bg-primary/60 rounded-full flex items-center justify-center",
+            "w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 bg-primary/60 rounded-full flex items-center justify-center",
              getAnimationClass()
            )}
              style={{ animationDuration: `${currentDuration}s`, animationDelay: '0.1s' }} // Slight delay for inner circle
            >
            <div className={cn(
-            "w-16 h-16 md:w-24 md:h-24 bg-primary rounded-full",
+            "w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 bg-primary rounded-full",
              getAnimationClass()
            )}
              style={{ animationDuration: `${currentDuration}s`, animationDelay: '0.2s' }} // Slight delay for inner circle
            />
         </div>
       </div>
-      <p className="text-2xl font-semibold text-primary animate-pulse" style={{ animationDuration: '2s'}}>
+      <p className="text-xl sm:text-2xl font-semibold text-primary animate-pulse" style={{ animationDuration: '2s'}}>
         {getInstructionText()}... ({currentDuration}s)
       </p>
       <style jsx global>{`

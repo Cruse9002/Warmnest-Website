@@ -31,7 +31,7 @@ const formSchema = z.object({
 
 export function AuthForm({ isRegister = false }: AuthFormProps) {
   const { t } = useLanguage();
-  const { login, register: registerUser, loading } = useAuth();
+  const { login, register: registerUser, signInWithGoogle, loading } = useAuth(); // Use signInWithGoogle
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,16 +43,16 @@ export function AuthForm({ isRegister = false }: AuthFormProps) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (isRegister) {
-      await registerUser(values.email); // Simplified: using email also for password for mock
+      // In a real app, password would be used. Here, email is used as a mock identifier.
+      await registerUser(values.email); 
     } else {
-      await login(values.email); // Simplified: using email also for password for mock
+      // In a real app, password would be used for login.
+      await login(values.email); 
     }
   }
   
   const handleGoogleSignIn = async () => {
-    // Mock Google Sign-In: For demo, let's just log in with a predefined Google user.
-    // In a real app, this would use Firebase's GoogleAuthProvider.
-    await login("googleuser@example.com");
+    await signInWithGoogle();
   };
 
 

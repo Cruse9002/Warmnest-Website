@@ -25,8 +25,13 @@ export default function AppLayout({
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!loading && !user && pathname !== '/auth/login' && pathname !== '/auth/register') {
-      router.replace('/auth/login');
+    // This effect handles redirection if auth state changes *after* initial load
+    if (!loading && !user) {
+      // Avoid redirecting if already on an auth page (though this layout shouldn't wrap them)
+      // This check is more of a safeguard.
+      if (pathname !== '/auth/login' && pathname !== '/auth/register') {
+        router.replace('/auth/login');
+      }
     }
   }, [user, loading, router, pathname]);
 
@@ -34,20 +39,26 @@ export default function AppLayout({
     return (
       <div className="flex flex-col min-h-screen items-center justify-center bg-background">
         <MinimalAppLogo size="lg" />
-        <Progress value={50} className="w-1/4 mt-4" />
+        <Progress value={50} className="w-1/2 sm:w-1/3 md:w-1/4 mt-4" />
         <p className="text-muted-foreground mt-2">Loading your space...</p>
       </div>
     );
   }
   
+  // If not loading, and still no user, and not on an auth page (this condition should ideally not be met often here due to useEffect)
+  // This ensures that if the useEffect hasn't redirected yet, we still don't render children.
   if (!user && pathname !== '/auth/login' && pathname !== '/auth/register') {
     return (
       <div className="flex flex-col min-h-screen items-center justify-center bg-background">
-         <p className="text-muted-foreground mt-2">Redirecting to login...</p>
+         <MinimalAppLogo size="lg" />
+         <p className="text-muted-foreground mt-4">Redirecting to login...</p>
       </div>
     );
   }
 
+  // If user is null but we are on an auth page (which this layout shouldn't wrap), 
+  // or if user exists, then render the layout.
+  // The primary protection for app routes is the above block.
   return (
     <SidebarProvider defaultOpen>
       <Sidebar side="left" variant="sidebar" collapsible="icon">

@@ -31,9 +31,9 @@ export default function HomePage() {
       <div className="mb-8">
         <AppLogo size="lg" />
       </div>
-      <Progress value={50} className="w-1/2 md:w-1/4 mb-4" />
-      <p className="text-muted-foreground text-lg">Initializing your space...</p>
-      <p className="text-sm text-muted-foreground mt-2">Please wait while we prepare WarmNest for you.</p>
+      <Progress value={50} className="w-1/2 sm:w-1/3 md:w-1/4 mb-4" />
+      <p className="text-muted-foreground text-base sm:text-lg">Initializing your space...</p>
+      <p className="text-xs sm:text-sm text-muted-foreground mt-2">Please wait while we prepare WarmNest for you.</p>
     </div>
   );
 }
