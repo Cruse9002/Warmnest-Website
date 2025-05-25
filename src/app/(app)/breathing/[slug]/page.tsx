@@ -14,7 +14,7 @@ import { useParams } from 'next/navigation';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { mockJamendoTracks } from '@/lib/mockJamendo';
 import Image from 'next/image';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'; // Added CardFooter
 
 const LOCAL_STORAGE_SKIP_INSTRUCTIONS_KEY = 'warmnest-skip-breathing-instructions';
 
