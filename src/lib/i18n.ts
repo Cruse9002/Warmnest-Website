@@ -103,6 +103,37 @@ export const translations = {
     inhale: "Inhale",
     hold: "Hold",
     exhale: "Exhale",
+    howToPerform: "How to Perform",
+    dontShowInstructionsAgain: "Don't show instructions next time",
+    // Box Breathing Steps
+    boxBreathingStep1: "Sit comfortably in a chair or on the floor with your back straight.",
+    boxBreathingStep2: "Close your eyes gently. Inhale slowly and deeply through your nose to a count of 4.",
+    boxBreathingStep3: "Hold your breath for a count of 4.",
+    boxBreathingStep4: "Exhale slowly through your mouth for a count of 4.",
+    boxBreathingStep5: "Hold your breath with your lungs empty for a count of 4. This completes one cycle.",
+    // 4-7-8 Breathing Steps
+    fourSevenEightBreathingStep1: "Sit or lie down in a comfortable position. Rest the tip of your tongue against the ridge of tissue just behind your upper front teeth.",
+    fourSevenEightBreathingStep2: "Exhale completely through your mouth, making a whoosh sound.",
+    fourSevenEightBreathingStep3: "Close your mouth and inhale quietly through your nose to a mental count of 4.",
+    fourSevenEightBreathingStep4: "Hold your breath for a count of 7.",
+    fourSevenEightBreathingStep5: "Exhale completely through your mouth, making a whoosh sound to a count of 8. This is one breath.",
+    // Diaphragmatic Breathing Steps
+    diaphragmaticBreathingStep1: "Lie on your back with your knees bent, or sit comfortably in a chair.",
+    diaphragmaticBreathingStep2: "Place one hand on your upper chest and the other just below your rib cage. This will allow you to feel your diaphragm move as you breathe.",
+    diaphragmaticBreathingStep3: "Breathe in slowly through your nose so that your stomach moves out against your lower hand. The hand on your chest should remain as still as possible.",
+    diaphragmaticBreathingStep4: "Tighten your stomach muscles, letting them fall inward as you exhale through pursed lips (like whistling). The hand on your upper chest must remain as still as possible.",
+    // Alternate Nostril Breathing Steps
+    alternateNostrilBreathingStep1: "Sit in a comfortable meditative posture. Keep your spine erect and shoulders relaxed.",
+    alternateNostrilBreathingStep2: "Rest your left hand on your left knee. Bring your right hand up to your nose. Exhale completely.",
+    alternateNostrilBreathingStep3: "Close your right nostril with your right thumb. Inhale through your left nostril slowly and steadily.",
+    alternateNostrilBreathingStep4: "Close your left nostril with your right ring finger and pinky finger so both nostrils are held closed; retain your breath for a moment.",
+    alternateNostrilBreathingStep5: "Open your right nostril and breathe out slowly. Then, inhale through the right nostril.",
+    alternateNostrilBreathingStep6: "Close the right nostril, open the left, and exhale slowly. This completes one cycle.",
+    // Pursed-Lip Breathing Steps
+    pursedLipBreathingStep1: "Relax your neck and shoulders.",
+    pursedLipBreathingStep2: "Keeping your mouth closed, inhale slowly through your nose for two counts.",
+    pursedLipBreathingStep3: "Pucker or “purse” your lips as if you were going to whistle or gently blow out a candle.",
+    pursedLipBreathingStep4: "Exhale slowly and gently through your pursed lips for a count of four (or longer).",
     // Chatbot
     mentalWellnessChatbot: "Mental Wellness Chatbot",
     typeYourMessage: "Type your message...",
@@ -274,6 +305,37 @@ export const translations = {
     inhale: "உள்ளிழுக்கவும்",
     hold: "நிறுத்து",
     exhale: "வெளியேற்றவும்",
+    howToPerform: "செய்வது எப்படி",
+    dontShowInstructionsAgain: "அடுத்த முறை வழிமுறைகளைக் காட்ட வேண்டாம்",
+    // Box Breathing Steps - Tamil
+    boxBreathingStep1: "நாற்காலியில் அல்லது தரையில் உங்கள் முதுகை நேராக வைத்து வசதியாக உட்காருங்கள்.",
+    boxBreathingStep2: "உங்கள் கண்களை மெதுவாக மூடிக்கொள்ளுங்கள். 4 எண்ணிக்கைக்கு மெதுவாகவும் ஆழமாகவும் உங்கள் மூக்கு வழியாக உள்ளிழுக்கவும்.",
+    boxBreathingStep3: "4 எண்ணிக்கைக்கு உங்கள் சுவாசத்தை பிடித்துக் கொள்ளுங்கள்.",
+    boxBreathingStep4: "4 எண்ணிக்கைக்கு மெதுவாக உங்கள் வாய் வழியாக வெளிவிடவும்.",
+    boxBreathingStep5: "நுரையீரல் காலியாக இருக்கும்போது 4 எண்ணிக்கைக்கு உங்கள் சுவாசத்தை பிடித்துக் கொள்ளுங்கள். இது ஒரு சுழற்சியை நிறைவு செய்கிறது.",
+    // 4-7-8 Breathing Steps - Tamil
+    fourSevenEightBreathingStep1: "வசதியான நிலையில் உட்கார்ந்து கொள்ளுங்கள் அல்லது படுத்துக் கொள்ளுங்கள். உங்கள் நாக்கின் நுனியை உங்கள் மேல் முன் பற்களுக்குப் பின்னால் உள்ள திசு மேட்டில் வைக்கவும்.",
+    fourSevenEightBreathingStep2: "உங்கள் வாய் வழியாக முழுமையாக வெளிவிட்டு, 'whoosh' என்ற சத்தத்தை உருவாக்கவும்.",
+    fourSevenEightBreathingStep3: "உங்கள் வாயை மூடிக்கொண்டு, உங்கள் மூக்கு வழியாக அமைதியாக 4 மன எண்ணிக்கைக்கு உள்ளிழுக்கவும்.",
+    fourSevenEightBreathingStep4: "7 எண்ணிக்கைக்கு உங்கள் சுவாசத்தைப் பிடித்துக் கொள்ளுங்கள்.",
+    fourSevenEightBreathingStep5: "உங்கள் வாய் வழியாக முழுமையாக வெளிவிட்டு, 8 எண்ணிக்கைக்கு 'whoosh' என்ற சத்தத்தை உருவாக்கவும். இது ஒரு சுவாசம்.",
+    // Diaphragmatic Breathing Steps - Tamil
+    diaphragmaticBreathingStep1: "உங்கள் முழங்கால்களை வளைத்து முதுகில் படுத்துக் கொள்ளுங்கள், அல்லது நாற்காலியில் வசதியாக உட்காருங்கள்.",
+    diaphragmaticBreathingStep2: "ஒரு கையை உங்கள் மேல் மார்பிலும் மற்றொன்றை உங்கள் விலா எலும்புக் கூட்டுக்குக் கீழேயும் வைக்கவும். இது நீங்கள் சுவாசிக்கும்போது உங்கள் உதரவிதானம் நகர்வதை உணர உதவும்.",
+    diaphragmaticBreathingStep3: "உங்கள் மூக்கு வழியாக மெதுவாக உள்ளிழுங்கள், இதனால் உங்கள் வயிறு உங்கள் கீழ் கைக்கு எதிராக வெளியேறும். உங்கள் மார்பில் உள்ள கை முடிந்தவரை அசையாமல் இருக்க வேண்டும்.",
+    diaphragmaticBreathingStep4: "உங்கள் வயிற்று தசைகளை இறுக்குங்கள், குவிந்த உதடுகள் வழியாக (விசில் அடிப்பது போல) வெளிவிடும்போது அவை உள்நோக்கி விழட்டும். உங்கள் மேல் மார்பில் உள்ள கை முடிந்தவரை அசையாமல் இருக்க வேண்டும்.",
+    // Alternate Nostril Breathing Steps - Tamil
+    alternateNostrilBreathingStep1: "வசதியான தியான ஆசனத்தில் அமரவும். உங்கள் முதுகெலும்பை நிமிர்த்தி, தோள்களை தளர்வாக வைக்கவும்.",
+    alternateNostrilBreathingStep2: "உங்கள் இடது கையை உங்கள் இடது முழங்காலில் வைக்கவும். உங்கள் வலது கையை உங்கள் மூக்குக்கு கொண்டு வாருங்கள். முழுமையாக வெளிவிடவும்.",
+    alternateNostrilBreathingStep3: "உங்கள் வலது நாசியை உங்கள் வலது கட்டைவிரலால் மூடவும். உங்கள் இடது நாசி வழியாக மெதுவாகவும் சீராகவும் உள்ளிழுக்கவும்.",
+    alternateNostrilBreathingStep4: "உங்கள் இடது நாசியை உங்கள் வலது மோதிர விரல் மற்றும் சுண்டு விரலால் மூடவும், இதனால் இரு நாசிகளும் மூடப்பட்டிருக்கும்; ஒரு கணம் உங்கள் சுவாசத்தை நிறுத்தவும்.",
+    alternateNostrilBreathingStep5: "உங்கள் வலது நாசியைத் திறந்து மெதுவாக வெளிவிடவும். பின்னர், வலது நாசி வழியாக உள்ளிழுக்கவும்.",
+    alternateNostrilBreathingStep6: "வலது நாசியை மூடி, இடது நாசியைத் திறந்து மெதுவாக வெளிவிடவும். இது ஒரு சுழற்சியை நிறைவு செய்கிறது.",
+    // Pursed-Lip Breathing Steps - Tamil
+    pursedLipBreathingStep1: "உங்கள் கழுத்து மற்றும் தோள்களை தளர்த்தவும்.",
+    pursedLipBreathingStep2: "உங்கள் வாயை மூடிக்கொண்டு, இரண்டு எண்ணிக்கைக்கு மூக்கு வழியாக மெதுவாக உள்ளிழுக்கவும்.",
+    pursedLipBreathingStep3: "நீங்கள் விசில் அடிக்கப் போவது போல அல்லது மெழுகுவர்த்தியை மெதுவாக ஊதுவது போல உங்கள் உதடுகளைக் குவிக்கவும்.",
+    pursedLipBreathingStep4: "நான்கு (அல்லது அதற்கு மேற்பட்ட) எண்ணிக்கைக்கு உங்கள் குவிந்த உதடுகள் வழியாக மெதுவாகவும் மென்மையாகவும் வெளிவிடவும்.",
     // Chatbot
     mentalWellnessChatbot: "மனநல உரையாடல் கருவி",
     typeYourMessage: "உங்கள் செய்தியை தட்டச்சு செய்யவும்...",
@@ -347,5 +409,3 @@ export const translations = {
 };
 
 export type TranslatedStringType = keyof typeof translations.en;
-
-    

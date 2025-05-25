@@ -8,7 +8,7 @@ export interface User {
   language: Language;
   onboarded: boolean;
   darkMode?: boolean;
-  photoURL?: string; // Added for profile photo
+  photoURL?: string;
   dob?: string;
   gender?: 'male' | 'female' | 'other' | 'preferNotToSay';
   favoriteColor?: 'red' | 'blue' | 'green' | 'yellow' | 'purple' | 'pink' | 'orange' | 'black' | 'white' | 'other_color';
@@ -24,11 +24,17 @@ export interface QuestionnaireAnswers {
   favoriteColor?: 'red' | 'blue' | 'green' | 'yellow' | 'purple' | 'pink' | 'orange' | 'black' | 'white' | 'other_color';
 }
 
+interface InstructionStep {
+  textKey: TranslatedStringType;
+  diagramHint: string; // For data-ai-hint of placeholder image
+}
+
 export interface BreathingExercise {
   slug: string;
   nameKey: TranslatedStringType;
   descriptionKey: TranslatedStringType;
   durationMinutes: number;
+  instructionSteps?: InstructionStep[]; // Optional array of instruction steps
 }
 
 export interface MoodLog {
