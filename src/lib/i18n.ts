@@ -90,9 +90,15 @@ export const translations = {
     // Breathing
     guidedBreathing: "Guided Breathing",
     boxBreathing: "Box Breathing",
-    boxBreathingDesc: "A simple technique to calm your nerves.",
+    boxBreathingDesc: "A simple technique to calm your nerves by inhaling, holding, exhaling, and holding for equal counts.",
     fourSevenEightBreathing: "4-7-8 Breathing",
-    fourSevenEightBreathingDesc: "Relaxing breath to help with sleep and anxiety.",
+    fourSevenEightBreathingDesc: "A relaxing breath technique: inhale for 4, hold for 7, exhale for 8. Helps with sleep and anxiety.",
+    diaphragmaticBreathing: "Diaphragmatic Breathing (Belly Breathing)",
+    diaphragmaticBreathingDesc: "Focus on deep belly breaths to fully engage the diaphragm, promoting relaxation and efficient oxygen exchange.",
+    alternateNostrilBreathing: "Alternate Nostril Breathing (Nadi Shodhana)",
+    alternateNostrilBreathingDesc: "A yogic breath practice to balance energy and calm the mind by breathing through one nostril at a time.",
+    pursedLipBreathing: "Pursed-Lip Breathing",
+    pursedLipBreathingDesc: "Inhale gently through the nose and exhale slowly through pursed lips to improve lung function and promote calmness.",
     startExercise: "Start Exercise",
     inhale: "Inhale",
     hold: "Hold",
@@ -255,9 +261,15 @@ export const translations = {
     // Breathing
     guidedBreathing: "வழிநடத்தும் சுவாசம்",
     boxBreathing: "பெட்டி சுவாசம்",
-    boxBreathingDesc: "உங்கள் நரம்புகளை அமைதிப்படுத்த ஒரு எளிய நுட்பம்.",
+    boxBreathingDesc: "சமமான எண்ணிக்கையில் உள்ளிழுத்தல், நிறுத்துதல், வெளிவிடுதல் மற்றும் நிறுத்துதல் மூலம் உங்கள் நரம்புகளை அமைதிப்படுத்த ஒரு எளிய நுட்பம்.",
     fourSevenEightBreathing: "4-7-8 சுவாசம்",
-    fourSevenEightBreathingDesc: "தூக்கம் மற்றும் பதட்டத்திற்கு உதவும் ஓய்வெடுக்கும் சுவாசம்.",
+    fourSevenEightBreathingDesc: "ஓய்வெடுக்கும் சுவாச நுட்பம்: 4 விநாடிகள் உள்ளிழுத்து, 7 விநாடிகள் நிறுத்தி, 8 விநாடிகள் வெளிவிடவும். தூக்கம் மற்றும் பதட்டத்திற்கு உதவுகிறது.",
+    diaphragmaticBreathing: "உதரவிதான சுவாசம் (வயிற்று சுவாசம்)",
+    diaphragmaticBreathingDesc: "உதரவிதானத்தை முழுமையாக ஈடுபடுத்த ஆழமான வயிற்று சுவாசத்தில் கவனம் செலுத்துங்கள், இது தளர்வு மற்றும் திறமையான ஆக்ஸிஜன் பரிமாற்றத்தை ஊக்குவிக்கிறது.",
+    alternateNostrilBreathing: "மாற்று நாசி சுவாசம் (நாடி शोधन)",
+    alternateNostrilBreathingDesc: "ஒரு நேரத்தில் ஒரு நாசி வழியாக சுவாசிப்பதன் மூலம் ஆற்றலை சமநிலைப்படுத்தவும் மனதை அமைதிப்படுத்தவும் ஒரு யோக சுவாசப் பயிற்சி.",
+    pursedLipBreathing: "குவிந்த உதடு சுவாசம்",
+    pursedLipBreathingDesc: "நுரையீரல் செயல்பாட்டை மேம்படுத்தவும் அமைதியை ஊக்குவிக்கவும் மூக்கு வழியாக மெதுவாக உள்ளிழுத்து, குவிந்த உதடுகள் வழியாக மெதுவாக வெளிவிடவும்.",
     startExercise: "பயிற்சியைத் தொடங்கு",
     inhale: "உள்ளிழுக்கவும்",
     hold: "நிறுத்து",
@@ -335,3 +347,5 @@ export const translations = {
 };
 
 export type TranslatedStringType = keyof typeof translations.en;
+
+    

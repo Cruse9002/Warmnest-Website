@@ -8,7 +8,8 @@ import type { BreathingExercise as BreathingExerciseType } from '@/types'; // Re
 import { ArrowLeft, RotateCcw, Play, Pause } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { mockJamendoTracks } from '@/lib/mockJamendo';
 
 // Mock data - in a real app, this would come from a service or context
 const exercisesData: Record<string, BreathingExerciseType & { cycleConfig: { state: 'inhale' | 'hold' | 'exhale'; duration: number }[] }> = {
@@ -35,6 +36,38 @@ const exercisesData: Record<string, BreathingExerciseType & { cycleConfig: { sta
       { state: 'exhale', duration: 8 },
     ],
   },
+  'diaphragmatic-breathing': {
+    slug: 'diaphragmatic-breathing',
+    nameKey: 'diaphragmaticBreathing',
+    descriptionKey: 'diaphragmaticBreathingDesc',
+    durationMinutes: 7,
+    cycleConfig: [
+      { state: 'inhale', duration: 4 }, // Focus on belly rising
+      { state: 'exhale', duration: 6 }, // Slow exhale
+    ],
+  },
+  'alternate-nostril-breathing': {
+    slug: 'alternate-nostril-breathing',
+    nameKey: 'alternateNostrilBreathing',
+    descriptionKey: 'alternateNostrilBreathingDesc',
+    durationMinutes: 5,
+    // Animation is simplified; user manually alternates nostrils based on description.
+    cycleConfig: [
+      { state: 'inhale', duration: 4 }, 
+      { state: 'hold', duration: 2 },
+      { state: 'exhale', duration: 4 },
+    ],
+  },
+  'pursed-lip-breathing': {
+    slug: 'pursed-lip-breathing',
+    nameKey: 'pursedLipBreathing',
+    descriptionKey: 'pursedLipBreathingDesc',
+    durationMinutes: 4,
+    cycleConfig: [
+      { state: 'inhale', duration: 2 }, // Inhale through nose
+      { state: 'exhale', duration: 4 }, // Exhale slowly through pursed lips
+    ],
+  },
 };
 
 export default function BreathingExercisePage() {
@@ -45,6 +78,11 @@ export default function BreathingExercisePage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [totalCycles, setTotalCycles] = useState(0);
   const [completedCycles, setCompletedCycles] = useState(0);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  // Using a specific calm track for all breathing exercises for simplicity
+  const musicUrl = useMemo(() => mockJamendoTracks.find(track => track.id === 'jam1')?.streamUrl, []);
+
 
   useEffect(() => {
     if (slug && exercisesData[slug]) {
@@ -74,6 +112,36 @@ export default function BreathingExercisePage() {
     }
   }, [completedCycles, totalCycles, isPlaying]);
 
+  // Effect for controlling music playback
+  useEffect(() => {
+    const audioElement = audioRef.current;
+    if (audioElement && musicUrl) {
+      if (isPlaying) {
+        audioElement.play().catch(error => console.warn("Audio play failed (this is expected if using mock URLs):", error));
+      } else {
+        audioElement.pause();
+      }
+    }
+  }, [isPlaying, musicUrl]);
+
+  // Effect for cleanup on unmount
+  useEffect(() => {
+    const audioElement = audioRef.current;
+    // Ensure audio element is created if musicUrl is present
+    if (musicUrl && !audioElement && typeof window !== 'undefined') {
+        const newAudioElement = new Audio(musicUrl);
+        newAudioElement.loop = true;
+        audioRef.current = newAudioElement;
+    }
+
+    return () => {
+      if (audioRef.current) { // Check if audioRef.current was initialized
+        audioRef.current.pause();
+        audioRef.current.src = ''; // Release the audio resource
+      }
+    };
+  }, [musicUrl]); // Depend on musicUrl to set up audio element
+
   if (!exercise) {
     return (
       <div className="text-center py-10">
@@ -85,6 +153,7 @@ export default function BreathingExercisePage() {
   const togglePlay = () => {
     if (completedCycles >= totalCycles && totalCycles > 0) { // If exercise finished, reset
         setCompletedCycles(0);
+        if (audioRef.current) audioRef.current.currentTime = 0;
     }
     setIsPlaying(!isPlaying);
   }
@@ -92,10 +161,20 @@ export default function BreathingExercisePage() {
   const resetExercise = () => {
     setIsPlaying(false);
     setCompletedCycles(0);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
   }
 
   return (
     <div className="flex flex-col items-center space-y-6 p-4 md:p-8">
+       {/* Hidden Audio Element. Note: Autoplay might be blocked by browsers without user interaction. 
+           Playback is controlled via `isPlaying` state.
+           If using actual audio URLs, `preload="auto"` is good.
+       */}
+      {musicUrl && <audio ref={audioRef} src={musicUrl} loop preload="auto" />}
+
       <div className="w-full max-w-2xl">
         <Button variant="ghost" asChild className="mb-4 text-sm sm:text-base">
           <Link href="/breathing">
@@ -135,3 +214,5 @@ export default function BreathingExercisePage() {
     </div>
   );
 }
+
+    

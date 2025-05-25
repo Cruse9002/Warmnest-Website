@@ -16,6 +16,24 @@ const exercises: BreathingExercise[] = [
     descriptionKey: 'fourSevenEightBreathingDesc',
     durationMinutes: 3,
   },
+  {
+    slug: 'diaphragmatic-breathing',
+    nameKey: 'diaphragmaticBreathing',
+    descriptionKey: 'diaphragmaticBreathingDesc',
+    durationMinutes: 7,
+  },
+  {
+    slug: 'alternate-nostril-breathing',
+    nameKey: 'alternateNostrilBreathing',
+    descriptionKey: 'alternateNostrilBreathingDesc',
+    durationMinutes: 5,
+  },
+  {
+    slug: 'pursed-lip-breathing',
+    nameKey: 'pursedLipBreathing',
+    descriptionKey: 'pursedLipBreathingDesc',
+    durationMinutes: 4,
+  },
   // Add more exercises here
 ];
 
@@ -39,3 +57,5 @@ export default function BreathingExercisesPage() {
     </div>
   );
 }
+
+    
