@@ -14,9 +14,9 @@ import { useParams } from 'next/navigation';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { mockJamendoTracks } from '@/lib/mockJamendo';
 import Image from 'next/image';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'; // Added CardFooter
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 
-const LOCAL_STORAGE_SKIP_INSTRUCTIONS_KEY = 'warmnest-skip-breathing-instructions';
+const LOCAL_STORAGE_SKIP_INSTRUCTIONS_KEY_PREFIX = 'warmnest-skip-breathing-instructions-';
 
 
 // Mock data - in a real app, this would come from a service or context
@@ -129,13 +129,20 @@ export default function BreathingExercisePage() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const musicUrl = useMemo(() => mockJamendoTracks.find(track => track.id === 'jam1')?.streamUrl, []);
 
+  const localStorageKey = useMemo(() => {
+    if (!slug) return '';
+    return `${LOCAL_STORAGE_SKIP_INSTRUCTIONS_KEY_PREFIX}${slug}`;
+  }, [slug]);
+
   useEffect(() => {
-    const skip = localStorage.getItem(LOCAL_STORAGE_SKIP_INSTRUCTIONS_KEY) === 'true';
+    if (!localStorageKey) return; // Don't proceed if slug (and thus key) isn't ready
+
+    const skip = localStorage.getItem(localStorageKey) === 'true';
     if (skip) {
       setShowInstructionsScreen(false);
     }
     setUserWantsToSkipInstructions(skip); // Initialize checkbox state from localStorage
-  }, []);
+  }, [localStorageKey]);
 
   useEffect(() => {
     if (slug && exercisesData[slug]) {
@@ -149,10 +156,12 @@ export default function BreathingExercisePage() {
   }, [slug]);
 
   const handleProceedToExercise = () => {
+    if (!localStorageKey) return;
+
     if (userWantsToSkipInstructions) {
-      localStorage.setItem(LOCAL_STORAGE_SKIP_INSTRUCTIONS_KEY, 'true');
+      localStorage.setItem(localStorageKey, 'true');
     } else {
-      localStorage.removeItem(LOCAL_STORAGE_SKIP_INSTRUCTIONS_KEY); // Remove if unchecked
+      localStorage.removeItem(localStorageKey); // Remove if unchecked
     }
     setShowInstructionsScreen(false);
   };
@@ -221,9 +230,11 @@ export default function BreathingExercisePage() {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
-    // Optionally, if user wants to see instructions again after reset:
-    // const skip = localStorage.getItem(LOCAL_STORAGE_SKIP_INSTRUCTIONS_KEY) === 'true';
-    // if (!skip) setShowInstructionsScreen(true);
+    // Optionally, if user wants to see instructions again after reset and they haven't globally skipped for THIS exercise:
+    // if (localStorageKey) {
+    //   const skip = localStorage.getItem(localStorageKey) === 'true';
+    //   if (!skip) setShowInstructionsScreen(true);
+    // }
   }
 
   return (
@@ -314,3 +325,4 @@ export default function BreathingExercisePage() {
     </div>
   );
 }
+
