@@ -21,7 +21,7 @@ const LOCAL_STORAGE_SKIP_INSTRUCTIONS_KEY_PREFIX = 'warmnest-skip-breathing-inst
 
 // Mock data - in a real app, this would come from a service or context
 const exercisesData: Record<string, BreathingExerciseType & { 
-  cycleConfig: { state: 'inhale' | 'hold' | 'exhale'; duration: number }[],
+  cycleConfig: { state: 'inhale' | 'hold-inhaled' | 'exhale' | 'hold-exhaled'; duration: number }[], // Updated state types
   instructionSteps: { textKey: string, diagramHint: string }[] 
 }> = {
   'box-breathing': {
@@ -38,9 +38,9 @@ const exercisesData: Record<string, BreathingExerciseType & {
     ],
     cycleConfig: [
       { state: 'inhale', duration: 4 },
-      { state: 'hold', duration: 4 },
+      { state: 'hold-inhaled', duration: 4 }, // Updated state
       { state: 'exhale', duration: 4 },
-      { state: 'hold', duration: 4 },
+      { state: 'hold-exhaled', duration: 4 }, // Updated state
     ],
   },
   '4-7-8-breathing': {
@@ -57,7 +57,7 @@ const exercisesData: Record<string, BreathingExerciseType & {
     ],
     cycleConfig: [
       { state: 'inhale', duration: 4 },
-      { state: 'hold', duration: 7 },
+      { state: 'hold-inhaled', duration: 7 }, // Assuming hold after inhale
       { state: 'exhale', duration: 8 },
     ],
   },
@@ -90,9 +90,11 @@ const exercisesData: Record<string, BreathingExerciseType & {
         { textKey: 'alternateNostrilBreathingStep5', diagramHint: 'exhale right nostril inhale right' },
         { textKey: 'alternateNostrilBreathingStep6', diagramHint: 'exhale left nostril' },
     ],
+    // This exercise's cycle is more complex and might need more nuanced state representation for perfect animation
+    // For now, using generic hold state if the simple distinction isn't enough
     cycleConfig: [
       { state: 'inhale', duration: 4 }, 
-      { state: 'hold', duration: 2 },
+      { state: 'hold-inhaled', duration: 2 },
       { state: 'exhale', duration: 4 },
     ],
   },
@@ -127,6 +129,7 @@ export default function BreathingExercisePage() {
   const [userWantsToSkipInstructions, setUserWantsToSkipInstructions] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  // Use a default calming track for breathing exercises
   const musicUrl = useMemo(() => mockJamendoTracks.find(track => track.id === 'jam1')?.streamUrl, []);
 
   const localStorageKey = useMemo(() => {
@@ -135,13 +138,13 @@ export default function BreathingExercisePage() {
   }, [slug]);
 
   useEffect(() => {
-    if (!localStorageKey) return; // Don't proceed if slug (and thus key) isn't ready
+    if (!localStorageKey) return; 
 
     const skip = localStorage.getItem(localStorageKey) === 'true';
     if (skip) {
       setShowInstructionsScreen(false);
     }
-    setUserWantsToSkipInstructions(skip); // Initialize checkbox state from localStorage
+    setUserWantsToSkipInstructions(skip); 
   }, [localStorageKey]);
 
   useEffect(() => {
@@ -161,13 +164,15 @@ export default function BreathingExercisePage() {
     if (userWantsToSkipInstructions) {
       localStorage.setItem(localStorageKey, 'true');
     } else {
-      localStorage.removeItem(localStorageKey); // Remove if unchecked
+      localStorage.removeItem(localStorageKey); 
     }
     setShowInstructionsScreen(false);
   };
 
   const handleCycleComplete = () => {
     setCompletedCycles(prev => prev + 1);
+    // Potentially play a sound cue for cycle completion
+    // Example: playSound('/audio/cycle-complete.mp3');
   };
   
   const progress = useMemo(() => {
@@ -178,13 +183,15 @@ export default function BreathingExercisePage() {
   useEffect(() => {
     if (isPlaying && completedCycles >= totalCycles && totalCycles > 0) {
       setIsPlaying(false); 
+      // Potentially play an exercise completion sound
+      // Example: playSound('/audio/exercise-finished.mp3');
     }
   }, [completedCycles, totalCycles, isPlaying]);
 
   useEffect(() => {
     const audioElement = audioRef.current;
     if (audioElement && musicUrl) {
-      if (isPlaying && !showInstructionsScreen) { // Only play if not on instructions screen
+      if (isPlaying && !showInstructionsScreen) { 
         audioElement.play().catch(error => console.warn("Audio play failed:", error));
       } else {
         audioElement.pause();
@@ -197,6 +204,9 @@ export default function BreathingExercisePage() {
         const newAudioElement = new Audio(musicUrl);
         newAudioElement.loop = true;
         audioRef.current = newAudioElement;
+        // Note: To play specific frequencies for music therapy, you'd need a different mechanism,
+        // possibly Web Audio API for tone generation or selecting specific tracks.
+        // This current setup is for background music during breathing.
     }
     return () => {
       if (audioRef.current) {
@@ -215,7 +225,7 @@ export default function BreathingExercisePage() {
   }
 
   const togglePlay = () => {
-    if (showInstructionsScreen) return; // Don't allow play/pause from instruction screen's perspective
+    if (showInstructionsScreen) return; 
     if (completedCycles >= totalCycles && totalCycles > 0) {
         setCompletedCycles(0);
         if (audioRef.current) audioRef.current.currentTime = 0;
@@ -230,11 +240,12 @@ export default function BreathingExercisePage() {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
-    // Optionally, if user wants to see instructions again after reset and they haven't globally skipped for THIS exercise:
-    // if (localStorageKey) {
-    //   const skip = localStorage.getItem(localStorageKey) === 'true';
-    //   if (!skip) setShowInstructionsScreen(true);
-    // }
+    if (localStorageKey) {
+       const skip = localStorage.getItem(localStorageKey) === 'true';
+       if (!skip) setShowInstructionsScreen(true);
+    } else {
+        setShowInstructionsScreen(true); // Default to show if no key (e.g. slug not ready)
+    }
   }
 
   return (

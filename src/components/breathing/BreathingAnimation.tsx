@@ -5,15 +5,18 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { cn } from '@/lib/utils';
 
+// Define specific states for breathing cycle including nuanced holds
+type BreathingState = 'inhale' | 'hold-inhaled' | 'exhale' | 'hold-exhaled' | 'idle';
+
 interface BreathingAnimationProps {
-  cycle: { state: 'inhale' | 'hold' | 'exhale'; duration: number }[]; // in seconds
+  cycle: { state: BreathingState; duration: number }[]; 
   onCycleComplete?: () => void;
 }
 
 export function BreathingAnimation({ cycle, onCycleComplete }: BreathingAnimationProps) {
-  const [currentState, setCurrentState] = useState<'inhale' | 'hold' | 'exhale' | 'idle'>('idle');
+  const [currentState, setCurrentState] = useState<BreathingState>('idle');
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [animationKey, setAnimationKey] = useState(0); // To restart CSS animation
+  const [animationKey, setAnimationKey] = useState(0); 
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -21,7 +24,9 @@ export function BreathingAnimation({ cycle, onCycleComplete }: BreathingAnimatio
       // Start the first cycle
       setCurrentState(cycle[0].state);
       setCurrentIndex(0);
-      setAnimationKey(prev => prev + 1); // Trigger animation restart
+      setAnimationKey(prev => prev + 1); 
+      // Example: playSound('/audio/exercise-start.mp3');
+      // if (cycle[0].state === 'inhale') playSound('/audio/inhale-cue.mp3');
       return;
     }
 
@@ -31,7 +36,12 @@ export function BreathingAnimation({ cycle, onCycleComplete }: BreathingAnimatio
         const nextIndex = (currentIndex + 1) % cycle.length;
         setCurrentIndex(nextIndex);
         setCurrentState(cycle[nextIndex].state);
-        setAnimationKey(prev => prev + 1); // Trigger animation restart
+        setAnimationKey(prev => prev + 1); 
+
+        // Play sound cues based on state
+        // Example:
+        // if (cycle[nextIndex].state === 'inhale') playSound('/audio/inhale-cue.mp3');
+        // else if (cycle[nextIndex].state === 'exhale') playSound('/audio/exhale-cue.mp3');
 
         if (nextIndex === 0 && onCycleComplete) {
           onCycleComplete();
@@ -50,8 +60,10 @@ export function BreathingAnimation({ cycle, onCycleComplete }: BreathingAnimatio
         return 'animate-inhale';
       case 'exhale':
         return 'animate-exhale';
-      case 'hold':
-        return 'animate-hold'; // Could be no size change, or a slight pulse
+      case 'hold-inhaled':
+        return 'animate-hold-inhaled';
+      case 'hold-exhaled':
+        return 'animate-hold-exhaled';
       default:
         return '';
     }
@@ -61,7 +73,8 @@ export function BreathingAnimation({ cycle, onCycleComplete }: BreathingAnimatio
     switch (currentState) {
       case 'inhale':
         return t('inhale');
-      case 'hold':
+      case 'hold-inhaled':
+      case 'hold-exhaled':
         return t('hold');
       case 'exhale':
         return t('exhale');
@@ -69,6 +82,12 @@ export function BreathingAnimation({ cycle, onCycleComplete }: BreathingAnimatio
         return "Ready?";
     }
   }
+
+  // Placeholder for playing sound - implement actual audio playback here
+  // const playSound = (soundFile: string) => {
+  //   const audio = new Audio(soundFile);
+  //   audio.play().catch(e => console.error("Error playing sound:", e));
+  // };
 
   return (
     <div className="flex flex-col items-center justify-center p-4 sm:p-8 space-y-4 sm:space-y-6">
@@ -84,13 +103,13 @@ export function BreathingAnimation({ cycle, onCycleComplete }: BreathingAnimatio
             "w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 bg-primary/60 rounded-full flex items-center justify-center",
              getAnimationClass()
            )}
-             style={{ animationDuration: `${currentDuration}s`, animationDelay: '0.1s' }} // Slight delay for inner circle
+             style={{ animationDuration: `${currentDuration}s`, animationDelay: '0.1s' }} 
            >
            <div className={cn(
             "w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 bg-primary rounded-full",
              getAnimationClass()
            )}
-             style={{ animationDuration: `${currentDuration}s`, animationDelay: '0.2s' }} // Slight delay for inner circle
+             style={{ animationDuration: `${currentDuration}s`, animationDelay: '0.2s' }} 
            />
         </div>
       </div>
@@ -106,13 +125,18 @@ export function BreathingAnimation({ cycle, onCycleComplete }: BreathingAnimatio
           0% { transform: scale(1); opacity: 1; }
           100% { transform: scale(0.7); opacity: 0.7; }
         }
-        @keyframes hold { /* Optional: subtle pulse or no change */
+        @keyframes hold-inhaled { /* Hold after inhale - stays large */
           0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.02); opacity: 0.95; }
+          50% { transform: scale(1.02); opacity: 0.95; } /* Subtle pulse */
+        }
+        @keyframes hold-exhaled { /* Hold after exhale - stays small */
+          0%, 100% { transform: scale(0.7); opacity: 0.7; }
+          50% { transform: scale(0.72); opacity: 0.65; } /* Subtle pulse, maintaining smaller size */
         }
         .animate-inhale { animation-name: inhale; animation-timing-function: ease-out; animation-fill-mode: forwards; }
         .animate-exhale { animation-name: exhale; animation-timing-function: ease-in; animation-fill-mode: forwards; }
-        .animate-hold { animation-name: hold; animation-timing-function: linear; animation-fill-mode: forwards; }
+        .animate-hold-inhaled { animation-name: hold-inhaled; animation-timing-function: linear; animation-fill-mode: forwards; }
+        .animate-hold-exhaled { animation-name: hold-exhaled; animation-timing-function: linear; animation-fill-mode: forwards; }
       `}</style>
     </div>
   );

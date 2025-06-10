@@ -10,7 +10,13 @@ import { Play, RotateCcw, CheckCircle, Hourglass } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useToast } from '@/hooks/use-toast';
 
-const TWO_MINUTE_DURATION = 2 * 60; // 2 minutes
+const TWO_MINUTE_DURATION = 2 * 60; 
+
+// Placeholder for playing sound - implement actual audio playback here
+// const playSound = (soundFile: string) => {
+//   const audio = new Audio(soundFile); // Assumes soundFile is like '/audio/timer-short-end.mp3'
+//   audio.play().catch(e => console.error("Error playing sound:", e));
+// };
 
 export function TwoMinuteRule() {
   const { t } = useLanguage();
@@ -28,8 +34,9 @@ export function TwoMinuteRule() {
       }, 1000);
     } else if (isRunning && timeRemaining === 0) {
       setIsRunning(false);
-      setIsTaskDone(true); // Assume task is done when timer ends
+      setIsTaskDone(true); 
       toast({ title: t('taskCompleted'), description: task || "Great job!"});
+      // playSound('/audio/2min-rule-complete.mp3');
     }
     return () => clearTimeout(timer);
   }, [isRunning, timeRemaining, t, toast, task]);
@@ -39,6 +46,7 @@ export function TwoMinuteRule() {
     setIsRunning(true);
     setIsTaskDone(false);
     toast({ title: "2-Minute Timer Started", description: "Focus on your task!" });
+    // playSound('/audio/timer-start-short.mp3');
   };
 
   const handleReset = () => {
@@ -46,12 +54,14 @@ export function TwoMinuteRule() {
     setTimeRemaining(TWO_MINUTE_DURATION);
     setTask("");
     setIsTaskDone(false);
+    // playSound('/audio/timer-reset.mp3');
   };
 
   const handleMarkDone = () => {
     setIsRunning(false);
     setIsTaskDone(true);
     toast({ title: t('taskCompleted'), description: task || "Well done!" });
+    // playSound('/audio/task-marked-done.mp3');
   };
   
   const formatTime = (seconds: number) => {
@@ -127,5 +137,3 @@ export function TwoMinuteRule() {
     </>
   );
 }
-
-    

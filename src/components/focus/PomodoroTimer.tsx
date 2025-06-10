@@ -9,12 +9,18 @@ import { Play, Pause, RotateCcw, Coffee, Briefcase } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useToast } from '@/hooks/use-toast';
 
-const WORK_DURATION = 25 * 60; // 25 minutes
-const SHORT_BREAK_DURATION = 5 * 60; // 5 minutes
-const LONG_BREAK_DURATION = 15 * 60; // 15 minutes
+const WORK_DURATION = 25 * 60; 
+const SHORT_BREAK_DURATION = 5 * 60; 
+const LONG_BREAK_DURATION = 15 * 60; 
 const CYCLES_BEFORE_LONG_BREAK = 4;
 
 type Mode = 'work' | 'shortBreak' | 'longBreak' | 'idle';
+
+// Placeholder for playing sound - implement actual audio playback here
+// const playSound = (soundFile: string) => {
+//   const audio = new Audio(soundFile); // Assumes soundFile is like '/audio/timer-end.mp3'
+//   audio.play().catch(e => console.error("Error playing sound:", e));
+// };
 
 export function PomodoroTimer() {
   const { t } = useLanguage();
@@ -29,24 +35,29 @@ export function PomodoroTimer() {
   const handleModeChangeNotification = useCallback((newMode: Mode) => {
     let title = "";
     let description = "";
+    // let soundToPlay = ""; // To determine which sound to play
 
     switch (newMode) {
         case 'work':
             title = t('backToWork');
             description = t('pomodoroDescription');
+            // soundToPlay = '/audio/work-start.mp3';
             break;
         case 'shortBreak':
             title = t('takeYourBreak');
             description = `${t('shortBreak')} - ${SHORT_BREAK_DURATION / 60} ${t('minutes') || 'minutes'}`;
+            // soundToPlay = '/audio/break-start.mp3';
             break;
         case 'longBreak':
             title = t('longBreakTime');
             description = `${t('longBreak')} - ${LONG_BREAK_DURATION / 60} ${t('minutes') || 'minutes'}`;
+            // soundToPlay = '/audio/long-break-start.mp3';
             break;
         default:
             return;
     }
     toast({ title, description });
+    // if (soundToPlay) playSound(soundToPlay);
   }, [t, toast]);
 
 
@@ -56,9 +67,11 @@ export function PomodoroTimer() {
     if (isRunning && timeRemaining > 0) {
       timer = setTimeout(() => {
         setTimeRemaining(prev => prev - 1);
+        // Optionally play a ticking sound every second or at specific intervals
+        // if (timeRemaining % 60 === 0) playSound('/audio/minute-tick.mp3');
       }, 1000);
     } else if (isRunning && timeRemaining === 0) {
-      // Mode transition logic
+      // playSound('/audio/timer-end-chime.mp3'); // Sound for when any timer ends
       if (mode === 'work') {
         setTotalPomodoros(prev => prev + 1);
         const newPomodorosThisCycle = pomodorosThisCycle + 1;
@@ -75,7 +88,7 @@ export function PomodoroTimer() {
       } else if (mode === 'shortBreak' || mode === 'longBreak') {
         setMode('work');
         setTimeRemaining(WORK_DURATION);
-        if (mode === 'longBreak') setPomodorosThisCycle(0); // Reset cycle after long break
+        if (mode === 'longBreak') setPomodorosThisCycle(0); 
         handleModeChangeNotification('work');
       }
     }
@@ -87,6 +100,9 @@ export function PomodoroTimer() {
       setMode('work');
       setTimeRemaining(WORK_DURATION);
       handleModeChangeNotification('work');
+      // playSound('/audio/timer-start.mp3');
+    } else {
+        // playSound(isRunning ? '/audio/timer-pause.mp3' : '/audio/timer-resume.mp3');
     }
     setIsRunning(prev => !prev);
   };
@@ -96,8 +112,9 @@ export function PomodoroTimer() {
     setMode('idle');
     setTimeRemaining(WORK_DURATION);
     setPomodorosThisCycle(0);
-    setTotalPomodoros(0); // Optionally reset total pomodoros too
+    setTotalPomodoros(0); 
     toast({ title: "Timer Reset", description: "Pomodoro timer has been reset."});
+    // playSound('/audio/timer-reset.mp3');
   };
 
   const formatTime = (seconds: number) => {
@@ -162,5 +179,3 @@ export function PomodoroTimer() {
     </>
   );
 }
-
-    

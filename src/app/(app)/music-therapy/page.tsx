@@ -9,35 +9,42 @@ import { useLanguage } from '@/hooks/useLanguage';
 import Image from 'next/image';
 import { Music2, Waves, CloudRain, Volume2, PlayCircle, ListMusic } from 'lucide-react';
 import type { User, MockJamendoTrack } from '@/types';
-import { getMockTracksByGenre, mockJamendoTracks } from '@/lib/mockJamendo'; // Import mock data and fetcher
+import { getMockTracksByGenre, mockJamendoTracks } from '@/lib/mockJamendo'; 
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const commonSounds = [
   { id: 'white-noise', nameKey: 'whiteNoise', icon: Volume2, hint: "abstract soundwave" },
+  // Example: To play white noise of a specific frequency (e.g., pink noise),
+  // you might use Web Audio API or have a specific audio file:
+  // audioSrc: '/audio/pink-noise.mp3'
   { id: 'rain-sounds', nameKey: 'rainSounds', icon: CloudRain, hint: "rain window" },
+  // audioSrc: '/audio/rain-ambience.mp3'
   { id: 'ocean-waves', nameKey: 'oceanWaves', icon: Waves, hint: "ocean wave" },
+  // audioSrc: '/audio/ocean-waves.mp3'
 ];
 
 const mapColorToGenre = (color?: User['favoriteColor']): MockJamendoTrack['genre'] => {
+  // This mapping can also inform which type of sound frequencies might be preferred.
+  // e.g., 'calm' genre could map to lower frequency ranges or binaural beats for relaxation.
   switch (color) {
     case 'blue':
     case 'green':
-      return 'calm';
+      return 'calm'; // Potentially maps to alpha/theta wave frequencies
     case 'white':
       return 'gentle';
     case 'red':
     case 'orange':
-      return 'energetic';
+      return 'energetic'; // Potentially maps to beta wave frequencies
     case 'yellow':
       return 'uplifting';
     case 'purple':
     case 'pink':
       return 'uplifting';
     case 'black':
-      return 'focus';
+      return 'focus'; // Potentially maps to gamma wave frequencies or specific focus music
     default:
-      return 'gentle'; // Default genre
+      return 'gentle'; 
   }
 };
 
@@ -48,7 +55,7 @@ const getGenreTitleKey = (genre: MockJamendoTrack['genre']): keyof typeof import
         case 'focus': return 'focusEnhancingMusic';
         case 'uplifting': return 'upliftingTunes';
         case 'gentle': return 'gentleMelodies';
-        case 'nature': return 'natureSounds'; // Though nature is not directly mapped from color
+        case 'nature': return 'natureSounds'; 
         default: return 'gentleMelodies';
     }
 }
@@ -65,9 +72,12 @@ export default function MusicTherapyPage() {
 
   useEffect(() => {
     setIsLoadingTracks(true);
-    getMockTracksByGenre(personalGenre, 3) // Fetch 3 tracks for the personalized genre
+    getMockTracksByGenre(personalGenre, 3) 
       .then(tracks => {
         setSuggestedTracks(tracks);
+        // Here, you could further process tracks to select specific frequencies
+        // or types of sounds if the mock data (or a real API) provided that info.
+        // For example, if a track had 'binaural_alpha_10hz' tag.
       })
       .catch(error => {
         console.error("Error fetching mock tracks:", error);
@@ -79,6 +89,10 @@ export default function MusicTherapyPage() {
   }, [personalGenre, toast]);
 
   const handlePlayTrack = (track: MockJamendoTrack) => {
+    // Actual audio playback would happen here using track.streamUrl
+    // For specific frequencies, if track.streamUrl was a generator or pointed
+    // to a specific frequency file, it would be handled by an audio player.
+    // e.g., playAudio(track.streamUrl, { frequency: track.frequencyData });
     console.log(`Playing ${track.title} from ${track.streamUrl} (mock)`);
     toast({
       title: `Now Playing (Mock)`,
@@ -87,11 +101,26 @@ export default function MusicTherapyPage() {
   };
 
   const handlePlayCommonSound = (soundNameKey: string) => {
+    // Example: const sound = commonSounds.find(s => s.nameKey === soundNameKey);
+    // if (sound && sound.audioSrc) playAudio(sound.audioSrc);
     toast({
       title: `Now Playing (Mock)`,
       description: `${t(soundNameKey as any)}`,
     });
   };
+
+  // const playAudio = (src: string, options?: any) => {
+  //   // Implement actual audio playback using Web Audio API or HTMLAudioElement
+  //   // For frequencies, Web Audio API's OscillatorNode would be used.
+  //   // Example:
+  //   // const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  //   // const oscillator = audioCtx.createOscillator();
+  //   // oscillator.type = 'sine'; // 'sine', 'square', 'sawtooth', 'triangle'
+  //   // oscillator.frequency.setValueAtTime(options.frequency || 440, audioCtx.currentTime); // value in hertz
+  //   // oscillator.connect(audioCtx.destination);
+  //   // oscillator.start();
+  //   // setTimeout(() => oscillator.stop(), 2000); // Play for 2 seconds
+  // };
 
   return (
     <div className="space-y-8">
