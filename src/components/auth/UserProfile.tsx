@@ -96,6 +96,7 @@ export function UserProfile() {
     if (user) {
       updateUser({ ...user, name: values.name });
       if (values.newPassword) {
+        // TODO: Implement actual password change logic with backend
         toast({
           title: "Password Change (Mocked)",
           description: t('passwordChangeMockMessage'),
@@ -117,22 +118,22 @@ export function UserProfile() {
   const handleDeleteAccountConfirm = async () => {
     await deleteAccount();
     setIsDeleteDialogOpen(false);
-    // Toast is handled by AuthContext or calling page after redirect
   };
 
   const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && user) {
-      // Mock photo update: In a real app, upload file and get URL.
-      // Here, we'll use a new placeholder to demonstrate change.
+      // PHOTO_UPLOAD_MOCK: In a real app, this file would be uploaded to a server/storage.
+      // The server would return a URL for the uploaded image.
+      // For this mock, we generate a new placeholder URL to simulate change.
       const newPhotoURL = `https://placehold.co/100x100.png?text=${user.name?.[0]?.toUpperCase() || 'U'}${Math.floor(Math.random() * 100)}`;
+      // URL_DYNAMIC: newPhotoURL would be the URL of the uploaded user image.
       updateUser({ photoURL: newPhotoURL });
       toast({
         title: t('profilePhotoUpdatedTitle'),
         description: t('profilePhotoUpdatedDescMock'),
       });
     }
-    // Reset file input to allow selecting the same file again if needed (optional)
     if (event.target) {
       event.target.value = "";
     }
@@ -158,6 +159,8 @@ export function UserProfile() {
                 <Label className="text-base font-medium">{t('profilePhoto')}</Label>
                 <div className="relative w-28 h-28">
                   <Avatar className="w-28 h-28 text-3xl border-2 border-primary">
+                    {/* PHOTO_DYNAMIC: User's profile picture. */}
+                    {/* URL_DYNAMIC: user.photoURL or a placeholder if not available. */}
                     <AvatarImage src={user?.photoURL || `https://placehold.co/100x100.png?text=${user?.name?.[0]?.toUpperCase() || 'U'}`} alt={user?.name || "User"} data-ai-hint="avatar profile" />
                     <AvatarFallback>{user?.name?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
                   </Avatar>
@@ -171,6 +174,7 @@ export function UserProfile() {
                   >
                     <Camera className="h-5 w-5" />
                   </Button>
+                  {/* PHOTO_UPLOAD: Hidden file input for photo selection. */}
                   <input
                     type="file"
                     ref={fileInputRef}

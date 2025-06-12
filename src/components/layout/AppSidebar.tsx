@@ -4,14 +4,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarFooter,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  // SidebarMenuBadge, // Not used currently
   SidebarGroup,
   SidebarGroupLabel,
   useSidebar,
@@ -20,7 +18,7 @@ import { AppLogo } from './AppLogo';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useLanguage } from '@/hooks/useLanguage';
-import { useAuth } from '@/contexts/AuthContext'; // Corrected import path
+import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import {
   Home, MessageCircle, User, LogOut, Sun, Moon, Settings, Wind, BookOpen, Music2, Brain, Languages
@@ -67,6 +65,7 @@ export function AppSidebar() {
                 isActive={pathname === link.href}
                 tooltip={sidebarState === 'collapsed' ? t(link.labelKey) : undefined}
               >
+                {/* URL_NAVIGATION: Sidebar navigation link. */}
                 <Link href={link.href}>
                   <link.icon />
                   <span>{t(link.labelKey)}</span>
@@ -76,7 +75,7 @@ export function AppSidebar() {
           ))}
         </SidebarMenu>
 
-        <SidebarGroup className="mt-auto pt-4"> {/* Push to bottom */}
+        <SidebarGroup className="mt-auto pt-4"> 
             <SidebarGroupLabel className="flex items-center">
                 <Settings className="mr-2" /> {t('profile')}
             </SidebarGroupLabel>
@@ -88,6 +87,7 @@ export function AppSidebar() {
                         isActive={pathname === link.href}
                         tooltip={sidebarState === 'collapsed' ? t(link.labelKey) : undefined}
                     >
+                        {/* URL_NAVIGATION: Sidebar account navigation link. */}
                         <Link href={link.href}>
                         <link.icon />
                         <span>{t(link.labelKey)}</span>
@@ -124,6 +124,8 @@ export function AppSidebar() {
             sidebarState === 'collapsed' ? "justify-center" : ""
           )}>
             <Avatar className="h-9 w-9 border-2 border-primary">
+              {/* PHOTO_DYNAMIC: User's profile avatar in sidebar. */}
+              {/* URL_DYNAMIC: user.photoURL or a placeholder. */}
               <AvatarImage src={user.photoURL || `https://placehold.co/100x100.png?text=${user.name?.[0]?.toUpperCase() || 'U'}`} alt={user.name || "User Avatar"} data-ai-hint="avatar profile" />
               <AvatarFallback>{user.name?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
             </Avatar>

@@ -25,8 +25,12 @@ export function BreathingAnimation({ cycle, onCycleComplete }: BreathingAnimatio
       setCurrentState(cycle[0].state);
       setCurrentIndex(0);
       setAnimationKey(prev => prev + 1); 
-      // Example: playSound('/audio/exercise-start.mp3');
-      // if (cycle[0].state === 'inhale') playSound('/audio/inhale-cue.mp3');
+      // AUDIO_FILE_REQUIRED: Sound cue for starting the exercise animation.
+      // Example: playSound('/audio/animation-start.mp3');
+      if (cycle[0].state === 'inhale') {
+        // AUDIO_FILE_REQUIRED: Sound cue for 'inhale'.
+        // Example: playSound('/audio/inhale-cue.mp3');
+      }
       return;
     }
 
@@ -38,13 +42,20 @@ export function BreathingAnimation({ cycle, onCycleComplete }: BreathingAnimatio
         setCurrentState(cycle[nextIndex].state);
         setAnimationKey(prev => prev + 1); 
 
-        // Play sound cues based on state
+        // AUDIO_FILE_REQUIRED: Play sound cues based on state
         // Example:
-        // if (cycle[nextIndex].state === 'inhale') playSound('/audio/inhale-cue.mp3');
-        // else if (cycle[nextIndex].state === 'exhale') playSound('/audio/exhale-cue.mp3');
+        if (cycle[nextIndex].state === 'inhale') {
+            // playSound('/audio/inhale-cue.mp3');
+        } else if (cycle[nextIndex].state === 'exhale') {
+            // playSound('/audio/exhale-cue.mp3');
+        }
+        // else if (cycle[nextIndex].state === 'hold-inhaled' || cycle[nextIndex].state === 'hold-exhaled') {
+        //   playSound('/audio/hold-cue.mp3'); // Optional
+        // }
+
 
         if (nextIndex === 0 && onCycleComplete) {
-          onCycleComplete();
+          onCycleComplete(); // This already has a sound cue in the parent component
         }
       }, currentCycleConfig.duration * 1000);
 
@@ -84,8 +95,8 @@ export function BreathingAnimation({ cycle, onCycleComplete }: BreathingAnimatio
   }
 
   // Placeholder for playing sound - implement actual audio playback here
-  // const playSound = (soundFile: string) => {
-  //   const audio = new Audio(soundFile);
+  // const playSound = (soundFileUrl: string) => { // soundFileUrl would be like '/audio/inhale-cue.mp3'
+  //   const audio = new Audio(soundFileUrl); // AUDIO_URL_REQUIRED: soundFileUrl needs to be a valid path
   //   audio.play().catch(e => console.error("Error playing sound:", e));
   // };
 

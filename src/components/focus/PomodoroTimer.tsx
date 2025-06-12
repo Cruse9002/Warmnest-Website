@@ -16,9 +16,11 @@ const CYCLES_BEFORE_LONG_BREAK = 4;
 
 type Mode = 'work' | 'shortBreak' | 'longBreak' | 'idle';
 
-// Placeholder for playing sound - implement actual audio playback here
-// const playSound = (soundFile: string) => {
-//   const audio = new Audio(soundFile); // Assumes soundFile is like '/audio/timer-end.mp3'
+// AUDIO_FILE_REQUIRED: Placeholder for playing sound.
+// Implement actual audio playback using Web Audio API or HTMLAudioElement.
+// soundFileUrl would be a path like '/audio/timer-end.mp3'. Store audio files in /public/audio.
+// const playSound = (soundFileUrl: string) => {
+//   const audio = new Audio(soundFileUrl); // AUDIO_URL_REQUIRED: soundFileUrl needs to be valid
 //   audio.play().catch(e => console.error("Error playing sound:", e));
 // };
 
@@ -35,23 +37,23 @@ export function PomodoroTimer() {
   const handleModeChangeNotification = useCallback((newMode: Mode) => {
     let title = "";
     let description = "";
-    // let soundToPlay = ""; // To determine which sound to play
+    // let soundToPlay = ""; // To determine which sound to play. AUDIO_FILE_REQUIRED
 
     switch (newMode) {
         case 'work':
             title = t('backToWork');
             description = t('pomodoroDescription');
-            // soundToPlay = '/audio/work-start.mp3';
+            // soundToPlay = '/audio/work-start-notification.mp3';
             break;
         case 'shortBreak':
             title = t('takeYourBreak');
             description = `${t('shortBreak')} - ${SHORT_BREAK_DURATION / 60} ${t('minutes') || 'minutes'}`;
-            // soundToPlay = '/audio/break-start.mp3';
+            // soundToPlay = '/audio/break-start-notification.mp3';
             break;
         case 'longBreak':
             title = t('longBreakTime');
             description = `${t('longBreak')} - ${LONG_BREAK_DURATION / 60} ${t('minutes') || 'minutes'}`;
-            // soundToPlay = '/audio/long-break-start.mp3';
+            // soundToPlay = '/audio/long-break-notification.mp3';
             break;
         default:
             return;
@@ -67,11 +69,13 @@ export function PomodoroTimer() {
     if (isRunning && timeRemaining > 0) {
       timer = setTimeout(() => {
         setTimeRemaining(prev => prev - 1);
-        // Optionally play a ticking sound every second or at specific intervals
-        // if (timeRemaining % 60 === 0) playSound('/audio/minute-tick.mp3');
+        // AUDIO_FILE_REQUIRED: Optionally play a ticking sound every second or at specific intervals
+        // if (timeRemaining % 60 === 0 && timeRemaining > 0) playSound('/audio/timer-tick-minute.mp3');
+        // else if (timeRemaining <= 5 && timeRemaining > 0) playSound('/audio/timer-tick-short.mp3');
       }, 1000);
     } else if (isRunning && timeRemaining === 0) {
-      // playSound('/audio/timer-end-chime.mp3'); // Sound for when any timer ends
+      // AUDIO_FILE_REQUIRED: Sound for when any timer segment (work/break) ends.
+      // playSound('/audio/timer-segment-end-chime.mp3'); 
       if (mode === 'work') {
         setTotalPomodoros(prev => prev + 1);
         const newPomodorosThisCycle = pomodorosThisCycle + 1;
@@ -100,8 +104,10 @@ export function PomodoroTimer() {
       setMode('work');
       setTimeRemaining(WORK_DURATION);
       handleModeChangeNotification('work');
-      // playSound('/audio/timer-start.mp3');
+      // AUDIO_FILE_REQUIRED: Sound for initially starting the Pomodoro session.
+      // playSound('/audio/pomodoro-start-session.mp3');
     } else {
+        // AUDIO_FILE_REQUIRED: Sounds for pause and resume.
         // playSound(isRunning ? '/audio/timer-pause.mp3' : '/audio/timer-resume.mp3');
     }
     setIsRunning(prev => !prev);
@@ -114,7 +120,8 @@ export function PomodoroTimer() {
     setPomodorosThisCycle(0);
     setTotalPomodoros(0); 
     toast({ title: "Timer Reset", description: "Pomodoro timer has been reset."});
-    // playSound('/audio/timer-reset.mp3');
+    // AUDIO_FILE_REQUIRED: Sound for resetting the timer.
+    // playSound('/audio/timer-reset-action.mp3');
   };
 
   const formatTime = (seconds: number) => {

@@ -21,7 +21,7 @@ const LOCAL_STORAGE_SKIP_INSTRUCTIONS_KEY_PREFIX = 'warmnest-skip-breathing-inst
 
 // Mock data - in a real app, this would come from a service or context
 const exercisesData: Record<string, BreathingExerciseType & { 
-  cycleConfig: { state: 'inhale' | 'hold-inhaled' | 'exhale' | 'hold-exhaled'; duration: number }[], // Updated state types
+  cycleConfig: { state: 'inhale' | 'hold-inhaled' | 'exhale' | 'hold-exhaled'; duration: number }[],
   instructionSteps: { textKey: string, diagramHint: string }[] 
 }> = {
   'box-breathing': {
@@ -38,9 +38,9 @@ const exercisesData: Record<string, BreathingExerciseType & {
     ],
     cycleConfig: [
       { state: 'inhale', duration: 4 },
-      { state: 'hold-inhaled', duration: 4 }, // Updated state
+      { state: 'hold-inhaled', duration: 4 }, 
       { state: 'exhale', duration: 4 },
-      { state: 'hold-exhaled', duration: 4 }, // Updated state
+      { state: 'hold-exhaled', duration: 4 }, 
     ],
   },
   '4-7-8-breathing': {
@@ -57,7 +57,7 @@ const exercisesData: Record<string, BreathingExerciseType & {
     ],
     cycleConfig: [
       { state: 'inhale', duration: 4 },
-      { state: 'hold-inhaled', duration: 7 }, // Assuming hold after inhale
+      { state: 'hold-inhaled', duration: 7 }, 
       { state: 'exhale', duration: 8 },
     ],
   },
@@ -90,8 +90,6 @@ const exercisesData: Record<string, BreathingExerciseType & {
         { textKey: 'alternateNostrilBreathingStep5', diagramHint: 'exhale right nostril inhale right' },
         { textKey: 'alternateNostrilBreathingStep6', diagramHint: 'exhale left nostril' },
     ],
-    // This exercise's cycle is more complex and might need more nuanced state representation for perfect animation
-    // For now, using generic hold state if the simple distinction isn't enough
     cycleConfig: [
       { state: 'inhale', duration: 4 }, 
       { state: 'hold-inhaled', duration: 2 },
@@ -129,7 +127,8 @@ export default function BreathingExercisePage() {
   const [userWantsToSkipInstructions, setUserWantsToSkipInstructions] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  // Use a default calming track for breathing exercises
+  // AUDIO_URL_REQUIRED: The musicUrl below comes from mockJamendo.ts. 
+  // In a real app, this might be fetched or configured, pointing to an actual audio file URL.
   const musicUrl = useMemo(() => mockJamendoTracks.find(track => track.id === 'jam1')?.streamUrl, []);
 
   const localStorageKey = useMemo(() => {
@@ -167,12 +166,14 @@ export default function BreathingExercisePage() {
       localStorage.removeItem(localStorageKey); 
     }
     setShowInstructionsScreen(false);
+    // AUDIO_FILE_REQUIRED: Could play a sound cue for starting the exercise.
+    // Example: playSound('/audio/exercise-start-confirm.mp3');
   };
 
   const handleCycleComplete = () => {
     setCompletedCycles(prev => prev + 1);
-    // Potentially play a sound cue for cycle completion
-    // Example: playSound('/audio/cycle-complete.mp3');
+    // AUDIO_FILE_REQUIRED: Could play a sound cue for cycle completion.
+    // Example: playSound('/audio/cycle-complete-chime.mp3');
   };
   
   const progress = useMemo(() => {
@@ -183,8 +184,8 @@ export default function BreathingExercisePage() {
   useEffect(() => {
     if (isPlaying && completedCycles >= totalCycles && totalCycles > 0) {
       setIsPlaying(false); 
-      // Potentially play an exercise completion sound
-      // Example: playSound('/audio/exercise-finished.mp3');
+      // AUDIO_FILE_REQUIRED: Could play an exercise completion sound.
+      // Example: playSound('/audio/exercise-finished-long.mp3');
     }
   }, [completedCycles, totalCycles, isPlaying]);
 
@@ -201,12 +202,9 @@ export default function BreathingExercisePage() {
 
   useEffect(() => {
     if (musicUrl && typeof window !== 'undefined' && !audioRef.current) {
-        const newAudioElement = new Audio(musicUrl);
+        const newAudioElement = new Audio(musicUrl); // AUDIO_URL_REQUIRED: musicUrl needs to be a valid audio source
         newAudioElement.loop = true;
         audioRef.current = newAudioElement;
-        // Note: To play specific frequencies for music therapy, you'd need a different mechanism,
-        // possibly Web Audio API for tone generation or selecting specific tracks.
-        // This current setup is for background music during breathing.
     }
     return () => {
       if (audioRef.current) {
@@ -240,20 +238,25 @@ export default function BreathingExercisePage() {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
+    // AUDIO_FILE_REQUIRED: Sound for reset action.
+    // Example: playSound('/audio/reset-sound.mp3');
     if (localStorageKey) {
        const skip = localStorage.getItem(localStorageKey) === 'true';
        if (!skip) setShowInstructionsScreen(true);
     } else {
-        setShowInstructionsScreen(true); // Default to show if no key (e.g. slug not ready)
+        setShowInstructionsScreen(true);
     }
   }
 
   return (
     <div className="flex flex-col items-center space-y-6 p-4 md:p-8">
+      {/* AUDIO_URL_REQUIRED: The 'src' for this audio element is dynamic based on 'musicUrl'. */}
+      {/* Ensure 'musicUrl' resolves to a playable audio file URL. */}
       {musicUrl && <audio ref={audioRef} src={musicUrl} loop preload="auto" />}
 
       <div className="w-full max-w-2xl">
         <Button variant="ghost" asChild className="mb-4 text-sm sm:text-base">
+          {/* URL_NAVIGATION: Link to breathing exercises list. */}
           <Link href="/breathing">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to exercises
           </Link>
@@ -274,13 +277,15 @@ export default function BreathingExercisePage() {
             {exercise.instructionSteps?.map((step, index) => (
               <div key={index} className="flex flex-col sm:flex-row items-center gap-4 p-3 border rounded-md bg-card">
                 <div className="flex-shrink-0 w-full sm:w-1/3 h-40 sm:h-auto relative">
+                  {/* PHOTO_PLACEHOLDER: Diagram for breathing instruction step. */}
+                  {/* URL_PLACEHOLDER: Using placehold.co for diagram. Replace with actual diagram images. */}
                   <Image 
                     src={`https://placehold.co/300x200.png`} 
                     alt={`${t(step.textKey)} diagram`} 
                     layout="fill"
                     objectFit="contain"
                     className="rounded-md"
-                    data-ai-hint={step.diagramHint}
+                    data-ai-hint={step.diagramHint} // data-ai-hint provides keywords for image search
                   />
                 </div>
                 <p className="text-sm flex-1">{index + 1}. {t(step.textKey)}</p>

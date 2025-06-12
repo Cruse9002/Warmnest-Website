@@ -1,7 +1,7 @@
 
 "use client";
 
-import type { User, QuestionnaireAnswers } from '@/types'; // Added QuestionnaireAnswers
+import type { User, QuestionnaireAnswers } from '@/types';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -12,7 +12,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   register: (email: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
-  updateUser: (updatedFields: Partial<User & QuestionnaireAnswers>) => void; // Allow QuestionnaireAnswers here
+  updateUser: (updatedFields: Partial<User & QuestionnaireAnswers>) => void; 
   deleteAccount: () => Promise<void>;
 }
 
@@ -35,7 +35,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           } else if (!parsedUser.name) {
             parsedUser.name = "User";
           }
-          if (!parsedUser.photoURL) { // Ensure photoURL has a sensible default if missing
+          if (!parsedUser.photoURL) { 
+            // URL_PLACEHOLDER: Default placeholder for user photo if not set.
             parsedUser.photoURL = `https://placehold.co/100x100.png?text=${parsedUser.name?.[0]?.toUpperCase() || 'U'}`;
           }
           if (isMounted) {
@@ -60,21 +61,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const commonLoginProcedure = (mockUser: User, isNewUser: boolean) => {
     if (!mockUser.photoURL) {
+      // URL_PLACEHOLDER: Default placeholder for new user photo.
       mockUser.photoURL = `https://placehold.co/100x100.png?text=${mockUser.name?.[0]?.toUpperCase() || 'U'}`;
     }
     setUser(mockUser);
     localStorage.setItem('warmnest-user', JSON.stringify(mockUser));
     setLoading(false);
     if (isNewUser || !mockUser.onboarded) {
+      // URL_NAVIGATION: Redirect to onboarding for new/unonboarded users.
       router.push('/onboarding');
     } else {
+      // URL_NAVIGATION: Redirect to dashboard for onboarded users.
       router.push('/dashboard');
     }
   };
 
   const login = async (email: string) => {
     setLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
     const storedUser = localStorage.getItem('warmnest-user');
     let existingUser: User | null = null;
     if (storedUser) {
@@ -89,13 +93,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (existingUser) {
       commonLoginProcedure(existingUser, false);
     } else {
+      // For demo, creating a user if not found - real app would likely error or have different flow
       const mockUser: User = {
-        id: '1',
+        id: '1', // Mock ID
         email,
         name: email.split('@')[0] || "User",
         language: 'en',
         onboarded: false,
         darkMode: typeof window !== "undefined" ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) : false,
+        // URL_PLACEHOLDER: Default photoURL for a newly created user during login (if not found).
         photoURL: `https://placehold.co/100x100.png?text=${(email.split('@')[0] || "U")[0].toUpperCase()}`,
       };
       commonLoginProcedure(mockUser, true);
@@ -104,14 +110,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const register = async (email: string) => {
     setLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
     const mockUser: User = {
-      id: `user-${Date.now()}`,
+      id: `user-${Date.now()}`, // Mock ID
       email,
       name: email.split('@')[0] || "User",
       language: 'en',
       onboarded: false,
       darkMode: typeof window !== "undefined" ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) : false,
+      // URL_PLACEHOLDER: Default photoURL for a newly registered user.
       photoURL: `https://placehold.co/100x100.png?text=${(email.split('@')[0] || "U")[0].toUpperCase()}`,
     };
     commonLoginProcedure(mockUser, true);
@@ -119,7 +126,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signInWithGoogle = async () => {
     setLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
 
     const randomId = Math.floor(Math.random() * 10000);
     const googleEmail = `google.user.${randomId}@example.com`;
@@ -127,12 +134,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const formattedName = nameFromEmail.split(' ').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
 
     const mockUser: User = {
-      id: `google-${Date.now()}`,
+      id: `google-${Date.now()}`, // Mock ID
       email: googleEmail,
       name: formattedName,
       language: 'en',
       onboarded: false,
       darkMode: typeof window !== "undefined" ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) : false,
+      // URL_PLACEHOLDER: Default photoURL for Google sign-in user.
       photoURL: `https://placehold.co/100x100.png?text=${formattedName?.[0]?.toUpperCase() || 'G'}`,
     };
     commonLoginProcedure(mockUser, true);
@@ -146,7 +154,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem('warmnest-moodlog');
     localStorage.removeItem('warmnest-theme');
     localStorage.removeItem('warmnest-onboarding-answers');
+    // Clear any per-exercise skip instruction flags
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('warmnest-skip-breathing-instructions-')) {
+        localStorage.removeItem(key);
+      }
+    });
     setLoading(false);
+    // URL_NAVIGATION: Redirect to login page after logout.
     router.push('/auth/login');
   };
 
@@ -160,6 +175,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteAccount = async () => {
+    // In a real app, this would involve backend calls to delete user data.
+    // For mock, it's the same as logout.
     await logout();
   };
 
