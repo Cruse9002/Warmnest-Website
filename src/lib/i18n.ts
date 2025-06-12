@@ -190,6 +190,7 @@ export const translations = {
     twoMinuteRuleDescription: "If a task takes less than two minutes, do it now.",
     start: "Start",
     pause: "Pause",
+    replay: "Replay",
     reset: "Reset",
     workTime: "Work Time",
     shortBreak: "Short Break",
@@ -203,6 +204,13 @@ export const translations = {
     pomodoroSessionComplete: "Pomodoro Session Complete!",
     whatsTheTask: "What's the task (optional)?",
     markDone: "Mark as Done",
+    focusMusicTitle: "Focus Music",
+    focusMusicDescription: "Select a track to help you concentrate.",
+    selectTrack: "Select a track",
+    nowPlaying: "Now Playing:",
+    noTrackSelected: "No track selected",
+    loadingMusic: "Loading music...",
+    noFocusTracks: "No focus tracks available at the moment.",
   },
   ta: {
     appName: "WarmNest",
@@ -392,6 +400,7 @@ export const translations = {
     twoMinuteRuleDescription: "ஒரு பணி இரண்டு நிமிடங்களுக்கு குறைவாக எடுத்தால், அதை இப்போதே செய்யுங்கள்.",
     start: "தொடங்கு",
     pause: "இடைநிறுத்து",
+    replay: "மீண்டும் இயக்கு",
     reset: " மீட்டமை",
     workTime: "வேலை நேரம்",
     shortBreak: "சிறிய இடைவேளை",
@@ -405,7 +414,16 @@ export const translations = {
     pomodoroSessionComplete: "பொமோடோரோ அமர்வு முடிந்தது!",
     whatsTheTask: "பணி என்ன (விருப்பத்தேர்வு)?",
     markDone: "முடிந்ததாகக் குறிக்கவும்",
+    focusMusicTitle: "கவன இசை",
+    focusMusicDescription: "உங்கள் கவனத்தை ஒருமுகப்படுத்த ஒரு இசையைத் தேர்ந்தெடுக்கவும்.",
+    selectTrack: "ஒரு இசையைத் தேர்ந்தெடுக்கவும்",
+    nowPlaying: "இப்போது ஒலிபரப்பாகிறது:",
+    noTrackSelected: "இசை எதுவும் தேர்ந்தெடுக்கப்படவில்லை",
+    loadingMusic: "இசை ஏற்றப்படுகிறது...",
+    noFocusTracks: "தற்போது கவனத்திற்கான இசை எதுவும் கிடைக்கவில்லை.",
   },
 };
 
 export type TranslatedStringType = keyof typeof translations.en;
+
+    
