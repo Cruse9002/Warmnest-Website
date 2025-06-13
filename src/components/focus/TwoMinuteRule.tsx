@@ -10,7 +10,15 @@ import { Play, RotateCcw, CheckCircle, Hourglass } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useToast } from '@/hooks/use-toast';
 
-const TWO_MINUTE_DURATION = 2 * 60; // 2 minutes
+const TWO_MINUTE_DURATION = 2 * 60; 
+
+// AUDIO_FILE_REQUIRED: Placeholder for playing sound.
+// Implement actual audio playback using Web Audio API or HTMLAudioElement.
+// soundFileUrl would be a path like '/audio/timer-short-end.mp3'. Store audio files in /public/audio.
+// const playSound = (soundFileUrl: string) => {
+//   const audio = new Audio(soundFileUrl); // AUDIO_URL_REQUIRED: soundFileUrl needs to be valid
+//   audio.play().catch(e => console.error("Error playing sound:", e));
+// };
 
 export function TwoMinuteRule() {
   const { t } = useLanguage();
@@ -28,8 +36,10 @@ export function TwoMinuteRule() {
       }, 1000);
     } else if (isRunning && timeRemaining === 0) {
       setIsRunning(false);
-      setIsTaskDone(true); // Assume task is done when timer ends
+      setIsTaskDone(true); 
       toast({ title: t('taskCompleted'), description: task || "Great job!"});
+      // AUDIO_FILE_REQUIRED: Sound for when the 2-minute timer automatically completes.
+      // playSound('/audio/2min-rule-timer-complete.mp3');
     }
     return () => clearTimeout(timer);
   }, [isRunning, timeRemaining, t, toast, task]);
@@ -39,6 +49,8 @@ export function TwoMinuteRule() {
     setIsRunning(true);
     setIsTaskDone(false);
     toast({ title: "2-Minute Timer Started", description: "Focus on your task!" });
+    // AUDIO_FILE_REQUIRED: Sound for starting the 2-minute timer.
+    // playSound('/audio/timer-start-short-action.mp3');
   };
 
   const handleReset = () => {
@@ -46,12 +58,16 @@ export function TwoMinuteRule() {
     setTimeRemaining(TWO_MINUTE_DURATION);
     setTask("");
     setIsTaskDone(false);
+    // AUDIO_FILE_REQUIRED: Sound for resetting the 2-minute timer.
+    // playSound('/audio/timer-reset-short-action.mp3');
   };
 
   const handleMarkDone = () => {
     setIsRunning(false);
     setIsTaskDone(true);
     toast({ title: t('taskCompleted'), description: task || "Well done!" });
+    // AUDIO_FILE_REQUIRED: Sound for manually marking the task as done.
+    // playSound('/audio/task-marked-done-confirm.mp3');
   };
   
   const formatTime = (seconds: number) => {
@@ -127,5 +143,3 @@ export function TwoMinuteRule() {
     </>
   );
 }
-
-    

@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { User, LogOut, Sun, Moon, Languages } from 'lucide-react'; // Added Languages, Sun, Moon. Removed Palette.
+import { User, LogOut, Sun, Moon, Languages } from 'lucide-react'; 
 import { AppLogo } from './AppLogo';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useAuth } from '@/contexts/AuthContext';
@@ -33,6 +33,7 @@ export function AppHeader() {
   };
 
   const navigateToProfile = () => {
+    // URL_NAVIGATION: Navigates to the user profile page.
     router.push('/profile');
   };
 
@@ -42,6 +43,8 @@ export function AppHeader() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10 border-2 border-primary">
+            {/* PHOTO_DYNAMIC: User's profile avatar. */}
+            {/* URL_DYNAMIC: user.photoURL or a placeholder. */}
             <AvatarImage src={user?.photoURL || `https://placehold.co/100x100.png?text=${user?.name?.[0]?.toUpperCase() || 'U'}`} alt={user?.name || 'User'} data-ai-hint="avatar profile" />
             <AvatarFallback>{user?.name?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
           </Avatar>
@@ -81,9 +84,11 @@ export function AppHeader() {
   const AuthButtons = () => (
     <div className="flex items-center gap-2">
       <Button variant="ghost" asChild>
+        {/* URL_NAVIGATION: Link to login page. */}
         <Link href="/auth/login">{t('login')}</Link>
       </Button>
       <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
+        {/* URL_NAVIGATION: Link to register page. */}
         <Link href="/auth/register">{t('register')}</Link>
       </Button>
     </div>
@@ -91,16 +96,16 @@ export function AppHeader() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between max-w-full px-4 sm:px-6 lg:px-8"> {/* max-w-full for header */}
+      <div className="container flex h-16 items-center justify-between max-w-full px-4 sm:px-6 lg:px-8"> 
         <div className="flex items-center gap-2 md:gap-4">
-         <SidebarTrigger className="md:hidden" /> {/* Sidebar trigger for mobile */}
+         <SidebarTrigger className="md:hidden" /> 
          <div className="hidden md:block">
-            <AppLogo size="sm"/> {/* Smaller logo for header when sidebar is present */}
+            <AppLogo size="sm"/> 
          </div>
         </div>
 
-        {/* Centered Logo/Title for mobile when sidebar trigger is shown */}
         <div className="md:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          {/* URL_NAVIGATION: Link to dashboard page (mobile logo). */}
           <Link href="/dashboard" className="font-semibold text-lg text-primary">WarmNest</Link>
         </div>
 

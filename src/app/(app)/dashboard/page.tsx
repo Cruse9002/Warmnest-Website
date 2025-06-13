@@ -41,6 +41,7 @@ const chartConfig = {
   },
 } satisfies import("@/components/ui/chart").ChartConfig;
 
+// URL_CONTENT: Affirmations could be fetched from an external source or CMS in a full app.
 const wellKnownAffirmations = [
   "Believe you can and you're halfway there. - Theodore Roosevelt",
   "The only way to do great work is to love what you do. - Steve Jobs",
@@ -89,6 +90,7 @@ export default function DashboardPage() {
           </div>
         )}
          <Button asChild className="mt-6 w-full sm:w-auto">
+            {/* URL_NAVIGATION: Link to journal page */}
             <Link href="/journal">
                 <Smile className="mr-2 h-5 w-5" /> {t('logYourMood')}
             </Link>
@@ -105,6 +107,7 @@ export default function DashboardPage() {
                 <action.icon className={`h-6 w-6 sm:h-7 sm:w-7 ${action.color}`} />
               </CardHeader>
               <CardContent className="pb-3 sm:pb-4">
+                 {/* URL_NAVIGATION: Link to respective feature page */}
                  <Link href={action.href} className={`text-xs sm:text-sm font-medium ${action.color} hover:underline`}>
                     {t('startExercise').startsWith(t(action.titleKey).substring(0,5)) ? t('startExercise') : t(action.titleKey) }
                 </Link>
@@ -127,6 +130,7 @@ export default function DashboardPage() {
               <p className="text-muted-foreground text-sm sm:text-base">No mood logged recently.</p>
             )}
             <Button asChild variant="outline" className="mt-4 w-full sm:w-auto">
+              {/* URL_NAVIGATION: Link to journal page */}
               <Link href="/journal">{t('logYourMood')}</Link>
             </Button>
           </CardContent>
@@ -143,6 +147,7 @@ export default function DashboardPage() {
               <p className="text-muted-foreground text-sm sm:text-base">{t('noEntriesYet')}</p>
             )}
              <Button asChild variant="outline" className="mt-4 w-full sm:w-auto">
+               {/* URL_NAVIGATION: Link to journal page */}
               <Link href="/journal">{t('writeInJournal')}</Link>
             </Button>
           </CardContent>
@@ -155,7 +160,7 @@ export default function DashboardPage() {
                 <CardTitle className="text-base sm:text-lg">Weekly Mood Overview</CardTitle>
                 <CardDescription className="text-xs sm:text-sm">See your mood trends from the past week.</CardDescription>
             </CardHeader>
-            <CardContent className="h-[280px] sm:h-[300px]"> {/* Give fixed height for responsiveness */}
+            <CardContent className="h-[280px] sm:h-[300px]"> 
                 <ChartContainer config={chartConfig} className="w-full h-full">
                     <BarChart accessibilityLayer data={moodChartData} margin={{ top: 5, right: 5, left: 10, bottom: 5 }}>
                         <CartesianGrid vertical={false} strokeDasharray="3 3" />
@@ -174,8 +179,8 @@ export default function DashboardPage() {
                             domain={[0, 5]}
                             ticks={[1, 2, 3, 4, 5]}
                             tickFormatter={(value) => [t('sad'), t('anxious'), t('neutral'), t('calm'), t('happy')][value-1]}
-                            width={language === 'ta' ? 65 : 60} // Adjust width for Tamil labels
-                            fontSize={10} // Smaller font for Y-axis labels
+                            width={language === 'ta' ? 65 : 60} 
+                            fontSize={10} 
                         />
                         <ChartTooltip content={<ChartTooltipContent hideIndicator labelClassName="text-sm" className="text-xs" />} />
                         <Bar dataKey="moodScore" fill="var(--color-moodScore)" radius={4} />
@@ -204,4 +209,3 @@ function formatTimeAgo(date: Date, lang: 'en' | 'ta'): string {
   if (interval > 1) return Math.floor(interval) + (lang === 'en' ? ` minute${Math.floor(interval) > 1 ? 's' : ''} ago` : " நிமிடங்களுக்கு முன்பு");
   return Math.floor(seconds) + (lang === 'en' ? ` second${Math.floor(seconds) > 1 ? 's' : ''} ago` : " விநாடிகளுக்கு முன்பு");
 }
-

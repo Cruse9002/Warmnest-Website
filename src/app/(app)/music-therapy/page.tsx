@@ -9,35 +9,44 @@ import { useLanguage } from '@/hooks/useLanguage';
 import Image from 'next/image';
 import { Music2, Waves, CloudRain, Volume2, PlayCircle, ListMusic } from 'lucide-react';
 import type { User, MockJamendoTrack } from '@/types';
-import { getMockTracksByGenre, mockJamendoTracks } from '@/lib/mockJamendo'; // Import mock data and fetcher
+import { getMockTracksByGenre, mockJamendoTracks } from '@/lib/mockJamendo'; 
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const commonSounds = [
-  { id: 'white-noise', nameKey: 'whiteNoise', icon: Volume2, hint: "abstract soundwave" },
-  { id: 'rain-sounds', nameKey: 'rainSounds', icon: CloudRain, hint: "rain window" },
-  { id: 'ocean-waves', nameKey: 'oceanWaves', icon: Waves, hint: "ocean wave" },
+  { id: 'white-noise', nameKey: 'whiteNoise', icon: Volume2, hint: "abstract soundwave", 
+    // AUDIO_URL_REQUIRED: Example for specific audio file for white noise.
+    // audioSrc: '/audio/white-noise-60min.mp3' 
+  },
+  { id: 'rain-sounds', nameKey: 'rainSounds', icon: CloudRain, hint: "rain window",
+    // AUDIO_URL_REQUIRED: Example for specific audio file for rain sounds.
+    // audioSrc: '/audio/rain-ambience-loop.mp3' 
+  },
+  { id: 'ocean-waves', nameKey: 'oceanWaves', icon: Waves, hint: "ocean wave",
+    // AUDIO_URL_REQUIRED: Example for specific audio file for ocean waves.
+    // audioSrc: '/audio/ocean-waves-calm.mp3'
+   },
 ];
 
 const mapColorToGenre = (color?: User['favoriteColor']): MockJamendoTrack['genre'] => {
   switch (color) {
     case 'blue':
     case 'green':
-      return 'calm';
+      return 'calm'; 
     case 'white':
       return 'gentle';
     case 'red':
     case 'orange':
-      return 'energetic';
+      return 'energetic'; 
     case 'yellow':
       return 'uplifting';
     case 'purple':
     case 'pink':
       return 'uplifting';
     case 'black':
-      return 'focus';
+      return 'focus'; 
     default:
-      return 'gentle'; // Default genre
+      return 'gentle'; 
   }
 };
 
@@ -48,7 +57,7 @@ const getGenreTitleKey = (genre: MockJamendoTrack['genre']): keyof typeof import
         case 'focus': return 'focusEnhancingMusic';
         case 'uplifting': return 'upliftingTunes';
         case 'gentle': return 'gentleMelodies';
-        case 'nature': return 'natureSounds'; // Though nature is not directly mapped from color
+        case 'nature': return 'natureSounds'; 
         default: return 'gentleMelodies';
     }
 }
@@ -65,9 +74,11 @@ export default function MusicTherapyPage() {
 
   useEffect(() => {
     setIsLoadingTracks(true);
-    getMockTracksByGenre(personalGenre, 3) // Fetch 3 tracks for the personalized genre
+    getMockTracksByGenre(personalGenre, 3) 
       .then(tracks => {
         setSuggestedTracks(tracks);
+        // AUDIO_FEATURE: For specific frequencies, track data could include frequency info (e.g., 'binaural_alpha_10hz').
+        // This would then be used with Web Audio API to generate tones or select specific pre-recorded frequency files.
       })
       .catch(error => {
         console.error("Error fetching mock tracks:", error);
@@ -79,6 +90,11 @@ export default function MusicTherapyPage() {
   }, [personalGenre, toast]);
 
   const handlePlayTrack = (track: MockJamendoTrack) => {
+    // AUDIO_URL_REQUIRED: track.streamUrl is currently a mock URL. Replace with actual audio file URL.
+    // AUDIO_FEATURE: Actual audio playback would happen here using track.streamUrl.
+    // For specific frequencies, if track.streamUrl was a generator or pointed
+    // to a specific frequency file, it would be handled by an audio player.
+    // e.g., playAudio(track.streamUrl, { frequency: track.frequencyData });
     console.log(`Playing ${track.title} from ${track.streamUrl} (mock)`);
     toast({
       title: `Now Playing (Mock)`,
@@ -87,11 +103,25 @@ export default function MusicTherapyPage() {
   };
 
   const handlePlayCommonSound = (soundNameKey: string) => {
+    const sound = commonSounds.find(s => s.nameKey === soundNameKey);
+    // if (sound && sound.audioSrc) playAudio(sound.audioSrc); // AUDIO_URL_REQUIRED: audioSrc needs to be a valid path
     toast({
       title: `Now Playing (Mock)`,
       description: `${t(soundNameKey as any)}`,
     });
   };
+
+  // AUDIO_FEATURE: Example of how Web Audio API could be used for specific frequencies.
+  // const playAudioWithFrequency = (frequency: number, durationSeconds: number) => {
+  //   const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+  //   if (!audioCtx) return;
+  //   const oscillator = audioCtx.createOscillator();
+  //   oscillator.type = 'sine'; // 'sine', 'square', 'sawtooth', 'triangle'
+  //   oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime); // value in hertz
+  //   oscillator.connect(audioCtx.destination);
+  //   oscillator.start();
+  //   setTimeout(() => oscillator.stop(), durationSeconds * 1000);
+  // };
 
   return (
     <div className="space-y-8">
@@ -105,11 +135,13 @@ export default function MusicTherapyPage() {
             <ListMusic className="mr-3 h-7 w-7" /> 
             {t('personalizedSuggestions')} ({t(getGenreTitleKey(personalGenre))})
         </h2>
+        {/* URL_EXTERNAL: Link to Jamendo if actual API is used. */}
         <p className="text-sm text-muted-foreground mb-4">{t('jamendoAttribution')}</p>
         {isLoadingTracks ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1,2,3].map(i => (
                  <Card key={i} className="shadow-lg">
+                    {/* PHOTO_SKELETON: Placeholder for track album art while loading. */}
                     <Skeleton className="h-48 w-full" />
                     <CardHeader>
                         <Skeleton className="h-6 w-3/4" />
@@ -126,12 +158,14 @@ export default function MusicTherapyPage() {
             {suggestedTracks.map((track) => (
               <Card key={track.id} className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
                 <div className="relative h-48 w-full">
+                  {/* PHOTO_DYNAMIC: Album art for the music track. */}
+                  {/* URL_DYNAMIC: track.albumArtUrl should point to an actual image. */}
                   <Image
                     src={track.albumArtUrl}
                     alt={track.title}
                     layout="fill"
                     objectFit="cover"
-                    data-ai-hint={track.aiHint}
+                    data-ai-hint={track.aiHint} // data-ai-hint provides keywords for image search
                   />
                 </div>
                 <CardHeader>
@@ -159,12 +193,14 @@ export default function MusicTherapyPage() {
           {commonSounds.map((sound) => (
             <Card key={sound.id} className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
               <div className="relative h-48 w-full">
+                 {/* PHOTO_PLACEHOLDER: Image representing the common sound. */}
+                 {/* URL_PLACEHOLDER: Using placehold.co. Replace with actual representative images. */}
                  <Image
                     src={`https://placehold.co/600x400.png`}
                     alt={t(sound.nameKey as any)}
                     layout="fill"
                     objectFit="cover"
-                    data-ai-hint={sound.hint}
+                    data-ai-hint={sound.hint} // data-ai-hint for image search
                   />
               </div>
               <CardHeader>
