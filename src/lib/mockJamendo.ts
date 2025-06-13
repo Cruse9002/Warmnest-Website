@@ -45,12 +45,12 @@ export const mockJamendoTracks: MockJamendoTrack[] = [
   },
   {
     id: 'jam5',
-    title: 'Sunrise Anthem',
-    artist: 'Aura Lift',
-    albumArtUrl: 'https://placehold.co/300x300.png', // Placeholder album art
-    streamUrl: 'mock://stream/jam5', // Mock audio stream URL
+    title: 'Mortals',
+    artist: 'Warriyo',
+    albumArtUrl: '/assets/images/Mortals.jpg', // Placeholder album art
+    streamUrl: '/assets/audio/Warriyo - Mortals (ft. Laura Brehm).mp3', // Mock audio stream URL
     genre: 'uplifting',
-    aiHint: 'sunrise sky',
+    aiHint: 'hype',
   },
   {
     id: 'jam6',
@@ -72,12 +72,12 @@ export const mockJamendoTracks: MockJamendoTrack[] = [
   },
   {
     id: 'jam8',
-    title: 'Mountain Peak',
-    artist: 'Altitude Sounds',
-    albumArtUrl: 'https://placehold.co/300x300.png', // Placeholder album art
-    streamUrl: 'mock://stream/jam8', // Mock audio stream URL
+    title: 'Interlinked',
+    artist: 'Lonely Lies, GOLDKID',
+    albumArtUrl: '/assets/images/Interlinked.jpg', // Placeholder album art
+    streamUrl: '/assets/audio/Lonely Lies, GOLDKID - Interlinked.mp3', // Mock audio stream URL
     genre: 'uplifting',
-    aiHint: 'mountain peak',
+    aiHint: 'deep',
   },
   {
     id: 'jam9',
