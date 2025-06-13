@@ -1,4 +1,3 @@
-
 import type { MockJamendoTrack } from '@/types';
 
 // AUDIO_URL_REQUIRED: The streamUrl properties below are mock URLs. 
@@ -9,46 +8,46 @@ import type { MockJamendoTrack } from '@/types';
 export const mockJamendoTracks: MockJamendoTrack[] = [
   {
     id: 'jam1',
-    title: 'Peaceful Morning Dew',
-    artist: 'Serene Scapes',
-    albumArtUrl: 'https://placehold.co/300x300.png', // Placeholder album art
-    streamUrl: 'mock://stream/jam1', // Mock audio stream URL
+    title: 'White Noise',
+    artist: 'Ambient Sounds',
+    albumArtUrl: '/assets/images/whiteNoise.jpg',
+    streamUrl: '/assets/audio/white.mp3',
     genre: 'calm',
-    aiHint: 'calm landscape',
+    aiHint: 'abstract soundwave',
   },
   {
     id: 'jam2',
-    title: 'Forest Whisper',
+    title: 'Rain Sounds',
     artist: 'Nature\'s Harmony',
-    albumArtUrl: 'https://placehold.co/300x300.png', // Placeholder album art
-    streamUrl: 'mock://stream/jam2', // Mock audio stream URL
+    albumArtUrl: '/assets/images/rain.jpg',
+    streamUrl: '/assets/audio/rain.mp3',
     genre: 'nature',
-    aiHint: 'forest path',
+    aiHint: 'rain window',
   },
   {
     id: 'jam3',
-    title: 'Electric Pulse',
-    artist: 'Synthwave Rider',
-    albumArtUrl: 'https://placehold.co/300x300.png', // Placeholder album art
-    streamUrl: 'mock://stream/jam3', // Mock audio stream URL
-    genre: 'energetic',
-    aiHint: 'abstract energy',
+    title: 'Ocean Waves',
+    artist: 'Deep Blue Project',
+    albumArtUrl: '/assets/images/ocean.jpg',
+    streamUrl: '/assets/audio/ocean.mp3',
+    genre: 'calm',
+    aiHint: 'ocean wave',
   },
   {
     id: 'jam4',
-    title: 'Study Flow',
-    artist: 'Concentration Beats',
-    albumArtUrl: 'https://placehold.co/300x300.png', // Placeholder album art
-    streamUrl: 'mock://stream/jam4', // Mock audio stream URL
-    genre: 'focus',
-    aiHint: 'minimalist abstract',
+    title: 'Interlinked',
+    artist: 'Lonely Lies, GOLDKID',
+    albumArtUrl: '/assets/images/Interlinked.jpg',
+    streamUrl: '/assets/audio/Lonely Lies, GOLDKID - Interlinked.mp3',
+    genre: 'uplifting',
+    aiHint: 'deep',
   },
   {
     id: 'jam5',
     title: 'Mortals',
     artist: 'Warriyo',
-    albumArtUrl: '/assets/images/Mortals.jpg', // Placeholder album art
-    streamUrl: '/assets/audio/Warriyo - Mortals (ft. Laura Brehm).mp3', // Mock audio stream URL
+    albumArtUrl: '/assets/images/Mortals.jpg',
+    streamUrl: '/assets/audio/Warriyo - Mortals (ft. Laura Brehm).mp3',
     genre: 'uplifting',
     aiHint: 'hype',
   },
@@ -72,15 +71,6 @@ export const mockJamendoTracks: MockJamendoTrack[] = [
   },
   {
     id: 'jam8',
-    title: 'Interlinked',
-    artist: 'Lonely Lies, GOLDKID',
-    albumArtUrl: '/assets/images/Interlinked.jpg', // Placeholder album art
-    streamUrl: '/assets/audio/Lonely Lies, GOLDKID - Interlinked.mp3', // Mock audio stream URL
-    genre: 'uplifting',
-    aiHint: 'deep',
-  },
-  {
-    id: 'jam9',
     title: 'Mind Palace',
     artist: 'Focus Finders',
     albumArtUrl: 'https://placehold.co/300x300.png', // Placeholder album art
@@ -89,7 +79,7 @@ export const mockJamendoTracks: MockJamendoTrack[] = [
     aiHint: 'geometric abstract',
   },
   {
-    id: 'jam10',
+    id: 'jam9',
     title: 'Desert Mirage Beat',
     artist: 'Sandstorm Grooves',
     albumArtUrl: 'https://placehold.co/300x300.png', // Placeholder album art

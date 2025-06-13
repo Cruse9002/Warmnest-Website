@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 import { Geist } from 'next/font/google'; // Removed Geist_Mono as it's not explicitly used for --font-geist-mono in body
 import './globals.css';

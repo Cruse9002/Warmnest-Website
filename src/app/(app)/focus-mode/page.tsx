@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -14,9 +13,11 @@ import type { MockJamendoTrack } from '@/types';
 import { getMockTracksByGenre, mockJamendoTracks } from '@/lib/mockJamendo'; // Assuming this can be used directly
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 export default function FocusModePage() {
   const { t } = useLanguage();
+  const { toast } = useToast();
 
   const [focusTracks, setFocusTracks] = useState<MockJamendoTrack[]>([]);
   const [currentMusicTrack, setCurrentMusicTrack] = useState<MockJamendoTrack | null>(null);
@@ -46,47 +47,42 @@ export default function FocusModePage() {
     if (currentMusicTrack && currentMusicTrack.streamUrl) {
       if (musicAudioRef.current) {
         musicAudioRef.current.pause();
+        musicAudioRef.current.src = '';
       }
-      // AUDIO_URL_REQUIRED: currentMusicTrack.streamUrl needs to be a valid audio source
       const newAudio = new Audio(currentMusicTrack.streamUrl);
       newAudio.loop = true;
       musicAudioRef.current = newAudio;
       
       if (isMusicAudioPlaying) {
-        musicAudioRef.current.play().catch(error => console.warn("Audio play failed on track change:", error));
+        musicAudioRef.current.play().catch(error => {
+          console.error("Error playing track:", error);
+          toast({ title: "Error", description: "Could not play the track.", variant: "destructive" });
+        });
       }
     }
     // Cleanup when currentMusicTrack is removed or component unmounts
     return () => {
       if (musicAudioRef.current) {
         musicAudioRef.current.pause();
-        musicAudioRef.current.src = ''; // Release resource
+        musicAudioRef.current.src = '';
       }
     };
-  }, [currentMusicTrack]); // isMusicAudioPlaying is handled in its own effect or by direct calls
+  }, [currentMusicTrack, toast]);
 
   // Effect to play/pause audio
   useEffect(() => {
     const audioElement = musicAudioRef.current;
     if (audioElement) {
       if (isMusicAudioPlaying) {
-        audioElement.play().catch(error => console.warn("Audio play failed:", error));
+        audioElement.play().catch(error => {
+          console.error("Error playing track:", error);
+          toast({ title: "Error", description: "Could not play the track.", variant: "destructive" });
+        });
       } else {
         audioElement.pause();
       }
     }
-  }, [isMusicAudioPlaying]);
-
-  // Cleanup on component unmount
-  useEffect(() => {
-    return () => {
-      if (musicAudioRef.current) {
-        musicAudioRef.current.pause();
-        musicAudioRef.current.src = '';
-      }
-    };
-  }, []);
-
+  }, [isMusicAudioPlaying, toast]);
 
   const handleSelectMusicTrack = (track: MockJamendoTrack) => {
     if (currentMusicTrack?.id === track.id) {
@@ -173,25 +169,23 @@ export default function FocusModePage() {
                     )}
                   >
                     <div className="relative h-32 w-full">
-                      {/* PHOTO_DYNAMIC: Album art for the focus music track. */}
-                      {/* URL_DYNAMIC: track.albumArtUrl should point to an actual image. */}
                       <Image
                         src={track.albumArtUrl}
                         alt={track.title}
-                        layout="fill"
-                        objectFit="cover"
+                        fill
+                        style={{ objectFit: 'cover' }}
                         data-ai-hint={track.aiHint}
                       />
-                       {currentMusicTrack?.id === track.id && isMusicAudioPlaying && (
-                         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                           <PauseCircle className="h-12 w-12 text-white/80" />
-                         </div>
-                       )}
-                       {currentMusicTrack?.id === track.id && !isMusicAudioPlaying && (
-                         <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                           <PlayCircle className="h-12 w-12 text-white/70" />
-                         </div>
-                       )}
+                      {currentMusicTrack?.id === track.id && isMusicAudioPlaying && (
+                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                          <PauseCircle className="h-12 w-12 text-white/80" />
+                        </div>
+                      )}
+                      {currentMusicTrack?.id === track.id && !isMusicAudioPlaying && (
+                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                          <PlayCircle className="h-12 w-12 text-white/70" />
+                        </div>
+                      )}
                     </div>
                     <CardHeader className="p-3">
                       <CardTitle className="text-base truncate">{track.title}</CardTitle>

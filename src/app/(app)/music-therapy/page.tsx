@@ -1,13 +1,12 @@
-
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/hooks/useLanguage';
 import Image from 'next/image';
-import { Music2, Waves, CloudRain, Volume2, PlayCircle, ListMusic } from 'lucide-react';
+import { Music2, Waves, CloudRain, Volume2, PlayCircle, ListMusic, PauseCircle } from 'lucide-react';
 import type { User, MockJamendoTrack } from '@/types';
 import { getMockTracksByGenre, mockJamendoTracks } from '@/lib/mockJamendo'; 
 import { useToast } from '@/hooks/use-toast';
@@ -15,17 +14,17 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const commonSounds = [
   { id: 'white-noise', nameKey: 'whiteNoise', icon: Volume2, hint: "abstract soundwave", 
-    // AUDIO_URL_REQUIRED: Example for specific audio file for white noise.
-    audioSrc: 'assets/audio/white.mp3' 
+    audioSrc: '/assets/audio/white.mp3',
+    imageSrc: '/assets/images/whiteNoise.jpg'
   },
   { id: 'rain-sounds', nameKey: 'rainSounds', icon: CloudRain, hint: "rain window",
-    // AUDIO_URL_REQUIRED: Example for specific audio file for rain sounds.
-    audioSrc: 'assets/audio/rain.mp3' 
+    audioSrc: '/assets/audio/rain.mp3',
+    imageSrc: '/assets/images/rain.jpg'
   },
   { id: 'ocean-waves', nameKey: 'oceanWaves', icon: Waves, hint: "ocean wave",
-    // AUDIO_URL_REQUIRED: Example for specific audio file for ocean waves.
-    audioSrc: 'assets/audio/ocean.mp3'
-   },
+    audioSrc: '/assets/audio/ocean.mp3',
+    imageSrc: '/assets/images/ocean.jpg'
+  },
 ];
 
 const mapColorToGenre = (color?: User['favoriteColor']): MockJamendoTrack['genre'] => {
@@ -69,6 +68,8 @@ export default function MusicTherapyPage() {
   const { toast } = useToast();
   const [suggestedTracks, setSuggestedTracks] = useState<MockJamendoTrack[]>([]);
   const [isLoadingTracks, setIsLoadingTracks] = useState(true);
+  const [currentPlayingSound, setCurrentPlayingSound] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const personalGenre = mapColorToGenre(user?.favoriteColor);
 
@@ -90,26 +91,66 @@ export default function MusicTherapyPage() {
   }, [personalGenre, toast]);
 
   const handlePlayTrack = (track: MockJamendoTrack) => {
-    // AUDIO_URL_REQUIRED: track.streamUrl is currently a mock URL. Replace with actual audio file URL.
-    // AUDIO_FEATURE: Actual audio playback would happen here using track.streamUrl.
-    // For specific frequencies, if track.streamUrl was a generator or pointed
-    // to a specific frequency file, it would be handled by an audio player.
-    // e.g., playAudio(track.streamUrl, { frequency: track.frequencyData });
-    console.log(`Playing ${track.title} from ${track.streamUrl} (mock)`);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+    }
+    const audio = new Audio(track.streamUrl);
+    audio.loop = true;
+    audioRef.current = audio;
+    audio.play().catch(error => {
+      console.error("Error playing track:", error);
+      toast({ title: "Error", description: "Could not play the track.", variant: "destructive" });
+    });
     toast({
-      title: `Now Playing (Mock)`,
+      title: `Now Playing`,
       description: `${track.title} by ${track.artist}`,
     });
   };
 
   const handlePlayCommonSound = (soundNameKey: string) => {
     const sound = commonSounds.find(s => s.nameKey === soundNameKey);
-    // if (sound && sound.audioSrc) playAudio(sound.audioSrc); // AUDIO_URL_REQUIRED: audioSrc needs to be a valid path
-    toast({
-      title: `Now Playing (Mock)`,
-      description: `${t(soundNameKey as any)}`,
-    });
+    if (!sound) return;
+
+    if (currentPlayingSound === soundNameKey) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+      setCurrentPlayingSound(null);
+      toast({
+        title: `Paused`,
+        description: `${t(soundNameKey as any)}`,
+      });
+    } else {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+      const audio = new Audio(sound.audioSrc);
+      audio.loop = true;
+      audioRef.current = audio;
+      audio.play().catch(error => {
+        console.error("Error playing sound:", error);
+        toast({ title: "Error", description: "Could not play the sound.", variant: "destructive" });
+      });
+      setCurrentPlayingSound(soundNameKey);
+      toast({
+        title: `Now Playing`,
+        description: `${t(soundNameKey as any)}`,
+      });
+    }
   };
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+    };
+  }, []);
 
   // AUDIO_FEATURE: Example of how Web Audio API could be used for specific frequencies.
   // const playAudioWithFrequency = (frequency: number, durationSeconds: number) => {
@@ -193,15 +234,18 @@ export default function MusicTherapyPage() {
           {commonSounds.map((sound) => (
             <Card key={sound.id} className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
               <div className="relative h-48 w-full">
-                 {/* PHOTO_PLACEHOLDER: Image representing the common sound. */}
-                 {/* URL_PLACEHOLDER: Using placehold.co. Replace with actual representative images. */}
-                 <Image
-                    src={`https://placehold.co/600x400.png`}
-                    alt={t(sound.nameKey as any)}
-                    layout="fill"
-                    objectFit="cover"
-                    data-ai-hint={sound.hint} // data-ai-hint for image search
-                  />
+                <Image
+                  src={sound.imageSrc}
+                  alt={t(sound.nameKey as any)}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  data-ai-hint={sound.hint}
+                />
+                {currentPlayingSound === sound.nameKey && (
+                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                    <PauseCircle className="h-12 w-12 text-white/70" />
+                  </div>
+                )}
               </div>
               <CardHeader>
                 <CardTitle className="text-xl text-foreground flex items-center">
@@ -212,9 +256,22 @@ export default function MusicTherapyPage() {
               <CardContent className="flex-grow">
               </CardContent>
               <CardFooter>
-                <Button className="w-full" variant="outline" onClick={() => handlePlayCommonSound(sound.nameKey)}>
-                  <PlayCircle className="mr-2 h-5 w-5" />
-                  {t('playTrack')}
+                <Button 
+                  className="w-full" 
+                  variant={currentPlayingSound === sound.nameKey ? "destructive" : "outline"} 
+                  onClick={() => handlePlayCommonSound(sound.nameKey)}
+                >
+                  {currentPlayingSound === sound.nameKey ? (
+                    <>
+                      <PauseCircle className="mr-2 h-5 w-5" />
+                      {t('pause')}
+                    </>
+                  ) : (
+                    <>
+                      <PlayCircle className="mr-2 h-5 w-5" />
+                      {t('playTrack')}
+                    </>
+                  )}
                 </Button>
               </CardFooter>
             </Card>
