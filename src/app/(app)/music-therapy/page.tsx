@@ -16,15 +16,15 @@ import { Skeleton } from '@/components/ui/skeleton';
 const commonSounds = [
   { id: 'white-noise', nameKey: 'whiteNoise', icon: Volume2, hint: "abstract soundwave", 
     // AUDIO_URL_REQUIRED: Example for specific audio file for white noise.
-    // audioSrc: '/audio/white-noise-60min.mp3' 
+    audioSrc: 'assets/audio/white.mp3' 
   },
   { id: 'rain-sounds', nameKey: 'rainSounds', icon: CloudRain, hint: "rain window",
     // AUDIO_URL_REQUIRED: Example for specific audio file for rain sounds.
-    // audioSrc: '/audio/rain-ambience-loop.mp3' 
+    audioSrc: 'assets/audio/rain.mp3' 
   },
   { id: 'ocean-waves', nameKey: 'oceanWaves', icon: Waves, hint: "ocean wave",
     // AUDIO_URL_REQUIRED: Example for specific audio file for ocean waves.
-    // audioSrc: '/audio/ocean-waves-calm.mp3'
+    audioSrc: 'assets/audio/ocean.mp3'
    },
 ];
 
