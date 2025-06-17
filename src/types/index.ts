@@ -1,4 +1,3 @@
-
 export type Language = 'en' | 'ta';
 
 export interface User {
@@ -7,6 +6,7 @@ export interface User {
   name: string;
   language: Language;
   onboarded: boolean;
+  has_completed_questionnaire?: boolean;
   darkMode?: boolean;
   photoURL?: string;
   dob?: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { signIn, signUp, getCurrentUser } from '@/lib/auth';
 import type { User } from '@/types';
 import Cookies from 'js-cookie';
@@ -84,13 +84,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     Cookies.remove('userId');
   };
 
-  const updateUser = (updates: Partial<User>) => {
-    setUser((prevUser) => {
-      if (!prevUser) return null;
-      const updatedUser = { ...prevUser, ...updates };
-      return updatedUser;
-    });
-  };
+  const updateUser = useCallback(async (updates: Partial<User>) => {
+    if (!user) return;
+
+    const previousUser = user;
+    setUser({ ...user, ...updates }); // Optimistic update
+
+    try {
+      const response = await fetch(`/api/users/${user.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update user');
+      }
+
+      const data = await response.json();
+      setUser(data.user); // Update with response from server
+    } catch (err) {
+      console.error('Update user error:', err);
+      setUser(previousUser); // Rollback on error
+    }
+  }, [user]);
 
   return (
     <AuthContext.Provider

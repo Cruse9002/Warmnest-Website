@@ -1,4 +1,3 @@
-
 import type { Language } from '@/types';
 
 export const translations = {
@@ -59,6 +58,7 @@ export const translations = {
     next: "Next",
     previous: "Previous",
     finish: "Finish",
+    finishing: "Finishing...",
     stressSourceQuestion: "What is your primary source of stress?",
     work: "Work",
     studies: "Studies",
@@ -132,7 +132,7 @@ export const translations = {
     // Pursed-Lip Breathing Steps
     pursedLipBreathingStep1: "Relax your neck and shoulders.",
     pursedLipBreathingStep2: "Keeping your mouth closed, inhale slowly through your nose for two counts.",
-    pursedLipBreathingStep3: "Pucker or “purse” your lips as if you were going to whistle or gently blow out a candle.",
+    pursedLipBreathingStep3: "Pucker or 'purse' your lips as if you were going to whistle or gently blow out a candle.",
     pursedLipBreathingStep4: "Exhale slowly and gently through your pursed lips for a count of four (or longer).",
     // Chatbot
     mentalWellnessChatbot: "Mental Wellness Chatbot",
@@ -172,7 +172,8 @@ export const translations = {
     whiteNoise: "White Noise",
     rainSounds: "Rain Sounds",
     oceanWaves: "Ocean Waves",
-    playTrack: "Play Track (Mock)",
+    playTrack: "Play",
+    pauseTrack: "Pause",
     calmingAmbient: "Calming Ambient",
     energeticBeats: "Energetic Beats",
     gentleMelodies: "Gentle Melodies",
@@ -265,10 +266,11 @@ export const translations = {
     profilePhotoUpdatedDescMock: "உங்கள் புதிய சுயவிவரப் படம் இப்போது செயலில் உள்ளது (கேலி செய்யப்பட்டது).",
     // Onboarding
     welcomeToOnboarding: "அறிமுகத்திற்கு வரவேற்கிறோம்",
-    questionnaireIntro: "உங்களைப் பற்றி மேலும் தெரிந்து கொள்வோம். இது உங்கள் அனுபவத்தைத் தனிப்பயனாக்க உதவும்.",
+    questionnaireIntro: "உங்களைப் பற்றி நன்கு தெரிந்து கொள்வோம். இது உங்கள் அனுபவத்தைத் தனிப்பயனாக்க எங்களுக்கு உதவும்.",
     next: "அடுத்து",
     previous: "முந்தையது",
     finish: "முடி",
+    finishing: "முடிக்கிறது...",
     stressSourceQuestion: "உங்கள் மன அழுத்தத்திற்கு முக்கிய காரணம் என்ன?",
     work: "வேலை",
     studies: "படிப்பு",
@@ -382,10 +384,11 @@ export const translations = {
     whiteNoise: "வெள்ளை இரைச்சல்",
     rainSounds: "மழை ஓசைகள்",
     oceanWaves: "கடல் அலைகள்",
-    playTrack: "ஒலியை இயக்கு (மாதிரி)",
+    playTrack: "இயக்கு",
+    pauseTrack: "இடைநிறுத்து",
     calmingAmbient: "அமைதியான சூழல்",
-    energeticBeats: "ஆற்றல்மிக்க இசை",
-    gentleMelodies: "மென்மையான மெல்லிசை",
+    energeticBeats: "ஆற்றல்மிக்க தாளங்கள்",
+    gentleMelodies: "மென்மையான மெல்லிசைகள்",
     focusEnhancingMusic: "கவன இசை",
     natureSounds: "இயற்கை ஒலிகள்",
     upliftingTunes: "உற்சாகமூட்டும் இசை",

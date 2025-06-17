@@ -20,6 +20,17 @@ const readCSV = (filename: string) => {
   return parse(fileContent, {
     columns: true,
     skip_empty_lines: true,
+    on_record: (record, context) => {
+      Object.keys(record).forEach(key => {
+        const value = record[key];
+        if (/^(true|false)$/i.test(value)) {
+          record[key] = value.toLowerCase() === 'true';
+        } else if (!isNaN(value) && value.trim() !== '') {
+          record[key] = Number(value);
+        }
+      });
+      return record;
+    }
   });
 };
 
@@ -71,6 +82,20 @@ export const userOperations = {
   async getUserById(id: number) {
     const users = readCSV('users.csv');
     return users.find((u: any) => u.id === id);
+  },
+
+  async updateUser(userId: number, updates: any) {
+    const users = readCSV('users.csv');
+    const userIndex = users.findIndex((u: any) => u.id === userId);
+
+    if (userIndex !== -1) {
+      // Merge updates into the user object
+      users[userIndex] = { ...users[userIndex], ...updates };
+      writeCSV('users.csv', users);
+      return users[userIndex];
+    }
+    
+    return null;
   },
 
   async updateUserQuestionnaireStatus(userId: number, completed: boolean) {

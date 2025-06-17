@@ -39,7 +39,7 @@ export const mockJamendoTracks: MockJamendoTrack[] = [
     artist: 'Lonely Lies, GOLDKID',
     albumArtUrl: '/assets/images/Interlinked.jpg',
     streamUrl: '/assets/audio/Lonely Lies, GOLDKID - Interlinked.mp3',
-    genre: 'uplifting',
+    genre: 'focus',
     aiHint: 'deep',
   },
   {
@@ -48,7 +48,7 @@ export const mockJamendoTracks: MockJamendoTrack[] = [
     artist: 'Warriyo',
     albumArtUrl: '/assets/images/Mortals.jpg',
     streamUrl: '/assets/audio/Warriyo - Mortals (ft. Laura Brehm).mp3',
-    genre: 'uplifting',
+    genre: 'focus',
     aiHint: 'hype',
   },
   {

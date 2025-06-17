@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -11,16 +10,18 @@ import { Input } from "@/components/ui/input";
 import { useLanguage } from '@/hooks/useLanguage';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import type { QuestionnaireAnswers, TranslatedStringType, User } from '@/types';
+import type { QuestionnaireAnswers, User } from '@/types';
 import { toast } from '@/hooks/use-toast';
+import { translations } from '@/lib/i18n';
 
+type QuestionKey = keyof (typeof translations)['en'];
 
 interface Question {
   id: keyof QuestionnaireAnswers;
-  titleKey: TranslatedStringType;
-  type: 'radio' | 'date' | 'select'; // Added type
-  optionsKey?: TranslatedStringType[]; // Optional for non-radio types
-  optionsValue?: string[]; // Optional for non-radio types
+  titleKey: QuestionKey;
+  type: 'radio' | 'date' | 'select';
+  optionsKey?: QuestionKey[];
+  optionsValue?: string[];
 }
 
 const questions: Question[] = [
@@ -64,23 +65,24 @@ const ONBOARDING_ANSWERS_LS_KEY = 'warmnest-onboarding-answers';
 export function Questionnaire() {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Partial<QuestionnaireAnswers>>({});
+  const [isLoading, setIsLoading] = useState(false);
   const { t } = useLanguage();
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, loading: authLoading } = useAuth();
   const router = useRouter();
 
-  // Load answers from localStorage on mount
   useEffect(() => {
-    const storedAnswers = localStorage.getItem(ONBOARDING_ANSWERS_LS_KEY);
-    if (storedAnswers) {
-      setAnswers(JSON.parse(storedAnswers));
+    // Redirect if user has already completed the questionnaire
+    if (!authLoading && user?.has_completed_questionnaire) {
+      toast({
+        title: "Welcome back!",
+        description: "You've already completed the onboarding.",
+      });
+      router.replace('/dashboard');
     }
-  }, []);
-
+  }, [user, authLoading, router]);
 
   const handleAnswerChange = (questionId: keyof QuestionnaireAnswers, value: string) => {
-    const newAnswers = { ...answers, [questionId]: value };
-    setAnswers(newAnswers);
-    localStorage.setItem(ONBOARDING_ANSWERS_LS_KEY, JSON.stringify(newAnswers));
+    setAnswers(prev => ({ ...prev, [questionId]: value }));
   };
 
   const nextStep = () => {
@@ -96,25 +98,50 @@ export function Questionnaire() {
   };
 
   const handleSubmit = async () => {
-    if (user) {
-      // Combine existing user data with new onboarding answers
-      const finalUserData: Partial<User & QuestionnaireAnswers> = {
-        ...user,
-        ...answers, // This will include dob, gender, favoriteColor, stressSource, copingMechanism
-        onboarded: true,
-      };
-      updateUser(finalUserData);
+    if (!user) {
+      toast({ title: "Error", description: "You must be logged in.", variant: "destructive" });
+      return;
     }
-    localStorage.removeItem(ONBOARDING_ANSWERS_LS_KEY); // Clean up temp storage
-    toast({
-        title: "Onboarding Complete!",
-        description: "Your preferences have been saved.",
-    });
-    router.push('/dashboard');
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/onboarding', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, answers }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save onboarding data');
+      }
+
+      const { user: updatedUser } = await response.json();
+      updateUser(updatedUser); // Update the user in AuthContext
+
+      toast({
+          title: "Onboarding Complete!",
+          description: "Your preferences have been saved.",
+      });
+      router.push('/dashboard');
+
+    } catch (error) {
+      console.error("Onboarding submission error:", error);
+      toast({ title: "Error", description: "Could not save your preferences.", variant: "destructive" });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const currentQuestion = questions[currentStep];
   const progressPercentage = ((currentStep + 1) / questions.length) * 100;
+  
+  if (authLoading || (user && user.has_completed_questionnaire)) {
+    return (
+      <div className="flex flex-col items-center justify-center py-8">
+          <p>{t('loadingMusic')}</p>
+      </div>
+    );
+  }
 
   return (
     <Card className="w-full max-w-xl mx-auto shadow-xl">
@@ -136,7 +163,7 @@ export function Questionnaire() {
                 {currentQuestion.optionsKey.map((optionKey, index) => (
                   <div key={optionKey} className="flex items-center space-x-2 p-3 border rounded-md hover:bg-muted/50 transition-colors">
                     <RadioGroupItem value={currentQuestion.optionsValue![index]} id={`${currentQuestion.id}-${optionKey}`} />
-                    <Label htmlFor={`${currentQuestion.id}-${optionKey}`} className="cursor-pointer flex-1 font-normal">{t(optionKey as TranslatedStringType)}</Label>
+                    <Label htmlFor={`${currentQuestion.id}-${optionKey}`} className="cursor-pointer flex-1 font-normal">{t(optionKey)}</Label>
                   </div>
                 ))}
               </RadioGroup>
@@ -154,16 +181,16 @@ export function Questionnaire() {
         </form>
       </CardContent>
       <CardFooter className="flex justify-between pt-6">
-        <Button variant="outline" onClick={prevStep} disabled={currentStep === 0}>
+        <Button variant="outline" onClick={prevStep} disabled={currentStep === 0 || isLoading}>
           {t('previous')}
         </Button>
         {currentStep < questions.length - 1 ? (
-          <Button onClick={nextStep} disabled={!answers[currentQuestion.id]}>
+          <Button onClick={nextStep} disabled={!answers[currentQuestion.id] || isLoading}>
             {t('next')}
           </Button>
         ) : (
-          <Button onClick={handleSubmit} disabled={!answers[currentQuestion.id]} className="bg-accent text-accent-foreground hover:bg-accent/90">
-            {t('finish')}
+          <Button onClick={handleSubmit} disabled={!answers[currentQuestion.id] || isLoading} className="bg-accent text-accent-foreground hover:bg-accent/90">
+            {isLoading ? t('finishing') : t('finish')}
           </Button>
         )}
       </CardFooter>
