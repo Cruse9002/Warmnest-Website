@@ -1,16 +1,14 @@
-
 "use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Progress } from '@/components/ui/progress';
 import { AppLogo } from '@/components/layout/AppLogo';
-
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
-  const router = useRouter();
   const { user, loading } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if (!loading) {
@@ -32,8 +30,12 @@ export default function HomePage() {
         <AppLogo size="lg" />
       </div>
       <Progress value={50} className="w-1/2 sm:w-1/3 md:w-1/4 mb-4" />
-      <p className="text-muted-foreground text-base sm:text-lg">Initializing your space...</p>
-      <p className="text-xs sm:text-sm text-muted-foreground mt-2">Please wait while we prepare WarmNest for you.</p>
+      <p className="text-muted-foreground text-base sm:text-lg">
+        {loading ? 'Initializing your space...' : 'Welcome to WarmNest'}
+      </p>
+      <p className="text-xs sm:text-sm text-muted-foreground mt-2">
+        {loading ? 'Please wait while we prepare WarmNest for you.' : 'Your mental wellness companion'}
+      </p>
     </div>
   );
 }

@@ -25,7 +25,7 @@ export async function signUp(email: string, password: string, name: string): Pro
     email: user.email,
     name: user.name,
     language: (user.language as any) || 'en',
-    onboarded: (user.onboarded as any) ?? false,
+    onboarded: Boolean(user.has_completed_questionnaire),
     darkMode: (user.darkMode as any),
     photoURL: (user.photoURL as any),
   } as User;
@@ -58,7 +58,7 @@ export async function signIn(email: string, password: string): Promise<User | nu
     email: user.email,
     name: user.name,
     language: (user.language as any) || 'en',
-    onboarded: (user.onboarded as any) ?? false,
+    onboarded: Boolean(user.has_completed_questionnaire),
     darkMode: (user.darkMode as any),
     photoURL: (user.photoURL as any),
   } as User;
@@ -76,7 +76,7 @@ export async function getCurrentUser(userId: string): Promise<User | null> {
       email: user.email,
       name: user.name,
       language: (user.language as any) || 'en',
-      onboarded: (user.onboarded as any) ?? false,
+      onboarded: Boolean(user.has_completed_questionnaire),
       darkMode: (user.darkMode as any),
       photoURL: (user.photoURL as any),
     } as User;

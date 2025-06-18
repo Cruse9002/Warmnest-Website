@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useState, useEffect, useContext, ReactNode, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useContext, ReactNode, useCallback, useRef, useLayoutEffect } from 'react';
 import { useAuth } from './AuthContext';
 
 type Theme = "light" | "dark";
@@ -16,27 +16,50 @@ export const ThemeContext = createContext<ThemeContextType | undefined>(undefine
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setThemeState] = useState<Theme>("light");
   const { user, updateUser, loading: authLoading } = useAuth();
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const didInit = useRef(false);
+  const prevUserId = useRef<string | number | null>(null);
+  const isInitializing = useRef(true);
 
-  useEffect(() => {
+  // Initialize theme from user, localStorage, or system
+  useLayoutEffect(() => {
     if (authLoading) return;
-
-    let initialTheme: Theme;
-    if (user?.darkMode !== undefined) {
-      const userThemeIsDark = user.darkMode.toString() === 'true';
-      initialTheme = userThemeIsDark ? "dark" : "light";
-    } else {
+    // If user just logged in or changed
+    if (user && user.id !== prevUserId.current) {
+      const userTheme = user.darkMode ? "dark" : "light";
+      setThemeState(userTheme);
+      prevUserId.current = user.id;
+      didInit.current = true;
+      isInitializing.current = false;
+      return;
+    }
+    // If user just logged out
+    if (!user && prevUserId.current !== null) {
+      // Try localStorage, then system
       const storedTheme = localStorage.getItem('warmnest-theme') as Theme | null;
       if (storedTheme) {
-        initialTheme = storedTheme;
+        setThemeState(storedTheme);
       } else {
-        initialTheme = window.matchMedia?.('(prefers-color-scheme: dark)')?.matches ? 'dark' : 'light';
+        setThemeState(window.matchMedia?.('(prefers-color-scheme: dark)')?.matches ? 'dark' : 'light');
       }
+      prevUserId.current = null;
+      didInit.current = true;
+      isInitializing.current = false;
+      return;
     }
-    setThemeState(initialTheme);
-    setIsInitialLoad(false);
+    // On first load (no user)
+    if (!user && !didInit.current) {
+      const storedTheme = localStorage.getItem('warmnest-theme') as Theme | null;
+      if (storedTheme) {
+        setThemeState(storedTheme);
+      } else {
+        setThemeState(window.matchMedia?.('(prefers-color-scheme: dark)')?.matches ? 'dark' : 'light');
+      }
+      didInit.current = true;
+      isInitializing.current = false;
+    }
   }, [user, authLoading]);
 
+  // Apply theme to DOM and localStorage
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove(theme === "light" ? "dark" : "light");
@@ -44,24 +67,35 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('warmnest-theme', theme);
   }, [theme]);
 
-  useEffect(() => {
-    if (isInitialLoad || authLoading || !user) return;
-    
-    const userThemeIsDark = user.darkMode?.toString() === 'true';
-    const userTheme = userThemeIsDark ? 'dark' : 'light';
-    
-    if (userTheme !== theme) {
-      updateUser({ darkMode: theme === 'dark' });
-    }
-  }, [theme, user, authLoading, updateUser, isInitialLoad]);
-
+  // Only PATCH when user explicitly changes theme
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
-  }, []);
+    // Defer updateUser to next tick to avoid render-time setState
+    if (user && !isInitializing.current && ((user.darkMode && newTheme === 'light') || (!user.darkMode && newTheme === 'dark'))) {
+      setTimeout(() => {
+        const newDarkMode = newTheme === 'dark';
+        if (user.darkMode !== newDarkMode) {
+          updateUser({ darkMode: newDarkMode });
+        }
+      }, 0);
+    }
+  }, [user, updateUser]);
 
   const toggleTheme = useCallback(() => {
-    setThemeState(prevTheme => (prevTheme === "light" ? "dark" : "light"));
-  }, []);
+    setThemeState((prev: Theme) => {
+      const newTheme = prev === 'light' ? 'dark' : 'light';
+      // Defer updateUser to next tick to avoid render-time setState
+      if (user && !isInitializing.current && ((user.darkMode && newTheme === 'light') || (!user.darkMode && newTheme === 'dark'))) {
+        setTimeout(() => {
+          const newDarkMode = newTheme === 'dark';
+          if (user.darkMode !== newDarkMode) {
+            updateUser({ darkMode: newDarkMode });
+          }
+        }, 0);
+      }
+      return newTheme;
+    });
+  }, [user, updateUser]);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>

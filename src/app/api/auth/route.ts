@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { userOperations } from '@/lib/csvData';
+import { userOperations, preferencesOperations } from '@/lib/csvData';
 
 export async function POST(request: Request) {
   try {
@@ -18,7 +18,19 @@ export async function POST(request: Request) {
             { status: 401 }
           );
         }
-        return NextResponse.json({ user });
+
+        // Load user preferences
+        const preferences = await preferencesOperations.getUserPreferences(user.id);
+        
+        // Combine user data with preferences
+        const userWithPreferences = {
+          ...user,
+          language: preferences?.language || 'en',
+          darkMode: preferences?.theme === 'dark',
+          photoURL: user.photoURL || null,
+        };
+
+        return NextResponse.json({ user: userWithPreferences });
 
       default:
         return NextResponse.json(

@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: http://localhost:9002/sitemap.xml
+
+# Disallow admin and private areas
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+
+# Allow important pages
+Allow: /auth/login
+Allow: /auth/register
+Allow: /dashboard
+Allow: /breathing
+Allow: /journal
+Allow: /music-therapy
+Allow: /focus-mode
+Allow: /chatbot 

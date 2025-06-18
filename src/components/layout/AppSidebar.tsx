@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from 'next/link';
@@ -38,12 +37,11 @@ const accountNavLinks = [
     { href: '/profile', labelKey: 'profile', icon: User },
 ] as const;
 
-
 export function AppSidebar() {
   const pathname = usePathname();
   const { t, language, setLanguage } = useLanguage();
   const { theme, toggleTheme } = useTheme();
-  const { user, logout } = useAuth();
+  const { user, signOut } = useAuth();
   const { state: sidebarState } = useSidebar();
 
   const handleLanguageToggle = () => {
@@ -65,7 +63,6 @@ export function AppSidebar() {
                 isActive={pathname === link.href}
                 tooltip={sidebarState === 'collapsed' ? t(link.labelKey) : undefined}
               >
-                {/* URL_NAVIGATION: Sidebar navigation link. */}
                 <Link href={link.href}>
                   <link.icon />
                   <span>{t(link.labelKey)}</span>
@@ -87,7 +84,6 @@ export function AppSidebar() {
                         isActive={pathname === link.href}
                         tooltip={sidebarState === 'collapsed' ? t(link.labelKey) : undefined}
                     >
-                        {/* URL_NAVIGATION: Sidebar account navigation link. */}
                         <Link href={link.href}>
                         <link.icon />
                         <span>{t(link.labelKey)}</span>
@@ -124,9 +120,7 @@ export function AppSidebar() {
             sidebarState === 'collapsed' ? "justify-center" : ""
           )}>
             <Avatar className="h-9 w-9 border-2 border-primary">
-              {/* PHOTO_DYNAMIC: User's profile avatar in sidebar. */}
-              {/* URL_DYNAMIC: user.photoURL or a placeholder. */}
-              <AvatarImage src={user.photoURL || `https://placehold.co/100x100.png?text=${user.name?.[0]?.toUpperCase() || 'U'}`} alt={user.name || "User Avatar"} data-ai-hint="avatar profile" />
+              <AvatarImage src={user.photoURL || `https://placehold.co/100x100.png?text=${user.name?.[0]?.toUpperCase() || 'U'}`} alt={user.name || "User Avatar"} />
               <AvatarFallback>{user.name?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
             </Avatar>
             {sidebarState === 'expanded' && (
@@ -138,7 +132,7 @@ export function AppSidebar() {
               </div>
             )}
              {sidebarState === 'expanded' && (
-                <Button variant="ghost" size="icon" onClick={logout} className="text-muted-foreground hover:text-destructive" aria-label={t('logout')}>
+                <Button variant="ghost" size="icon" onClick={signOut} className="text-muted-foreground hover:text-destructive" aria-label={t('logout')}>
                     <LogOut size={18} />
                 </Button>
              )}
@@ -147,7 +141,7 @@ export function AppSidebar() {
          {sidebarState === 'collapsed' && user && (
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton onClick={logout} tooltip={t('logout')}>
+                    <SidebarMenuButton onClick={signOut} tooltip={t('logout')}>
                         <LogOut />
                     </SidebarMenuButton>
                 </SidebarMenuItem>

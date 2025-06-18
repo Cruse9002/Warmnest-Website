@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from 'next/link';
@@ -18,14 +17,12 @@ import { AppLogo } from './AppLogo';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import { useRouter }
-from 'next/navigation';
-
+import { useRouter } from 'next/navigation';
 
 export function AppHeader() {
   const { t, language, setLanguage } = useLanguage();
   const { theme, toggleTheme } = useTheme();
-  const { user, logout, loading } = useAuth();
+  const { user, signOut, loading } = useAuth();
   const router = useRouter();
 
   const handleLanguageToggle = () => {
@@ -33,19 +30,15 @@ export function AppHeader() {
   };
 
   const navigateToProfile = () => {
-    // URL_NAVIGATION: Navigates to the user profile page.
     router.push('/profile');
   };
-
 
   const UserMenu = () => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10 border-2 border-primary">
-            {/* PHOTO_DYNAMIC: User's profile avatar. */}
-            {/* URL_DYNAMIC: user.photoURL or a placeholder. */}
-            <AvatarImage src={user?.photoURL || `https://placehold.co/100x100.png?text=${user?.name?.[0]?.toUpperCase() || 'U'}`} alt={user?.name || 'User'} data-ai-hint="avatar profile" />
+            <AvatarImage src={user?.photoURL || `https://placehold.co/100x100.png?text=${user?.name?.[0]?.toUpperCase() || 'U'}`} alt={user?.name || 'User'} />
             <AvatarFallback>{user?.name?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
           </Avatar>
         </Button>
@@ -73,7 +66,7 @@ export function AppHeader() {
           <span>{theme === 'dark' ? t('switchToLightMode') : t('switchToDarkMode')}</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={logout}>
+        <DropdownMenuItem onSelect={signOut}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>{t('logout')}</span>
         </DropdownMenuItem>
@@ -84,11 +77,9 @@ export function AppHeader() {
   const AuthButtons = () => (
     <div className="flex items-center gap-2">
       <Button variant="ghost" asChild>
-        {/* URL_NAVIGATION: Link to login page. */}
         <Link href="/auth/login">{t('login')}</Link>
       </Button>
       <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
-        {/* URL_NAVIGATION: Link to register page. */}
         <Link href="/auth/register">{t('register')}</Link>
       </Button>
     </div>
@@ -105,7 +96,6 @@ export function AppHeader() {
         </div>
 
         <div className="md:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          {/* URL_NAVIGATION: Link to dashboard page (mobile logo). */}
           <Link href="/dashboard" className="font-semibold text-lg text-primary">WarmNest</Link>
         </div>
 

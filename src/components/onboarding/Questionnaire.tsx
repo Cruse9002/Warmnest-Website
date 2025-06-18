@@ -72,7 +72,7 @@ export function Questionnaire() {
 
   useEffect(() => {
     // Redirect if user has already completed the questionnaire
-    if (!authLoading && user?.has_completed_questionnaire) {
+    if (!authLoading && user?.onboarded) {
       toast({
         title: "Welcome back!",
         description: "You've already completed the onboarding.",
@@ -135,7 +135,7 @@ export function Questionnaire() {
   const currentQuestion = questions[currentStep];
   const progressPercentage = ((currentStep + 1) / questions.length) * 100;
   
-  if (authLoading || (user && user.has_completed_questionnaire)) {
+  if (authLoading || (user && user.onboarded)) {
     return (
       <div className="flex flex-col items-center justify-center py-8">
           <p>{t('loadingMusic')}</p>

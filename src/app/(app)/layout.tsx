@@ -1,4 +1,3 @@
-
 "use client";
 
 import { AppHeader } from '@/components/layout/AppHeader';
@@ -10,8 +9,7 @@ import {
   SidebarRail 
 } from '@/components/ui/sidebar';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter, usePathname } from 'next/navigation';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Progress } from '@/components/ui/progress';
 import { AppLogo as MinimalAppLogo } from '@/components/layout/AppLogo';
 
@@ -20,20 +18,7 @@ export default function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  useEffect(() => {
-    // This effect handles redirection if auth state changes *after* initial load
-    if (!loading && !user) {
-      // Avoid redirecting if already on an auth page (though this layout shouldn't wrap them)
-      // This check is more of a safeguard.
-      if (pathname !== '/auth/login' && pathname !== '/auth/register') {
-        router.replace('/auth/login');
-      }
-    }
-  }, [user, loading, router, pathname]);
+  const { loading } = useAuth();
 
   if (loading) {
     return (
@@ -44,21 +29,7 @@ export default function AppLayout({
       </div>
     );
   }
-  
-  // If not loading, and still no user, and not on an auth page (this condition should ideally not be met often here due to useEffect)
-  // This ensures that if the useEffect hasn't redirected yet, we still don't render children.
-  if (!user && pathname !== '/auth/login' && pathname !== '/auth/register') {
-    return (
-      <div className="flex flex-col min-h-screen items-center justify-center bg-background">
-         <MinimalAppLogo size="lg" />
-         <p className="text-muted-foreground mt-4">Redirecting to login...</p>
-      </div>
-    );
-  }
 
-  // If user is null but we are on an auth page (which this layout shouldn't wrap), 
-  // or if user exists, then render the layout.
-  // The primary protection for app routes is the above block.
   return (
     <SidebarProvider defaultOpen>
       <Sidebar side="left" variant="sidebar" collapsible="icon">

@@ -36,12 +36,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           if (user) {
             setUser(user);
           } else {
+            // Invalid or stale cookie - remove it
+            console.log('Invalid userId cookie found, removing...');
             Cookies.remove('userId');
+            setUser(null);
           }
         })
         .catch((err) => {
           console.error('Error getting current user:', err);
+          // Remove invalid cookie on error
           Cookies.remove('userId');
+          setUser(null);
         })
         .finally(() => {
           setLoading(false);
@@ -54,38 +59,63 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const handleSignIn = async (email: string, password: string) => {
     try {
       setError(null);
+      setLoading(true);
       const user = await signIn(email, password);
       if (user) {
         setUser(user);
-        Cookies.set('userId', user.id, { expires: 7 }); // Cookie expires in 7 days
+        Cookies.set('userId', user.id.toString(), { expires: 7 }); // Cookie expires in 7 days
       } else {
         setError('Invalid email or password');
       }
     } catch (err) {
       setError('An error occurred during sign in');
       console.error('Sign in error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSignUp = async (email: string, password: string, name: string) => {
     try {
       setError(null);
+      setLoading(true);
       const user = await signUp(email, password, name);
       setUser(user);
-      Cookies.set('userId', user.id, { expires: 7 }); // Cookie expires in 7 days
+      Cookies.set('userId', user.id.toString(), { expires: 7 }); // Cookie expires in 7 days
     } catch (err) {
       setError('An error occurred during sign up');
       console.error('Sign up error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSignOut = () => {
     setUser(null);
+    setError(null);
     Cookies.remove('userId');
+    // Force redirect to login page
+    if (typeof window !== 'undefined') {
+      window.location.href = '/auth/login';
+    }
   };
 
   const updateUser = useCallback(async (updates: Partial<User>) => {
     if (!user) return;
+
+    // Don't update if updates object is empty or has no meaningful changes
+    if (!updates || Object.keys(updates).length === 0) {
+      return;
+    }
+
+    // Check if any of the updates are actually different from current user values
+    const hasChanges = Object.entries(updates).some(([key, value]) => {
+      return user[key as keyof User] !== value;
+    });
+
+    if (!hasChanges) {
+      return; // No actual changes, don't make API call
+    }
 
     const previousUser = user;
     setUser({ ...user, ...updates }); // Optimistic update

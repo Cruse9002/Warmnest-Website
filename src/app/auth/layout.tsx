@@ -1,4 +1,3 @@
-
 "use client";    
 import { AppLogo } from '@/components/layout/AppLogo';
 import { useAuth } from '@/contexts/AuthContext';
