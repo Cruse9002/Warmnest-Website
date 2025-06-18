@@ -20,7 +20,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import {
-  Home, MessageCircle, User, LogOut, Sun, Moon, Settings, Wind, BookOpen, Music2, Brain, Languages
+  Home, MessageCircle, User, LogOut, Sun, Moon, Settings, Wind, BookOpen, Music2, Brain, Languages, ClipboardList
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -31,6 +31,7 @@ const mainNavLinks = [
   { href: '/journal', labelKey: 'journal', icon: BookOpen },
   { href: '/music-therapy', labelKey: 'musicTherapy', icon: Music2 },
   { href: '/focus-mode', labelKey: 'focusMode', icon: Brain },
+  { href: '/task-assessment', labelKey: 'taskAssessmentTitle', icon: ClipboardList },
 ] as const;
 
 const accountNavLinks = [

@@ -224,4 +224,36 @@ export const chatbotOperations = {
     const history = readCSV('chatbot_history.csv');
     return history.filter((h: any) => h.user_id === userId);
   },
+};
+
+// Task Assessment Questionnaire operations
+export const taskAssessmentOperations = {
+  async saveTaskAssessment(userId: number, assessment: any) {
+    const assessments = readCSV('task_assessments.csv');
+    const newAssessment = {
+      id: assessments.length + 1,
+      user_id: userId,
+      mental_challenge: assessment.mentalChallenge,
+      physical_demand: assessment.physicalDemand,
+      time_pressure: assessment.timePressure,
+      success_level: assessment.successLevel,
+      effort_required: assessment.effortRequired,
+      stress_level: assessment.stressLevel,
+      created_at: new Date().toISOString(),
+    };
+    assessments.push(newAssessment);
+    writeCSV('task_assessments.csv', assessments);
+    return newAssessment;
+  },
+
+  async getTaskAssessments(userId: number) {
+    const assessments = readCSV('task_assessments.csv');
+    return assessments.filter((a: any) => a.user_id === userId);
+  },
+
+  async getLatestTaskAssessment(userId: number) {
+    const assessments = readCSV('task_assessments.csv');
+    const userAssessments = assessments.filter((a: any) => a.user_id === userId);
+    return userAssessments.length > 0 ? userAssessments[userAssessments.length - 1] : null;
+  },
 }; 

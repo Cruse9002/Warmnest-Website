@@ -70,3 +70,14 @@ export interface MockJamendoTrack {
 }
 
 export type TranslatedStringType = string;
+
+export interface TaskAssessmentQuestionnaire {
+  mentalChallenge: number;
+  physicalDemand: number;
+  timePressure: number;
+  successLevel: number;
+  effortRequired: number;
+  stressLevel: number;
+  timestamp: Date;
+  userId: string;
+}
