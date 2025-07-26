@@ -75,5 +75,21 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
     "webpack-bundle-analyzer": "^4.10.2"
-  }
+  },
+  "description": "This is a NextJS starter.",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cruse9002/Warmnest-Website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cruse9002/Warmnest-Website/issues"
+  },
+  "homepage": "https://github.com/Cruse9002/Warmnest-Website#readme"
 }
