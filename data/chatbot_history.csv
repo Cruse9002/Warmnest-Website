@@ -1,0 +1,3 @@
+id,user_id,message,is_user,created_at
+1,1,"Hello, how can I help you today?",false,2024-03-13T12:00:00Z
+2,1,"I'm feeling a bit anxious",true,2024-03-13T12:00:00Z 
