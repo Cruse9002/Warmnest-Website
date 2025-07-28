@@ -14,9 +14,9 @@ import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const commonSounds = [
-  { id: 'white-noise', nameKey: 'whiteNoise', icon: Volume2, hint: "abstract soundwave", 
-    audioSrc: '/assets/audio/white.mp3',
-    imageSrc: '/assets/images/whiteNoise.jpg'
+  { id: 'river-flow', nameKey: 'riverFlow', icon: Volume2, hint: "abstract soundwave", 
+    audioSrc: '/assets/audio/River.mp3',
+    imageSrc: '/assets/images/music/River.jpg'
   },
   { id: 'rain-sounds', nameKey: 'rainSounds', icon: CloudRain, hint: "rain window",
     audioSrc: '/assets/audio/rain.mp3',
@@ -26,6 +26,10 @@ const commonSounds = [
     audioSrc: '/assets/audio/ocean.mp3',
     imageSrc: '/assets/images/ocean.jpg'
   },
+  { id: 'weightless', nameKey: 'weightless', icon: Waves, hint: "ocean wave",
+    audioSrc: '/assets/audio/Weightless.mp3',
+    imageSrc: '/assets/images/music/Weightless.jpg'
+  }
 ];
 
 const mapColorToGenre = (color?: User['favoriteColor']): MockJamendoTrack['genre'] => {
