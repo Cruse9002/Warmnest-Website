@@ -7,11 +7,12 @@ import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/hooks/useLanguage';
 import Image from 'next/image';
-import { Music2, Waves, CloudRain, Volume2, PlayCircle, ListMusic, PauseCircle, SkipBack, SkipForward } from 'lucide-react';
+import { Music2, Waves, CloudRain, Volume2, PlayCircle, ListMusic, PauseCircle, SkipBack, SkipForward, Repeat } from 'lucide-react';
 import type { User, MusicTrack } from '@/types';
 import { getTracksByGenre } from '@/lib/music';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Slider } from '@/components/ui/slider';
 
 const commonSounds = [
   { id: 'river-flow', nameKey: 'riverFlow', icon: Volume2, hint: "abstract soundwave", 
@@ -33,6 +34,10 @@ const commonSounds = [
   { id: 'carnatic', nameKey: 'carnatic', icon: Volume2, hint: "carnatic",
     audioSrc: '/assets/audio/Carnatic.mp3',
     imageSrc: '/assets/images/music/Carnatic.jpg'
+  },
+  { id: '852Hz', nameKey: '852Hz', icon: Volume2, hint: "852Hz",
+    audioSrc: '/assets/audio/852Hz Frequency.mp3',
+    imageSrc: '/assets/images/music/852Hz Frequency.jpg'
   }
 ];
 
@@ -81,6 +86,7 @@ export default function MusicTherapyPage() {
   const [currentPlayingSound, setCurrentPlayingSound] = useState<string | null>(null);
   const [currentPlayingTrack, setCurrentPlayingTrack] = useState<MusicTrack | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLooping, setIsLooping] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -121,6 +127,7 @@ export default function MusicTherapyPage() {
       }
       setCurrentPlayingSound(null);
       const audio = new Audio(track.streamUrl);
+      audio.loop = isLooping;
       audioRef.current = audio;
       audio.play().catch(e => console.error("Audio play error", e));
       setCurrentPlayingTrack(track);
@@ -148,6 +155,7 @@ export default function MusicTherapyPage() {
       if (!sound) return;
 
       const audio = new Audio(sound.audioSrc);
+      audio.loop = isLooping;
       audioRef.current = audio;
       audio.play().catch(e => console.error("Audio play error", e));
       setCurrentPlayingSound(soundNameKey);
@@ -179,6 +187,23 @@ export default function MusicTherapyPage() {
       audio?.removeEventListener('ended', handleEnded);
     };
   }, [isPlaying]);
+
+  // Keep loop state in sync when toggled
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.loop = isLooping;
+    }
+  }, [isLooping]);
+
+  const handleSeek = (value: number) => {
+    const audio = audioRef.current;
+    if (audio && audio.duration) {
+      audio.currentTime = (value / 100) * audio.duration;
+      setProgress(value);
+    }
+  };
+
+  const toggleLoop = () => setIsLooping(prev => !prev);
 
   useEffect(() => {
     return () => {
@@ -224,6 +249,13 @@ export default function MusicTherapyPage() {
                   <CardDescription className="truncate">{currentPlayingTrack!.artist}</CardDescription>
                 )}
                 <Progress value={progress} className="w-full mt-2 h-2" />
+                <Slider 
+                  value={[progress]} 
+                  min={0} max={100} step={0.1}
+                  onValueChange={(val) => setProgress(val[0])}
+                  onValueCommit={(val) => handleSeek(val[0])}
+                  className="w-full mt-2"
+                />
               </div>
               <Button variant="ghost" size="icon" disabled>
                 <SkipBack className="h-6 w-6"/>
@@ -242,6 +274,13 @@ export default function MusicTherapyPage() {
               </Button>
               <Button variant="ghost" size="icon" disabled>
                 <SkipForward className="h-6 w-6"/>
+              </Button>
+              <Button 
+                variant="ghost" size="icon" 
+                onClick={toggleLoop}
+                className={isLooping ? 'text-primary' : ''}
+              >
+                <Repeat className="h-6 w-6"/>
               </Button>
             </CardContent>
           </Card>

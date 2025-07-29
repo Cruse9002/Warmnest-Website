@@ -45,6 +45,15 @@ export const musicTracks: MusicTrack[] = [
     streamUrl: '/assets/audio/Carnatic.mp3',
     genre: 'calm',
     aiHint: 'carnatic',
+  },
+  {
+    id: '852Hz',
+    title: '852Hz Frequency',
+    artist: 'Healing Things',
+    albumArtUrl: '/assets/images/music/852Hz Frequency.jpg',
+    streamUrl: '/assets/audio/852Hz Frequency.mp3',
+    genre: 'focus',
+    aiHint: '852Hz',
   }
 ];
 

@@ -8,7 +8,9 @@ import { Label }
 from '@/components/ui/label';
 import { useLanguage } from '@/hooks/useLanguage';
 import type { BreathingExercise as BreathingExerciseType } from '@/types'; 
-import { ArrowLeft, RotateCcw, Play, Pause, Info } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Play, Pause, Info, Music, PlayCircle } from 'lucide-react';
+import type { MusicTrack } from '@/types';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
@@ -127,9 +129,8 @@ export default function BreathingExercisePage() {
   const [userWantsToSkipInstructions, setUserWantsToSkipInstructions] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  // AUDIO_URL_REQUIRED: The musicUrl below comes from mockJamendo.ts. 
-  // In a real app, this might be fetched or configured, pointing to an actual audio file URL.
-  const musicUrl = useMemo(() => musicTracks.find(track => track.id === 'river')?.streamUrl, []);
+  // Currently selected background music track – default to first available
+  const [currentMusicTrack, setCurrentMusicTrack] = useState<MusicTrack>(musicTracks[0]);
 
   const localStorageKey = useMemo(() => {
     if (!slug) return '';
@@ -189,20 +190,27 @@ export default function BreathingExercisePage() {
     }
   }, [completedCycles, totalCycles, isPlaying]);
 
+  // Handle play / pause + track changes
   useEffect(() => {
     const audioElement = audioRef.current;
-    if (audioElement && musicUrl) {
-      if (isPlaying && !showInstructionsScreen) { 
-        audioElement.play().catch(error => console.warn("Audio play failed:", error));
-      } else {
-        audioElement.pause();
-      }
+    if (!audioElement || !currentMusicTrack) return;
+
+    // If the src differs, update and load
+    if (audioElement.src !== window.location.origin + currentMusicTrack.streamUrl) {
+      audioElement.src = currentMusicTrack.streamUrl;
+      audioElement.load();
     }
-  }, [isPlaying, musicUrl, showInstructionsScreen]);
+
+    if (isPlaying && !showInstructionsScreen) {
+      audioElement.play().catch(err => console.warn('Audio play failed:', err));
+    } else {
+      audioElement.pause();
+    }
+  }, [currentMusicTrack, isPlaying, showInstructionsScreen]);
 
   useEffect(() => {
-    if (musicUrl && typeof window !== 'undefined' && !audioRef.current) {
-        const newAudioElement = new Audio(musicUrl); // AUDIO_URL_REQUIRED: musicUrl needs to be a valid audio source
+    if (currentMusicTrack && typeof window !== 'undefined' && !audioRef.current) {
+        const newAudioElement = new Audio(currentMusicTrack.streamUrl); // AUDIO_URL_REQUIRED: musicUrl needs to be a valid audio source
         newAudioElement.loop = true;
         audioRef.current = newAudioElement;
     }
@@ -212,7 +220,7 @@ export default function BreathingExercisePage() {
         audioRef.current.src = ''; 
       }
     };
-  }, [musicUrl]);
+  }, []);
 
   if (!exercise) {
     return (
@@ -250,9 +258,7 @@ export default function BreathingExercisePage() {
 
   return (
     <div className="flex flex-col items-center space-y-6 p-4 md:p-8">
-      {/* AUDIO_URL_REQUIRED: The 'src' for this audio element is dynamic based on 'musicUrl'. */}
-      {/* Ensure 'musicUrl' resolves to a playable audio file URL. */}
-      {musicUrl && <audio ref={audioRef} src={musicUrl} loop preload="auto" />}
+      {currentMusicTrack && <audio ref={audioRef} src={currentMusicTrack.streamUrl} loop preload="auto" />}
 
       <div className="w-full max-w-2xl">
         <Button variant="ghost" asChild className="mb-4 text-sm sm:text-base">
@@ -261,8 +267,8 @@ export default function BreathingExercisePage() {
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to exercises
           </Link>
         </Button>
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-primary mb-2">{t(exercise.nameKey)}</h1>
-        <p className="text-center text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">{t(exercise.descriptionKey)}</p>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-primary mb-2">{t(exercise.nameKey as any)}</h1>
+        <p className="text-center text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">{t(exercise.descriptionKey as any)}</p>
       </div>
 
       {showInstructionsScreen ? (
@@ -281,14 +287,14 @@ export default function BreathingExercisePage() {
                   {/* URL_PLACEHOLDER: Using placehold.co for diagram. Replace with actual diagram images. */}
                   <Image 
                     src={`https://placehold.co/300x200.png`} 
-                    alt={`${t(step.textKey)} diagram`} 
+                    alt={`${t(step.textKey as any)} diagram`} 
                     layout="fill"
                     objectFit="contain"
                     className="rounded-md"
                     data-ai-hint={step.diagramHint} // data-ai-hint provides keywords for image search
                   />
                 </div>
-                <p className="text-sm flex-1">{index + 1}. {t(step.textKey)}</p>
+                <p className="text-sm flex-1">{index + 1}. {t(step.textKey as any)}</p>
               </div>
             ))}
             <div className="flex items-center space-x-2 pt-4">
@@ -336,6 +342,44 @@ export default function BreathingExercisePage() {
                 </div>
             </div>
           </div>
+
+          {/* Music selection */}
+          <section className="w-full max-w-xs sm:max-w-md mt-8">
+            <Card className="shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center text-primary text-lg">
+                  <Music className="mr-2 h-5 w-5" /> Background Music
+                </CardTitle>
+                <CardDescription>Select a track</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-3">
+                  {musicTracks.map((track) => (
+                    <Card
+                      key={track.id}
+                      onClick={() => setCurrentMusicTrack(track)}
+                      className={cn('overflow-hidden cursor-pointer hover:shadow-md transition-shadow', currentMusicTrack.id === track.id ? 'ring-2 ring-primary' : 'shadow')}
+                    >
+                      <div className="relative h-20 w-full">
+                        <Image
+                          src={track.albumArtUrl}
+                          alt={track.title}
+                          fill
+                          style={{ objectFit: 'cover' }}
+                          data-ai-hint={track.aiHint}
+                        />
+                        {currentMusicTrack.id === track.id && (
+                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                            <PlayCircle className="h-8 w-8 text-white/80" />
+                          </div>
+                        )}
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </section>
         </>
       )}
     </div>

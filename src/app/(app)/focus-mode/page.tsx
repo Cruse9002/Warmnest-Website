@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { Music, PlayCircle, PauseCircle, Disc3 } from 'lucide-react';
 import type { MusicTrack } from '@/types';
-import { getTracksByGenre } from '@/lib/music';
+import { musicTracks } from '@/lib/music';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -25,21 +25,11 @@ export default function FocusModePage() {
   const musicAudioRef = useRef<HTMLAudioElement | null>(null);
   const [isLoadingMusic, setIsLoadingMusic] = useState(true);
 
-  // Fetch focus tracks
+  // Load all available tracks once on mount
   useEffect(() => {
-    const fetchTracks = async () => {
-      setIsLoadingMusic(true);
-      let tracks = await getTracksByGenre('focus', 3);
-      if (tracks.length < 3) {
-        const gentleTracks = await getTracksByGenre('gentle', 3 - tracks.length);
-        tracks = [...tracks, ...gentleTracks];
-      }
-      // Ensure no duplicates if both calls return same tracks by chance
-      const uniqueTracks = Array.from(new Map(tracks.map(track => [track.id, track])).values());
-      setFocusTracks(uniqueTracks.slice(0, 3));
-      setIsLoadingMusic(false);
-    };
-    fetchTracks();
+    setIsLoadingMusic(true);
+    setFocusTracks(musicTracks);
+    setIsLoadingMusic(false);
   }, []);
 
   // Effect to setup and change audio source
