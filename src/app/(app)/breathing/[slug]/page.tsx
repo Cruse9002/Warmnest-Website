@@ -4,8 +4,8 @@
 import { BreathingAnimation } from '@/components/breathing/BreathingAnimation';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label }
-from '@/components/ui/label';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { useLanguage } from '@/hooks/useLanguage';
 import type { BreathingExercise as BreathingExerciseType } from '@/types'; 
 import { ArrowLeft, RotateCcw, Play, Pause, Info, Music, PlayCircle } from 'lucide-react';
@@ -131,6 +131,7 @@ export default function BreathingExercisePage() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   // Currently selected background music track – default to first available
   const [currentMusicTrack, setCurrentMusicTrack] = useState<MusicTrack>(musicTracks[0]);
+  const [isMusicEnabled, setIsMusicEnabled] = useState<boolean>(true);
 
   const localStorageKey = useMemo(() => {
     if (!slug) return '';
@@ -201,12 +202,12 @@ export default function BreathingExercisePage() {
       audioElement.load();
     }
 
-    if (isPlaying && !showInstructionsScreen) {
+    if (isPlaying && !showInstructionsScreen && isMusicEnabled) {
       audioElement.play().catch(err => console.warn('Audio play failed:', err));
     } else {
       audioElement.pause();
     }
-  }, [currentMusicTrack, isPlaying, showInstructionsScreen]);
+  }, [currentMusicTrack, isPlaying, showInstructionsScreen, isMusicEnabled]);
 
   useEffect(() => {
     if (currentMusicTrack && typeof window !== 'undefined' && !audioRef.current) {
@@ -268,7 +269,19 @@ export default function BreathingExercisePage() {
           </Link>
         </Button>
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-primary mb-2">{t(exercise.nameKey as any)}</h1>
-        <p className="text-center text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">{t(exercise.descriptionKey as any)}</p>
+        <p className="text-center text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">{t(exercise.descriptionKey as any)}</p>
+
+        {/* Hero image for the exercise */}
+        <div className="relative w-full h-56 sm:h-64 md:h-80 mb-6 rounded-md overflow-hidden shadow-lg">
+          <Image
+            src={`/assets/images/breathing/${slug}.jpg`}
+            alt={t(exercise.nameKey as any)}
+            fill
+            style={{ objectFit: 'cover' }}
+            className="object-cover"
+            priority
+          />
+        </div>
       </div>
 
       {showInstructionsScreen ? (
@@ -350,7 +363,10 @@ export default function BreathingExercisePage() {
                 <CardTitle className="flex items-center text-primary text-lg">
                   <Music className="mr-2 h-5 w-5" /> Background Music
                 </CardTitle>
-                <CardDescription>Select a track</CardDescription>
+                <CardDescription className="flex items-center gap-2 mt-2">
+                  <Switch checked={isMusicEnabled} onCheckedChange={(v) => setIsMusicEnabled(v as boolean)} />
+                  <span className="text-xs">{isMusicEnabled ? 'On' : 'Off'}</span>
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-3">

@@ -19,20 +19,19 @@ export function ExerciseCard({ exercise }: ExerciseCardProps) {
   return (
     <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
       <div className="relative h-48 w-full">
-        {/* PHOTO_PLACEHOLDER: Image for the breathing exercise card. */}
-        {/* URL_PLACEHOLDER: Using placehold.co with random bg. Replace with specific images for each exercise. */}
-        <Image 
-          src={`https://placehold.co/600x400.png?bg=${Math.random().toString(16).substr(-6)}`} 
-          alt={t(exercise.nameKey)} 
-          layout="fill" 
+        <Image
+          src={`/assets/images/breathing/${exercise.slug}.jpg`}
+          alt={t(exercise.nameKey as any)}
+          layout="fill"
           objectFit="cover"
-          data-ai-hint="nature serene" // data-ai-hint for image search
+          className="object-cover"
+          data-ai-hint="breathing exercise visual"
         />
       </div>
       <CardHeader>
-        <CardTitle className="text-xl text-primary">{t(exercise.nameKey)}</CardTitle>
+        <CardTitle className="text-xl text-primary">{t(exercise.nameKey as any)}</CardTitle>
         <CardDescription className="text-sm h-10 overflow-hidden text-ellipsis">
-          {t(exercise.descriptionKey)}
+          {t(exercise.descriptionKey as any)}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-grow">

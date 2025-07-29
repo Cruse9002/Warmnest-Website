@@ -17,27 +17,39 @@ import { Slider } from '@/components/ui/slider';
 const commonSounds = [
   { id: 'river-flow', nameKey: 'riverFlow', icon: Volume2, hint: "abstract soundwave", 
     audioSrc: '/assets/audio/River.mp3',
-    imageSrc: '/assets/images/music/River.jpg'
+    imageSrc: '/assets/images/music/River.jpg',
+    description: 'Gentle river ambience ideal for relaxation',
+    duration: '6:20'
   },
   { id: 'sleep', nameKey: 'sleep', icon: Volume2, hint: "sleep",
     audioSrc: '/assets/audio/Sleep.mp3',
-    imageSrc: '/assets/images/music/Sleep.jpg'
+    imageSrc: '/assets/images/music/Sleep.jpg',
+    description: 'Soothing piano piece to ease into sleep',
+    duration: '10:00'
   },
   { id: 'ocean-waves', nameKey: 'oceanWaves', icon: Volume2, hint: "ocean wave",
     audioSrc: '/assets/audio/ocean.mp3',
-    imageSrc: '/assets/images/music/Ocean.jpg'
+    imageSrc: '/assets/images/music/Ocean.jpg',
+    description: 'A deep soundscape that quiets external distractions for profound introspection',
+    duration: '8:45'
   },
   { id: 'weightless', nameKey: 'weightless', icon: Volume2, hint: "anxiety buster",
     audioSrc: '/assets/audio/Weightless.mp3',
-    imageSrc: '/assets/images/music/Weightless.jpg'
+    imageSrc: '/assets/images/music/Weightless.jpg',
+    description: 'Scientifically proven anxiety-reducing track',
+    duration: '8:00'
   },
   { id: 'carnatic', nameKey: 'carnatic', icon: Volume2, hint: "carnatic",
     audioSrc: '/assets/audio/Carnatic.mp3',
-    imageSrc: '/assets/images/music/Carnatic.jpg'
+    imageSrc: '/assets/images/music/Carnatic.jpg',
+    description: 'A pure rendition of Raga Neelambari, traditionally used to calm',
+    duration: '5:50'
   },
   { id: '852Hz', nameKey: '852Hz', icon: Volume2, hint: "852Hz",
     audioSrc: '/assets/audio/852Hz Frequency.mp3',
-    imageSrc: '/assets/images/music/852Hz Frequency.jpg'
+    imageSrc: '/assets/images/music/852Hz Frequency.jpg',
+    description: 'Healing 852 Hz pure tone for deep calm',
+    duration: '6:00'
   }
 ];
 
@@ -384,6 +396,8 @@ export default function MusicTherapyPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex-grow">
+                <p className="text-sm text-muted-foreground">{sound.description}</p>
+                <p className="text-xs text-muted-foreground mt-1">{sound.duration}</p>
               </CardContent>
               <CardFooter>
                 <Button 
