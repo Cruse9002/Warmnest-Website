@@ -1,6 +1,6 @@
-const CACHE_NAME = 'warmnest-v1';
-const STATIC_CACHE = 'warmnest-static-v1';
-const DYNAMIC_CACHE = 'warmnest-dynamic-v1';
+const CACHE_NAME = 'warmnest-v3';
+const STATIC_CACHE = 'warmnest-static-v3';
+const DYNAMIC_CACHE = 'warmnest-dynamic-v3';
 
 // Files to cache immediately
 const STATIC_FILES = [
@@ -51,26 +51,30 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Handle static assets
-  if (request.destination === 'style' || 
-      request.destination === 'script' || 
-      request.destination === 'image' ||
-      request.destination === 'font') {
+  // CACHE-FIRST: CSS & JS (fast, rarely change during session)
+  if (request.destination === 'style' || request.destination === 'script') {
     event.respondWith(
-      caches.match(request).then((response) => {
-        if (response) {
-          return response;
+      caches.match(request).then((cached) => cached || fetch(request).then((resp) => {
+        if (resp.status === 200) {
+          const clone = resp.clone();
+          caches.open(DYNAMIC_CACHE).then((cache) => cache.put(request, clone));
         }
-        return fetch(request).then((response) => {
-          if (response.status === 200) {
-            const responseClone = response.clone();
-            caches.open(DYNAMIC_CACHE).then((cache) => {
-              cache.put(request, responseClone);
-            });
-          }
-          return response;
-        });
-      })
+        return resp;
+      }))
+    );
+    return;
+  }
+
+  // NETWORK-FIRST: images, audio, fonts (these may be replaced with same URL)
+  if (request.destination === 'image' || request.destination === 'audio' || request.destination === 'font') {
+    event.respondWith(
+      fetch(request).then((resp) => {
+        if (resp.status === 200) {
+          const clone = resp.clone();
+          caches.open(DYNAMIC_CACHE).then((cache) => cache.put(request, clone));
+        }
+        return resp;
+      }).catch(() => caches.match(request))
     );
     return;
   }

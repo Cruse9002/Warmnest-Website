@@ -29,6 +29,10 @@ const commonSounds = [
   { id: 'weightless', nameKey: 'weightless', icon: Volume2, hint: "anxiety buster",
     audioSrc: '/assets/audio/Weightless.mp3',
     imageSrc: '/assets/images/music/Weightless.jpg'
+  },
+  { id: 'carnatic', nameKey: 'carnatic', icon: Volume2, hint: "carnatic",
+    audioSrc: '/assets/audio/Carnatic.mp3',
+    imageSrc: '/assets/images/music/Carnatic.jpg'
   }
 ];
 
@@ -81,6 +85,9 @@ export default function MusicTherapyPage() {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const personalGenre = mapColorToGenre(user?.favoriteColor);
+
+  // Helper to get the currently playing common sound object (if any)
+  const currentSoundObj = currentPlayingSound ? commonSounds.find(s => s.nameKey === currentPlayingSound) || null : null;
 
   useEffect(() => {
     setIsLoadingTracks(true);
@@ -201,27 +208,43 @@ export default function MusicTherapyPage() {
         <p className="text-muted-foreground">{t('musicTherapyDescription')}</p>
       </section>
 
-      {currentPlayingTrack && (
+      {(currentPlayingTrack || currentSoundObj) && (
         <section className="fixed bottom-0 left-0 right-0 z-50 p-2">
-            <Card className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full max-w-4xl mx-auto">
-                <CardContent className="p-4 flex items-center gap-4">
-                    <Image src={currentPlayingTrack.albumArtUrl} alt={currentPlayingTrack.title} width={56} height={56} className="rounded-md object-cover"/>
-                    <div className="flex-1">
-                        <CardTitle className="text-lg">{currentPlayingTrack.title}</CardTitle>
-                        <CardDescription>{currentPlayingTrack.artist}</CardDescription>
-                        <Progress value={progress} className="w-full mt-2 h-2" />
-                    </div>
-                    <Button variant="ghost" size="icon" disabled>
-                        <SkipBack className="h-6 w-6"/>
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handlePlayPauseTrack(currentPlayingTrack)}>
-                        {isPlaying ? <PauseCircle className="h-8 w-8"/> : <PlayCircle className="h-8 w-8"/>}
-                    </Button>
-                    <Button variant="ghost" size="icon" disabled>
-                        <SkipForward className="h-6 w-6"/>
-                    </Button>
-                </CardContent>
-            </Card>
+          <Card className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full max-w-4xl mx-auto">
+            <CardContent className="p-4 flex items-center gap-4">
+              <Image 
+                src={currentPlayingTrack ? currentPlayingTrack!.albumArtUrl : (currentSoundObj!.imageSrc)} 
+                alt={currentPlayingTrack ? currentPlayingTrack!.title : t(currentSoundObj!.nameKey as any)}
+                width={56} height={56} className="rounded-md object-cover"/>
+              <div className="flex-1 min-w-0">
+                <CardTitle className="text-lg truncate">
+                  {currentPlayingTrack ? currentPlayingTrack!.title : t(currentSoundObj!.nameKey as any)}
+                </CardTitle>
+                {currentPlayingTrack && (
+                  <CardDescription className="truncate">{currentPlayingTrack!.artist}</CardDescription>
+                )}
+                <Progress value={progress} className="w-full mt-2 h-2" />
+              </div>
+              <Button variant="ghost" size="icon" disabled>
+                <SkipBack className="h-6 w-6"/>
+              </Button>
+              <Button 
+                variant="ghost" size="icon" 
+                onClick={() => {
+                  if (currentPlayingTrack) {
+                    handlePlayPauseTrack(currentPlayingTrack!);
+                  } else if (currentSoundObj) {
+                    handlePlayCommonSound(currentSoundObj.nameKey);
+                  }
+                }}
+              >
+                {isPlaying ? <PauseCircle className="h-8 w-8"/> : <PlayCircle className="h-8 w-8"/>}
+              </Button>
+              <Button variant="ghost" size="icon" disabled>
+                <SkipForward className="h-6 w-6"/>
+              </Button>
+            </CardContent>
+          </Card>
         </section>
       )}
 

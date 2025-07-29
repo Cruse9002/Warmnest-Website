@@ -37,6 +37,15 @@ export const musicTracks: MusicTrack[] = [
     genre: 'focus',
     aiHint: 'deep',
   },
+  {
+    id: 'carnatic',
+    title: 'Nelambari Raga',
+    artist: 'Divine Monks',
+    albumArtUrl: '/assets/images/music/Carnatic.jpg',
+    streamUrl: '/assets/audio/Carnatic.mp3',
+    genre: 'calm',
+    aiHint: 'carnatic',
+  }
 ];
 
 // Simple helper that mimics async fetching/filtering of tracks by genre.
