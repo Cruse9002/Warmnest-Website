@@ -9,8 +9,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { Music, PlayCircle, PauseCircle, Disc3 } from 'lucide-react';
-import type { MockJamendoTrack } from '@/types';
-import { getMockTracksByGenre, mockJamendoTracks } from '@/lib/mockJamendo'; // Assuming this can be used directly
+import type { MusicTrack } from '@/types';
+import { getTracksByGenre } from '@/lib/music';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -19,8 +19,8 @@ export default function FocusModePage() {
   const { t } = useLanguage();
   const { toast } = useToast();
 
-  const [focusTracks, setFocusTracks] = useState<MockJamendoTrack[]>([]);
-  const [currentMusicTrack, setCurrentMusicTrack] = useState<MockJamendoTrack | null>(null);
+  const [focusTracks, setFocusTracks] = useState<MusicTrack[]>([]);
+  const [currentMusicTrack, setCurrentMusicTrack] = useState<MusicTrack | null>(null);
   const [isMusicAudioPlaying, setIsMusicAudioPlaying] = useState(false);
   const musicAudioRef = useRef<HTMLAudioElement | null>(null);
   const [isLoadingMusic, setIsLoadingMusic] = useState(true);
@@ -29,9 +29,9 @@ export default function FocusModePage() {
   useEffect(() => {
     const fetchTracks = async () => {
       setIsLoadingMusic(true);
-      let tracks = await getMockTracksByGenre('focus', 3);
+      let tracks = await getTracksByGenre('focus', 3);
       if (tracks.length < 3) {
-        const gentleTracks = await getMockTracksByGenre('gentle', 3 - tracks.length);
+        const gentleTracks = await getTracksByGenre('gentle', 3 - tracks.length);
         tracks = [...tracks, ...gentleTracks];
       }
       // Ensure no duplicates if both calls return same tracks by chance
@@ -84,7 +84,7 @@ export default function FocusModePage() {
     }
   }, [isMusicAudioPlaying, toast]);
 
-  const handleSelectMusicTrack = (track: MockJamendoTrack) => {
+  const handleSelectMusicTrack = (track: MusicTrack) => {
     if (currentMusicTrack?.id === track.id) {
       setIsMusicAudioPlaying(prev => !prev);
     } else {

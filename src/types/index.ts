@@ -59,12 +59,12 @@ export interface ChatMessage {
   escalate?: boolean;
 }
 
-export interface MockJamendoTrack {
+export interface MusicTrack {
   id: string;
   title: string;
   artist: string;
   albumArtUrl: string;
-  streamUrl: string; // Mock URL
+  streamUrl: string; // Local asset path
   genre: 'calm' | 'energetic' | 'focus' | 'uplifting' | 'gentle' | 'nature'; // For personalization
   aiHint: string;
 }

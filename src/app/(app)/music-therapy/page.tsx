@@ -8,8 +8,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/hooks/useLanguage';
 import Image from 'next/image';
 import { Music2, Waves, CloudRain, Volume2, PlayCircle, ListMusic, PauseCircle, SkipBack, SkipForward } from 'lucide-react';
-import type { User, MockJamendoTrack } from '@/types';
-import { getMockTracksByGenre, mockJamendoTracks } from '@/lib/mockJamendo'; 
+import type { User, MusicTrack } from '@/types';
+import { getTracksByGenre } from '@/lib/music';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -18,21 +18,21 @@ const commonSounds = [
     audioSrc: '/assets/audio/River.mp3',
     imageSrc: '/assets/images/music/River.jpg'
   },
-  { id: 'rain-sounds', nameKey: 'rainSounds', icon: CloudRain, hint: "rain window",
-    audioSrc: '/assets/audio/rain.mp3',
-    imageSrc: '/assets/images/rain.jpg'
+  { id: 'sleep', nameKey: 'sleep', icon: Volume2, hint: "sleep",
+    audioSrc: '/assets/audio/Sleep.mp3',
+    imageSrc: '/assets/images/music/Sleep.jpg'
   },
-  { id: 'ocean-waves', nameKey: 'oceanWaves', icon: Waves, hint: "ocean wave",
+  { id: 'ocean-waves', nameKey: 'oceanWaves', icon: Volume2, hint: "ocean wave",
     audioSrc: '/assets/audio/ocean.mp3',
-    imageSrc: '/assets/images/ocean.jpg'
+    imageSrc: '/assets/images/music/Ocean.jpg'
   },
-  { id: 'weightless', nameKey: 'weightless', icon: Waves, hint: "ocean wave",
+  { id: 'weightless', nameKey: 'weightless', icon: Volume2, hint: "anxiety buster",
     audioSrc: '/assets/audio/Weightless.mp3',
     imageSrc: '/assets/images/music/Weightless.jpg'
   }
 ];
 
-const mapColorToGenre = (color?: User['favoriteColor']): MockJamendoTrack['genre'] => {
+const mapColorToGenre = (color?: User['favoriteColor']): MusicTrack['genre'] => {
   switch (color) {
     case 'blue':
     case 'green':
@@ -54,7 +54,7 @@ const mapColorToGenre = (color?: User['favoriteColor']): MockJamendoTrack['genre
   }
 };
 
-const getGenreTitleKey = (genre: MockJamendoTrack['genre']): keyof typeof import('@/lib/i18n').translations.en => {
+const getGenreTitleKey = (genre: MusicTrack['genre']): keyof typeof import('@/lib/i18n').translations.en => {
     switch (genre) {
         case 'calm': return 'calmingAmbient';
         case 'energetic': return 'energeticBeats';
@@ -71,11 +71,11 @@ export default function MusicTherapyPage() {
   const { user } = useAuth();
   const { t } = useLanguage();
   const { toast } = useToast();
-  const [suggestedTracks, setSuggestedTracks] = useState<MockJamendoTrack[]>([]);
+  const [suggestedTracks, setSuggestedTracks] = useState<MusicTrack[]>([]);
   const [isLoadingTracks, setIsLoadingTracks] = useState(true);
   
   const [currentPlayingSound, setCurrentPlayingSound] = useState<string | null>(null);
-  const [currentPlayingTrack, setCurrentPlayingTrack] = useState<MockJamendoTrack | null>(null);
+  const [currentPlayingTrack, setCurrentPlayingTrack] = useState<MusicTrack | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
 
@@ -84,7 +84,7 @@ export default function MusicTherapyPage() {
 
   useEffect(() => {
     setIsLoadingTracks(true);
-    getMockTracksByGenre(personalGenre, 3) 
+    getTracksByGenre(personalGenre, 3) 
       .then(tracks => {
         setSuggestedTracks(tracks);
         // AUDIO_FEATURE: For specific frequencies, track data could include frequency info (e.g., 'binaural_alpha_10hz').
@@ -99,7 +99,7 @@ export default function MusicTherapyPage() {
       });
   }, [personalGenre, toast]);
 
-  const handlePlayPauseTrack = (track: MockJamendoTrack) => {
+  const handlePlayPauseTrack = (track: MusicTrack) => {
     if (currentPlayingTrack?.id === track.id) {
       if (isPlaying) {
         audioRef.current?.pause();
@@ -231,7 +231,7 @@ export default function MusicTherapyPage() {
             {t('personalizedSuggestions')} ({t(getGenreTitleKey(personalGenre))})
         </h2>
         {/* URL_EXTERNAL: Link to Jamendo if actual API is used. */}
-        <p className="text-sm text-muted-foreground mb-4">{t('jamendoAttribution')}</p>
+        {/* removed external Jamendo attribution as local files are used */}
         {isLoadingTracks ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1,2,3].map(i => (

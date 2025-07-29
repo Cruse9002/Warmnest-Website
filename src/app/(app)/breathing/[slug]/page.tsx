@@ -12,7 +12,7 @@ import { ArrowLeft, RotateCcw, Play, Pause, Info } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { mockJamendoTracks } from '@/lib/mockJamendo';
+import { musicTracks } from '@/lib/music';
 import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 
@@ -129,7 +129,7 @@ export default function BreathingExercisePage() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   // AUDIO_URL_REQUIRED: The musicUrl below comes from mockJamendo.ts. 
   // In a real app, this might be fetched or configured, pointing to an actual audio file URL.
-  const musicUrl = useMemo(() => mockJamendoTracks.find(track => track.id === 'jam1')?.streamUrl, []);
+  const musicUrl = useMemo(() => musicTracks.find(track => track.id === 'river')?.streamUrl, []);
 
   const localStorageKey = useMemo(() => {
     if (!slug) return '';
