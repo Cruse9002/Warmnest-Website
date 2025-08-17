@@ -1,1 +1,2 @@
-id,user_id,mental_challenge,physical_demand,time_pressure,success_level,effort_required,stress_level,created_at 
+id,user_id,mental_challenge,physical_demand,time_pressure,success_level,effort_required,stress_level,created_at
+1,2,43,54,44,58,48,55,2025-08-16T15:34:22.229Z
