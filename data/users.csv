@@ -1,3 +1,4 @@
 id,email,password,name,created_at,last_login,has_completed_questionnaire
 1,admin@warmnest.com,$2b$10$example_hash,Admin,2024-03-13T12:00:00Z,2024-03-13T12:00:00Z,true 
-2,adithya@gmail.com,$2b$10$6p3O/aYafDDm/3JEP/DrFeiKvlgNrtlPaohDNHGjkXbEngXXmPk52,Singa Adithya,2025-06-13T07:40:34.416Z,2025-08-16T15:36:03.065Z,1
+2,adithya@gmail.com,$2b$10$6p3O/aYafDDm/3JEP/DrFeiKvlgNrtlPaohDNHGjkXbEngXXmPk52,Singa Adithya,2025-06-13T07:40:34.416Z,2025-08-25T16:56:06.433Z,1
+3,singa@singa.com,$2b$10$AiOhenENptl973UYxdspxuf2czU83/CsqJnsQM0BrAZgORRmFJbP6,Singa,2025-08-26T16:16:19.473Z,2025-08-26T16:16:19.473Z,1
